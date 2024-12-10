@@ -1,0 +1,136 @@
+.root {
+  background-color: #fff;
+  padding: 14px 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 99999999;
+  height: 67px !important;
+}
+
+.inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+.logo {
+  color: var(--main-color);
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 35px;
+  text-transform: uppercase;
+  letter-spacing: 0.15px;
+  border-radius: 1px;
+  padding: 0 10px;
+  text-decoration: none;
+  transition: 0.4s  ease;
+
+  &:hover {
+    text-decoration: underline 4px;
+    text-underline-offset: 8px;
+  }
+}
+
+.rightContent {
+  /*   position: relative; */
+  button {
+    font-size: 14px;
+    font-weight: 600;
+    background-color: #fff;
+    color: #111;
+    border: 1.3px solid #111;
+    border-radius: 6px;
+    line-height: 28px;
+    cursor: pointer;
+  }
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  .avatar {
+    margin-left: 14px;
+  }
+}
+
+.link {
+  font-size: 18px;
+  font-weight: 700;
+  color: #000;
+  margin-right: 14px;
+}
+.link:hover {
+  text-decoration: underline;
+}
+.menu {
+  position: absolute;
+  top: 39px;
+  right: 0px;
+  display: flex;
+  width: 250px;
+  margin-top: 4px;
+  padding-bottom: 10px;
+  background-color: #fff;
+  flex-direction: column;
+  border: 1px solid #f0f0f0;
+  box-shadow: 0 4px 13px #3030301a;
+  border-radius: 8px;
+
+  padding: 10px 8px;
+  z-index: 999;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin-top: 8px;
+  padding: 2px;
+  border-radius: 2px;
+}
+
+.menuItem:hover {
+  background-color: #eee;
+  transition: 0.2s ease;
+}
+
+.menuProfile {
+  display: flex;
+  .avatar {
+    margin-left: 0px;
+  }
+  .menuProfileColumn {
+    display: flex;
+    flex-direction: column;
+    margin-left: 8px;
+  }
+  .menuProfileName {
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 120%;
+    overflow: hidden;
+    white-space: nowrap;
+    color: #242629;
+    max-width: 188px;
+    text-overflow: ellipsis;
+    margin-right: 12px;
+  }
+  .menuProfileEmail {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 188px;
+    color: #93969f;
+  }
+}
+
+.menuText {
+  color: #111;
+  font-weight: 500;
+  font-size: 14px;
+  margin-left: 4px;
+}

@@ -1,0 +1,100 @@
+.loginBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 30vw;
+  padding: 20px;
+  /*   background-color: #f4f4f6; */
+  background-color: #fff;
+  /*   border: 0.8px solid #eee; */
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
+  rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+  border-radius: 16px;
+}
+
+.loginBoxParent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 70vh;
+}
+
+/* .loginButton {
+  padding: 11px 22px;
+  width: 100%;
+  font-size: 16px;
+  font-variation-settings: "wght" 600;
+  line-height: 22px;
+  color: #fff;
+  background-color: #6788f3;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+}
+
+.loginButton:hover {
+  background-color: #4d71e7;
+  transition: 0.2;
+} */
+
+.loginButton {
+  background-color: var(--main-color);
+  border-radius: 12px;
+  padding: 11px 22px;
+  width: 100%;
+  font-size: calc(6px + 8 * (100vw - 320px) / 880);
+  color: white;
+  font-weight: 600;
+  transition: 0.3s ease;
+
+}
+
+.loginInput {
+  font-size: calc(6px + 8 * (100vw - 320px) / 880) !important;
+  padding: 0 14px 0 9px;
+  height: 44px;
+  width: 100%;
+  border-radius: 8px;
+  outline: none;
+  border: 1.3px solid #000 !important;
+  color: #111;
+  background-color: #fff;
+  transition: none;
+  margin-bottom: 10px;
+}
+
+.loginButton:hover {
+  background-color: #1286d4;
+  cursor: pointer;
+}
+
+.loginInput::after {
+  border-bottom: 0px !important;
+}
+.loginInput::before {
+  border-bottom: 0px !important;
+}
+.title {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+/* .input {
+  font-size: calc(6px + 8 * (100vw - 320px) / 880) !important;
+  font-weight: 600 !important;
+  color: #111 !important;
+  outline: 1.3px solid #000 !important;
+
+  border: none !important;
+  background-color: #fff !important;
+  padding: 0.5rem;
+  margin-bottom: 8px;
+}
+
+.input:focus {
+  transition: 0.4s ease-in-out !important;
+  outline: none !important;
+  box-shadow: 1px 0 0 #000 inset !important;
+  border: none !important;
+}
+ */

@@ -1,0 +1,20 @@
+
+
+.input {
+  border: 1px solid #ccc;
+  outline: none;
+  width: 100%;
+  text-shadow: 0 0 0 var(--primary-color);
+  padding: 6px 6px 6px 10px;
+  border-radius: 6px;
+  font: var(--font-m);
+  &:focus {
+    outline: none;
+  }
+}
+
+
+.readonly {
+  opacity: 0.7;
+}
+

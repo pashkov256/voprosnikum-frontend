@@ -1,0 +1,105 @@
+.QuizForm {
+
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+
+  .QuizFormBlock{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 32px 64px 32px 16px;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+    background-color: #fff;
+    border-radius: 12px;
+    position: relative;
+
+    .QuizFormIcons{
+      position: absolute;
+      top: 24px;
+      right: 24px;
+
+      .Icon{
+        font-size: 32px;
+        cursor: pointer;
+      }
+    }
+
+    .QuizQuestionInput{
+      margin-bottom: 18px;
+    }
+
+    .settings{
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .input{
+    }
+
+    .QuestionSettings{
+        display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .AnswerOptions{
+      display: flex;
+      flex-direction: column;
+      width: min-content;
+      gap: 20px;
+
+      .AnswerOptionLabel{
+        width: 242px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .AddAnswerOption{
+        width: 242px;
+        background-color: var(--main-color);
+        color: #fff;
+        padding: 12px 0px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 600;
+        border: none;
+        transition: 0.3s ease;
+        &:hover{
+          background-color: #1583d4;
+          cursor: pointer;
+        }
+      }
+
+    }
+    .AnswerBlock{
+      display: flex;
+    }
+
+
+  }
+  .AddQuestion{
+    width: 100%;
+    background-color: var(--main-color);
+    color: #fff;
+    padding: 16px 0px;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: 600;
+    border: none;
+    margin-top: 24px;
+    transition: 0.3s ease;
+    &:hover{
+      background-color: #1583d4;
+      cursor: pointer;
+    }
+
+
+    .IconAddQuestion{
+      font-size: 24px;
+    }
+  }
+
+}
+
