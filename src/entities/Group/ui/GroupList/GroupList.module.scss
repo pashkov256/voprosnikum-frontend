@@ -1,0 +1,27 @@
+.ButtonGroupCreate{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.groupList{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.GroupBlock{
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.groupForm{
+  display: flex;
+  max-width: 35%;
+  gap:16px;
+}
+
+.groupList{
+  margin-top: 6px;
+}

@@ -1,7 +1,7 @@
 import React, {memo} from 'react';
 import {classNames} from "shared/lib/classNames/classNames";
 import cls from './Table.module.scss'
-interface Column {
+export interface Column {
     header: string; // Заголовок столбца
     accessor: string; // Ключ объекта данных
 }
@@ -36,7 +36,6 @@ export const Table: React.FC<TableProps> = memo(({ data, columns, onRowClick ,cl
                         style={{ cursor: onRowClick ? 'pointer' : 'default' }}
                     >
                         {columns.map((column, colIndex) => {
-                            console.log(column.accessor)
                             return <td key={colIndex} >
 
                                 {row[column.accessor]}

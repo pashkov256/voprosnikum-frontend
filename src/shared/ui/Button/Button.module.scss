@@ -5,9 +5,14 @@
   padding: 6px 15px;
   border-radius: 8px;
   &:hover {
-    background-color: var(--main-color);
+    background-color: #048fbe;
+  }
+
+  &:active {
+    background-color: var(--main-color); // Цвет, который вы хотите при нажатии
   }
 }
+
 
 .clear {
   padding: 0;

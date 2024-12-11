@@ -27,7 +27,7 @@ const Header = (props: HeaderProps) => {
                         {isAuth ? <>
                             <span className={cls.link} onClick={()=>{
                                 localStorage.removeItem("token");
-                                navigate('/login')
+                                window.location.reload()
                             }}>Выйти</span>
                             <Link to={`/me`}>
                                 <FaUserCircle size={"36px"}  fill={"#222"}/>
@@ -37,9 +37,9 @@ const Header = (props: HeaderProps) => {
                                 <Link to="/login" className={cls.link}>
                                     Войти
                                 </Link>
-                                <Link to="/register" className={cls.link}>
-                                    Создать аккаунт
-                                </Link>
+                                {/*<Link to="/register" className={cls.link}>*/}
+                                {/*    Создать аккаунт*/}
+                                {/*</Link>*/}
                             </>
                         )}
                     </div>

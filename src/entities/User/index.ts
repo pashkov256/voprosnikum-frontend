@@ -1,1 +1,1 @@
-export {IUser,IGroup} from "./model/types/user";
+export {IUser} from "./model/types/user";

@@ -1,5 +1,8 @@
-.content{
+.Me{
   margin-top:48px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 .userCardWrapper{
   display: flex;
@@ -22,6 +25,19 @@
   }
 }
 
+.meTitle{
+  //margin-bottom: 12px;
+}
+
+.meBlock{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 4px 16px 30px 24px;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+  background-color: #fff;
+  border-radius: 12px;
+}
 
 
 .quizList h3{

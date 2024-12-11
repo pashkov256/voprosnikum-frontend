@@ -2,6 +2,8 @@ import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import axios from 'api/api'
 import {RootState} from "app/providers/StoreProvider/config/store";
 import {UserData} from "model/IUser";
+import {TypedUseSelectorHook, useSelector} from "react-redux";
+import {IUser} from "entities/User";
 
 export const fetchAuth = createAsyncThunk("auth/fetchAuth", async (params) => {
     const {data} = await axios.post("/auth/login", params);
@@ -21,7 +23,7 @@ export const fetchRegister = createAsyncThunk(
 );
 
 const initialState = {
-    data: null,
+    data:   null,
     status: "loading",
     _inited: false,
 };
@@ -82,6 +84,6 @@ const authSlice = createSlice({
 
 export const selectorIsAuth = (state:RootState) => Boolean(state.auth.data);
 export const selectorInited = (state:RootState) => Boolean(state.auth._inited);
-
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
 export const authReducer = authSlice.reducer;
 export const {logout} = authSlice.actions;

@@ -15,7 +15,7 @@ export const QuizCardList = (props: QuizCardListProps) => {
        <div className={cls.CardList} >
            <Link className={cls.CardAdd} to={'/quiz/create'}>
                <IoIosAddCircleOutline size={64} color={'#000'}/>
-                <span>Создать опрос</span>
+                <span>Создать тест</span>
            </Link>
            {quizes.map((quize) => <QuizListCard quiz={quize}/>)}
        </div>

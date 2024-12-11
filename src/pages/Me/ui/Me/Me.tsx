@@ -1,10 +1,11 @@
 import cls from 'pages/Me/ui/Me/Me.module.scss';
-import {UserContext} from "context/UserContext";
-import {useContext, useState} from "react";
-import {IQuiz} from "model/IQuiz";
 import {TableTeachers} from "pages/Me/ui/TableTeachers/TableTeachers";
 import {Text, TextSize} from "shared/ui/Text/Text";
-import {TableUsers} from "pages/Me/ui/TableUsers/TableUsers";
+import {GroupList} from "entities/Group/ui/GroupList/GroupList";
+import {useSelector} from "react-redux";
+import {useAppSelector} from "app/providers/StoreProvider/config/slices/auth";
+import {QuizCardList} from "components/QuizCardList/QuizCardList";
+import {TeachersList} from "pages/Me/ui/TeachersList/TeachersList";
 
 interface UserProps {
     className?: string;
@@ -12,23 +13,45 @@ interface UserProps {
 
 export const Me = (props: UserProps) => {
     const { className } = props;
-    const userData = useContext(UserContext);
-    const userId = userData._id
-    const isMe = userId === userData._id;
-    const [allQuiz, setAllQuiz] = useState<IQuiz[]>([])
-    const [allQuizIsLoading, setAllQuizIsLoading] = useState(true);
-
-
+    const authData = useAppSelector((state)=>state.auth.data)
     return (
-        <div className={cls.content}>
+        <div className={cls.Me}>
+            {
+                //@ts-ignore
+                authData.role !== "student" ? <>
+                        <div className={cls.meBlock}>
+                            <div>
+                                <Text title={"Группы"} size={TextSize.L} className={cls.meTitle}/>
+                                <GroupList/>
+                            </div>
+                        </div>
 
-            {/*<div className={cls.quizList}>*/}
-            {/*    <h3>{isMe ? "Ваши опросы" : "Квизы пользователя"}</h3>*/}
-            {/*</div>*/}
-            <Text title={"Список преподавателей"} size={TextSize.L}/>
-            <TableTeachers />
+                        {  //@ts-ignore
+                            authData.role === "teacher" &&
+                            <div className={cls.meBlock}>
+                                <Text title={"Ваши тесты"} size={TextSize.L} className={cls.meTitle}/>
+                            <QuizCardList quizes={[]}/>
+                        </div>
+                    }
 
-            {/*{(!allQuizIsLoading) ? <QuizCardList quizes={allQuiz} /> : null}*/}
+                    {  //@ts-ignore
+                        authData.role === "admin" &&
+                        <div className={cls.meBlock}>
+                            <Text title={"Список преподавателей"} size={TextSize.L} className={cls.meTitle}/>
+                            <TableTeachers/>
+                        </div>
+                    }
+
+                </>
+            :
+            <>
+                <div className={cls.meBlock}>
+                    <TeachersList/>
+                </div>
+            </>
+            }
+
+
         </div>
     )
 

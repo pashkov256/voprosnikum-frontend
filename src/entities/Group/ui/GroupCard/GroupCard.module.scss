@@ -1,0 +1,18 @@
+.GroupCard{
+  text-decoration: none;
+  padding: 10px;
+  background-color: #eee;
+  border-radius: 6px;
+  color: #111;
+  font-weight: 500;
+  font-size: 20px;
+  outline: 1px solid #c0bebe;
+  transition: 0.2s;
+
+  &:hover {
+    background-color: #f1f1f1;
+    outline: 2px solid #c0bebe;
+  }
+}
+
+

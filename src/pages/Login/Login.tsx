@@ -55,7 +55,7 @@ const Login = () => {
                         fullWidth
                         {...register("login", { required: "Укажите логин" })}
                         type="text"
-                        placeholder="Укажите почту"
+                        placeholder="Укажите логин"
                     />
                     <Input
                         className={styles.loginInput}

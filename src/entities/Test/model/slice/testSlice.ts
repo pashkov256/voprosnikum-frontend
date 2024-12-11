@@ -24,11 +24,11 @@ export const testApi = createApi({
         getTeachers: builder.query<IUser, void>({
             query: () => `/user/teachers`,
         }),
-        createUserByAdmin: builder.mutation<IUser, {fullName:string,role:"teacher" | "admin" | "student"}>({
-            query: ({fullName,role}) => ({
+        createUserByAdmin: builder.mutation<IUser, {fullName:string,role:"teacher" | "admin" | "student",group?:string}>({
+            query: ({fullName,role,group}) => ({
                 url:"/user/createByAdmin",
                 method:"POST",
-                body:{fullName,role},
+                body:{fullName,role,group},
             }),
         }),
     }),
