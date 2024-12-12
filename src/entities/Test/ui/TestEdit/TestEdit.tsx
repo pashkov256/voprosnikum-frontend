@@ -83,17 +83,6 @@ export const TestEdit = (props: TestEditProps) => {
             </div>
 
             <div className={cls.TestContainer}>
-                {/*{!testDataIsLoading && (*/}
-                {/*    <TabPanel value={tabsValue} index={0}>*/}
-                {/*        /!*<QuizForm*!/*/}
-                {/*        /!*    quizData={quizData}*!/*/}
-                {/*        /!*    answersData={answersData}*!/*/}
-                {/*        /!*    onChangeQuizData={setQuizData}*!/*/}
-                {/*        /!*    onChangeAnswerData={setAnswersData}*!/*/}
-                {/*        /!*//*/}
-                {/*        <TestForm testData={[]} isCreateMode={isCreateMode}/>*/}
-                {/*    </TabPanel>*/}
-                {/*)}*/}
 
 
                     <TabPanel value={tabsValue} index={0}>
