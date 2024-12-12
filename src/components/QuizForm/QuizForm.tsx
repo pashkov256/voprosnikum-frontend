@@ -196,6 +196,7 @@ export const QuizForm = memo((props: QuizFormProps) => {
         onChangeQuizData({...quizData,questions:changedQuestions});
     }
 
+
     return (
         <div className={cls.QuizForm}>
             <div className={cls.QuizFormBlock}>

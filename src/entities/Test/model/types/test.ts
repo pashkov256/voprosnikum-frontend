@@ -7,6 +7,15 @@ export interface ITestResult {
     updatedAt?: string;
 }
 
+export interface IQuestion {
+    test: string;
+    title: string;
+    type: 'short-answer' | 'multiple-choice';
+    options?: string[];
+    correctAnswers: string[];
+    imageUrl?: string | null;
+    timeLimit?: number;
+}
 
 export interface ITest {
     _id: string;
@@ -17,5 +26,6 @@ export interface ITest {
     deadline: string;
     createdAt?: string;
     updatedAt?: string;
+    questions?:IQuestion[];
 }
 

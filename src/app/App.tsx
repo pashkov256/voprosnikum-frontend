@@ -15,6 +15,7 @@ import {useSelector} from "react-redux";
 import {fetchAuthMe, selectorInited, selectorIsAuth} from "app/providers/StoreProvider/config/slices/auth";
 import AuthRoute from "components/AuthRoute";
 import {GroupPage} from "pages/GroupPage";
+import {TestEdit} from "entities/Test/ui/TestEdit/TestEdit";
 function App() {
     const dispatch = useAppDispatch();
     const _inited = useSelector(selectorInited);
@@ -92,6 +93,16 @@ function App() {
                             </PageLayoutAuth>
                         }
                     />
+                    <Route
+                        path="/test/:testId"
+                        element={
+                            <PageLayoutAuth>
+                                <Container maxWidth="lg"  style={{display:'flex', justifyContent:'center',margin:'auto',width:'1100px',paddingTop:"80px"}}>
+                                    <Quiz/>
+                                </Container>
+                            </PageLayoutAuth>
+                        }
+                    />
                     {/*<Route*/}
                     {/*    path="/quiz/:quizId/edit"*/}
                     {/*    element={*/}
@@ -124,6 +135,15 @@ function App() {
                         element={
                             <PageLayoutAuth haveBorder={false}>
                                 <QuizEdit/>
+                            </PageLayoutAuth>
+
+                        }
+                    />
+                    <Route
+                        path="/test/create"
+                        element={
+                            <PageLayoutAuth haveBorder={false}>
+                                <TestEdit/>
                             </PageLayoutAuth>
 
                         }
