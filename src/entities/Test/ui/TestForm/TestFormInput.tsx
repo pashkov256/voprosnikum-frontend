@@ -39,11 +39,9 @@ const TestFormInput = (props:TestFormInputProps) => {
     };
 
 
-
-    const handleChange = (e:any) => {
-        onChange(e.target.value);
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        onChange(event.target.value); // Используем event.target.value
     };
-
 
     return (
         <div className={className}>
@@ -59,7 +57,7 @@ const TestFormInput = (props:TestFormInputProps) => {
                     style={style}
                 />
             ) : (
-                <span className={classNames(cls.span,{},[textSizesClasses[textSize]])} onClick={handleFocus}>{value || 'Нажмите чтобы изменить заголовок опроса'}</span>
+                <span className={classNames(cls.span,{},[textSizesClasses[textSize]])} onClick={handleFocus}>{value || placeholder}</span>
             )}
         </div>
     );

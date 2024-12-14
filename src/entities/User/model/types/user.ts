@@ -1,6 +1,7 @@
 export interface IGroup {
     name: string,
     createdAt: string,
+    _id: string,
 }
 export interface IUser {
     _id: string,

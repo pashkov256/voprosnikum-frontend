@@ -15,7 +15,8 @@ import {useSelector} from "react-redux";
 import {fetchAuthMe, selectorInited, selectorIsAuth} from "app/providers/StoreProvider/config/slices/auth";
 import AuthRoute from "components/AuthRoute";
 import {GroupPage} from "pages/GroupPage";
-import {TestEdit} from "entities/Test/ui/TestEdit/TestEdit";
+import TestEdit from "pages/TestEdit/TestEdit";
+import {Test} from "pages/Test/Test";
 function App() {
     const dispatch = useAppDispatch();
     const _inited = useSelector(selectorInited);
@@ -87,8 +88,18 @@ function App() {
                         path="/quiz/:quizId"
                         element={
                             <PageLayoutAuth>
-                                <Container maxWidth="lg"  style={{display:'flex', justifyContent:'center',margin:'auto',width:'1100px',paddingTop:"80px"}}>
+                                <Container maxWidth="lg"  style={{display:'flex', justifyContent:'center',margin:'auto',paddingTop:"80px"}}>
                                     <Quiz/>
+                                </Container>
+                            </PageLayoutAuth>
+                        }
+                    />
+                    <Route
+                        path="/test/:testId"
+                        element={
+                            <PageLayoutAuth>
+                                <Container maxWidth="lg"  style={{display:'flex', justifyContent:'center',margin:'auto',paddingTop:"120px"}}>
+                                    <Test/>
                                 </Container>
                             </PageLayoutAuth>
                         }
@@ -141,6 +152,15 @@ function App() {
                     />
                     <Route
                         path="/test/create"
+                        element={
+                            <PageLayoutAuth haveBorder={false}>
+                                <TestEdit/>
+                            </PageLayoutAuth>
+
+                        }
+                    />
+                    <Route
+                        path="/test/:id/edit"
                         element={
                             <PageLayoutAuth haveBorder={false}>
                                 <TestEdit/>
