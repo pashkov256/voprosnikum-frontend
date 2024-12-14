@@ -47,7 +47,7 @@ export const User = (props: UserProps) => {
                 <h3>{isMe ? "Ваши квизы" : "Квизы пользователя"}</h3>
             </div>
 
-            {!allQuizIsLoading ? <QuizCardList quizes={allQuiz} /> : null}
+            {/*{!allQuizIsLoading ? <QuizCardList quizes={allQuiz} /> : null}*/}
 
         </div>
     )

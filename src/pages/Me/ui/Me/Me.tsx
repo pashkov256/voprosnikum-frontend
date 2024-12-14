@@ -30,7 +30,8 @@ export const Me = (props: UserProps) => {
                             authData.role === "teacher" &&
                             <div className={cls.meBlock}>
                                 <Text title={"Ваши тесты"} size={TextSize.L} className={cls.meTitle}/>
-                            <QuizCardList quizes={[]}/>
+                                {/*@ts-ignore*/}
+                            <QuizCardList  userId={authData._id}/>
                         </div>
                     }
 
