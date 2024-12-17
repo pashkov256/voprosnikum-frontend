@@ -7,7 +7,6 @@ import { IoIosClose } from "react-icons/io";
 import { ITest } from "entities/Test/model/types/test";
 import { useCreateQuestionMutation } from "entities/Test/model/slice/testSlice";
 import TestFormInput from "./TestFormInput";
-
 interface TestFormProps {
     className?: string;
     testData: ITest;
@@ -20,7 +19,7 @@ export const TestForm = memo((props: TestFormProps) => {
     const { className, testData, refetchGetTest ,onChangeTestFormData,updateTestData} = props;
     const [createQuestion, { isLoading: createQuestionIsLoading }] = useCreateQuestionMutation();
     const [testFormData, setTestFormData] = useState<ITest>(testData);
-
+    const [textAreaValue,setTextAreaValue] = useState('')
     useEffect(() => {
         setTestFormData(testData);
     }, [testData]);
@@ -29,21 +28,22 @@ export const TestForm = memo((props: TestFormProps) => {
         onChangeTestFormData(testFormData);
     }, [testFormData]);
 
-    const createNewQuestion = async () => {
+    const createNewQuestion = async (title?:string | undefined,options?:string[] | undefined) => {
         //@ts-ignore
         await updateTestData({...testFormData});
         await createQuestion({
             test: testFormData._id,
-            title: "Нажмите чтобы изменить вопрос №" + (testFormData.questions.length + 1),
-            title1: "Нажмите чтобы изменить вопрос №" + (testFormData.questions.length + 1),
-            options: [
+            title: title || "Нажмите чтобы изменить вопрос №" + (testFormData.questions.length + 1),
+            title1: title || "Нажмите чтобы изменить вопрос №" + (testFormData.questions.length + 1),
+            options: (options && options.length !== 0) ? options : [
                 "Вариант Ответа №1",
                 "Вариант Ответа №2",
                 "Вариант Ответа №3",
                 "Вариант Ответа №4",
             ],
             type: "multiple-choice",
-            correctAnswers: ["Вариант Ответа №1"],
+            //@ts-ignore
+            correctAnswers: options[0] || ["Вариант Ответа №1"],
         });
         refetchGetTest?.();
     };
@@ -321,9 +321,26 @@ export const TestForm = memo((props: TestFormProps) => {
             ))}
 
 
+                <textarea className={cls.textarea} value={textAreaValue} onChange={(e)=>setTextAreaValue(e.target.value)} placeholder="Вставьте ваш вопрос с вариантами ответа (пример)
+                ⠀
+                Кто создал Linux?¶
+                     Ада Лавлейс ¶
+                     Алан Тьюринг¶
+                     Линус Торвальдс¶
+                "></textarea>
+
+        
+
                 <button
                     className={cls.AddQuestion}
-                    onClick={createNewQuestion}
+                    // onClick={()=>createNewQuestion()}
+                    onClick={()=>{
+                        const splitedValue = textAreaValue.split('\n')
+                        let title = splitedValue[0]
+                        splitedValue.shift()
+                        console.log(splitedValue)
+                        createNewQuestion(title,splitedValue)
+                    }}
                     disabled={createQuestionIsLoading}
                 >
                     + Добавить новый вопрос

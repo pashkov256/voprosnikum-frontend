@@ -34,9 +34,9 @@ const Header = (props: HeaderProps) => {
                             </Link>
                        </> : (
                             <>
-                                <Link to="/login" className={cls.link}>
+                                {/* <Link to="/login" className={cls.link}>
                                     Войти
-                                </Link>
+                                </Link> */}
                                 {/*<Link to="/register" className={cls.link}>*/}
                                 {/*    Создать аккаунт*/}
                                 {/*</Link>*/}
