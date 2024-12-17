@@ -19,7 +19,7 @@ export const testApi = createApi({
         },
     }),
     endpoints: (builder) => ({
-        getTestsByTeacher: builder.query<ITest, string>({
+        getTestsByTeacher: builder.query<ITest[], string>({
             query: (teacherId: string) => `/tests/teacher/${teacherId}`,
         }),
         getTeachers: builder.query<IUser, void>({
@@ -40,10 +40,10 @@ export const testApi = createApi({
             }),
         }),
         createQuestion: builder.mutation<IQuestion, IQuestion>({
-            query: ({ test, title, type, options, correctAnswers, imageUrl, timeLimit }) => ({
+            query: ({ test, title, title1, type, options, correctAnswers, imageUrl, timeLimit }) => ({
                 url:`/question/test/${test}`,
                 method:"POST",
-                body:{ test, title, type, options, correctAnswers, imageUrl, timeLimit },
+                body:{ test, title, type, options, correctAnswers, imageUrl, timeLimit , title1},
             }),
         }),
         createTest: builder.mutation<ITest, {teacher:string}>({

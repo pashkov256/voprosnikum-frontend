@@ -1,28 +1,25 @@
-import {Input} from "@mui/material";
+// import {Input} from "@mui/material";
 /* import Button from "@mui/material/Button"; */
-import React from "react";
+import React, { useState } from "react";
 import {useForm} from "react-hook-form";
 import {useSelector} from "react-redux";
 import {Navigate} from "react-router";
 import {fetchAuth, selectorIsAuth} from "app/providers/StoreProvider/config/slices/auth";
 import styles from "./Login.module.scss";
 import {useAppDispatch} from "app/providers/StoreProvider/config/store";
+import { Input } from "shared/ui/Input/Input";
+import { Button } from "shared/ui/Button/Button";
 
 const Login = () => {
-    const isAuth = useSelector(selectorIsAuth);
     document.title = "Авторизация";
-    const {
-        register,
-        handleSubmit,
-        setError,
-        formState: { errors, isValid },
-    } = useForm({
-        defaultValues: {
-            login: "",
-            password: "",
-        },
-        mode: "onChange",
-    });
+    const isAuth = useSelector(selectorIsAuth);
+    const [loginFormData,setLoginFormData] = useState({
+        login:"",
+        password:""
+    })
+
+
+
 
     const dispatch = useAppDispatch();
 
@@ -49,28 +46,30 @@ const Login = () => {
         <div className={styles.loginBoxParent}>
             <h5 className={styles.title}>Вход в аккаунт</h5>
             <div className={styles.loginBox}>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <Input
-                        className={styles.loginInput}
-                        fullWidth
-                        {...register("login", { required: "Укажите логин" })}
-                        type="text"
-                        placeholder="Укажите логин"
-                    />
-                    <Input
-                        className={styles.loginInput}
-                        fullWidth
-                        {...register("password", { required: "Укажите пароль" })}
-                        error={Boolean(errors.password?.message)}
-                        placeholder="Укажите пароль"
-                        type={"password"}
-                    />
-                    <button
+                <form className={styles.form} onSubmit={()=>{onSubmit(loginFormData)}}>
+                    <div className={styles.inputs}>
+                        <Input
+                            className={styles.loginInput}
+                            placeholder="Укажите логин"
+                            onChange={(login)=>{
+                                setLoginFormData({...loginFormData,login})
+                            }}  
+                        />
+                        <Input
+                            className={styles.loginInput}
+                            placeholder="Укажите пароль"
+                            onChange={(password)=>{
+                                setLoginFormData({...loginFormData,password})
+                            }} 
+                            type={"password"}
+                        />
+                    </div>
+                    <Button
                         className={styles.loginButton}
                         type={"submit"}
                     >
                         Войти
-                    </button>
+                    </Button>
                 </form>
             </div>
         </div>

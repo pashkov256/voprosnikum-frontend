@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 30vw;
+  width: 23vw;
   padding: 20px;
   /*   background-color: #f4f4f6; */
   background-color: #fff;
@@ -20,30 +20,18 @@
   height: 70vh;
 }
 
-/* .loginButton {
-  padding: 11px 22px;
+.form{
   width: 100%;
-  font-size: 16px;
-  font-variation-settings: "wght" 600;
-  line-height: 22px;
-  color: #fff;
-  background-color: #6788f3;
-  border-radius: 8px;
-  border: none;
-  outline: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
-
-.loginButton:hover {
-  background-color: #4d71e7;
-  transition: 0.2;
-} */
 
 .loginButton {
   background-color: var(--main-color);
   border-radius: 12px;
-  padding: 11px 22px;
   width: 100%;
-  font-size: calc(6px + 8 * (100vw - 320px) / 880);
+  // font-size: calc(6px + 8 * (100vw - 320px) / 880);
   color: white;
   font-weight: 600;
   transition: 0.3s ease;
@@ -79,22 +67,29 @@
   font-size: 1.5rem;
   margin-bottom: 1rem;
 }
-/* .input {
-  font-size: calc(6px + 8 * (100vw - 320px) / 880) !important;
-  font-weight: 600 !important;
-  color: #111 !important;
-  outline: 1.3px solid #000 !important;
 
-  border: none !important;
-  background-color: #fff !important;
-  padding: 0.5rem;
-  margin-bottom: 8px;
+.inputs{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
-.input:focus {
-  transition: 0.4s ease-in-out !important;
-  outline: none !important;
-  box-shadow: 1px 0 0 #000 inset !important;
-  border: none !important;
+
+@media(max-width:1100px){
+  .loginBox{
+    width: 40vw;
+  }
 }
- */
+
+@media(max-width:800px){
+  .loginBox{
+    width: 60vw;
+  }
+}
+
+@media(max-width:500px){
+  .loginBox{
+    width: 80vw;
+  }
+}

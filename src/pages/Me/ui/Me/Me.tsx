@@ -6,6 +6,7 @@ import {useSelector} from "react-redux";
 import {useAppSelector} from "app/providers/StoreProvider/config/slices/auth";
 import {QuizCardList} from "components/QuizCardList/QuizCardList";
 import {TeachersList} from "pages/Me/ui/TeachersList/TeachersList";
+import { TestList } from 'shared/ui/TestList/TestList';
 
 interface UserProps {
     className?: string;
@@ -31,7 +32,7 @@ export const Me = (props: UserProps) => {
                             <div className={cls.meBlock}>
                                 <Text title={"Ваши тесты"} size={TextSize.L} className={cls.meTitle}/>
                                 {/*@ts-ignore*/}
-                            <QuizCardList  userId={authData._id}/>
+                            <TestList  userId={authData._id}/>
                         </div>
                     }
 
