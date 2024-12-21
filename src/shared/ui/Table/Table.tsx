@@ -9,7 +9,6 @@ export interface Column {
 
 interface TableProps {
     data: any; // Массив данных
-    // data: Array<Record<string, any>>; // Массив данных
     className?: string; // Массив данных
     columns: Column[]; // Массив настроек столбцов
     onRowClick?: (row: Record<string, any>) => void; // Обработчик клика на строку
@@ -37,10 +36,8 @@ export const Table: React.FC<TableProps> = memo(({ data, columns, onRowClick ,cl
                         style={{ cursor: onRowClick ? 'pointer' : 'default' }}
                     >
                         {columns.map((column, colIndex) => {
-                     //  {/*{column?.accessorDeep !== undefined ? row[column.accessor] : row[column.accessor][column?.accessorDeep || ""]}*/}
                             return <td key={colIndex} >
-
-                                {row[column.accessor]}
+                                {column?.accessorDeep === undefined ? row[column.accessor] : row[column.accessor][column?.accessorDeep || ""]}
                             </td>
                         })}
                     </tr>

@@ -10,9 +10,11 @@ interface TableTestResultsProps {
 }
 
 const columns = [
-    { header: 'Имя фамилия ', accessor: 'student'},
+    { header: 'Имя фамилия ', accessor: 'student',accessorDeep:"fullName"},
     { header: 'Оценка', accessor: 'score' },
     { header: 'Время прохождения', accessor: 'completionTime' },
+    { header: 'Дата начала прохождения', accessor: 'dateStart' },
+    // { header: 'Количество пройденных вопросов', accessor: 'completionTime' },
 ];
 
 export const TableTestResults = (props: TableTestResultsProps) => {

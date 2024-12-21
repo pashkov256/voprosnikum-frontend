@@ -66,12 +66,10 @@ const TestEdit = memo((props: TestEditProps) => {
     const [tabsValue, setTabsValue] = useState(0);
     const [testFormData, setTestFormData] = useState<ITest>();
     const isCreateMode = id === undefined;
-    //@ts-ignore
-    const { data: testAllResult,refetch:refetchTestResult } = useGetTestAllResultsQuery({ test: id || ""});
+
     const handleChangeTabs = (event: SyntheticEvent, newValue:any) => {
         setTabsValue(newValue);
     };
-    console.log(testAllResult)
     useEffect(()=>{
        document.title = 'Редактирование теста'
     },[])
