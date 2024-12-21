@@ -4,6 +4,7 @@ import cls from './Table.module.scss'
 export interface Column {
     header: string; // Заголовок столбца
     accessor: string; // Ключ объекта данных
+    accessorDeep?: string; // Ключ объекта данных
 }
 
 interface TableProps {
@@ -36,6 +37,7 @@ export const Table: React.FC<TableProps> = memo(({ data, columns, onRowClick ,cl
                         style={{ cursor: onRowClick ? 'pointer' : 'default' }}
                     >
                         {columns.map((column, colIndex) => {
+                     //  {/*{column?.accessorDeep !== undefined ? row[column.accessor] : row[column.accessor][column?.accessorDeep || ""]}*/}
                             return <td key={colIndex} >
 
                                 {row[column.accessor]}

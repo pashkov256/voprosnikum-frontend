@@ -1,14 +1,14 @@
 // import {Input} from "@mui/material";
 /* import Button from "@mui/material/Button"; */
+import { fetchAuth, selectorIsAuth } from "app/providers/StoreProvider/config/slices/auth";
+import { useAppDispatch } from "app/providers/StoreProvider/config/store";
 import React, { useState } from "react";
-import {useForm} from "react-hook-form";
-import {useSelector} from "react-redux";
-import {Navigate} from "react-router";
-import {fetchAuth, selectorIsAuth} from "app/providers/StoreProvider/config/slices/auth";
-import styles from "./Login.module.scss";
-import {useAppDispatch} from "app/providers/StoreProvider/config/store";
-import { Input } from "shared/ui/Input/Input";
+import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
+import { Navigate } from "react-router";
 import { Button } from "shared/ui/Button/Button";
+import { Input } from "shared/ui/Input/Input";
+import styles from "./Login.module.scss";
 
 const Login = () => {
     document.title = "Авторизация";
@@ -27,7 +27,7 @@ const Login = () => {
         console.log(values)
             //@ts-ignore
         const data = await dispatch(fetchAuth(values));
-
+    console.log(data)
         if (!data.payload) {
             return alert("Не удалось авторизоваться");
         }
@@ -46,7 +46,7 @@ const Login = () => {
         <div className={styles.loginBoxParent}>
             <h5 className={styles.title}>Вход в аккаунт</h5>
             <div className={styles.loginBox}>
-                <form className={styles.form} onSubmit={()=>{onSubmit(loginFormData)}}>
+                <div className={styles.form}>
                     <div className={styles.inputs}>
                         <Input
                             className={styles.loginInput}
@@ -67,10 +67,11 @@ const Login = () => {
                     <Button
                         className={styles.loginButton}
                         type={"submit"}
+                        onClick={()=>onSubmit(loginFormData)}
                     >
                         Войти
                     </Button>
-                </form>
+                </div>
             </div>
         </div>
     );

@@ -31,6 +31,7 @@ export const TestForm = memo((props: TestFormProps) => {
     const createNewQuestion = async (title?:string | undefined,options?:string[] | undefined) => {
         //@ts-ignore
         await updateTestData({...testFormData});
+        console.log({...testFormData})
         await createQuestion({
             test: testFormData._id,
             title: title || "Нажмите чтобы изменить вопрос №" + (testFormData.questions.length + 1),
@@ -294,16 +295,16 @@ export const TestForm = memo((props: TestFormProps) => {
                             </>}
 
                         <div className={cls.QuestionSettings}>
-                            {/*<TextField*/}
-                            {/*    className={cls.input}*/}
-                            {/*    value={question.timeLimit}*/}
-                            {/*    type={"number"}*/}
-                            {/*    onChange={(e) =>*/}
-                            {/*        handleTimeLimitChange(question.title || "", Number(e.target.value))*/}
-                            {/*    }*/}
-                            {/*    placeholder="Время выполнения (сек)"*/}
-                            {/*    variant="standard"*/}
-                            {/*/>*/}
+                            <TextField
+                                className={cls.input}
+                                value={question.timeLimit}
+                                type={"number"}
+                                onChange={(e) =>
+                                    handleTimeLimitChange(question.title || "", Number(e.target.value))
+                                }
+                                placeholder="Время выполнения (сек)"
+                                variant="standard"
+                            />
 
                             <TextField
                                 className={cls.input}
@@ -329,17 +330,16 @@ export const TestForm = memo((props: TestFormProps) => {
                      Линус Торвальдс¶
                 "></textarea>
 
-        
+
 
                 <button
                     className={cls.AddQuestion}
-                    // onClick={()=>createNewQuestion()}
                     onClick={()=>{
                         const splitedValue = textAreaValue.split('\n')
                         let title = splitedValue[0]
                         splitedValue.shift()
-                        console.log(splitedValue)
                         createNewQuestion(title,splitedValue)
+                        setTextAreaValue('')
                     }}
                     disabled={createQuestionIsLoading}
                 >

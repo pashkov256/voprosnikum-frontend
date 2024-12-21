@@ -1,26 +1,25 @@
-import {Container} from "@mui/material";
-import React, {Suspense, useEffect} from "react";
-import {Route, Routes} from "react-router-dom";
+import { Container } from "@mui/material";
+import { fetchAuthMe, selectorInited, selectorIsAuth } from "app/providers/StoreProvider/config/slices/auth";
+import { useAppDispatch } from "app/providers/StoreProvider/config/store";
+import AuthRoute from "components/AuthRoute";
 import Header from "components/Header/Header";
-import {Me} from "pages/Me/ui/Me/Me";
-import {QuizEdit} from "components/QuizEdit/QuizEdit";
-import Login from "pages/Login/Login";
-import {Registration} from "pages/Registration/ui/Registration";
-import {User} from "pages/User/User";
 import PageLayoutAuth from "components/PageLayoutAuth";
 import Quiz from "components/Quiz/Quiz";
+import { QuizEdit } from "components/QuizEdit/QuizEdit";
 import RedirectAuthRoute from "components/RedirectAuthRoute";
-import {useAppDispatch} from "app/providers/StoreProvider/config/store";
-import {useSelector} from "react-redux";
-import {fetchAuthMe, selectorInited, selectorIsAuth} from "app/providers/StoreProvider/config/slices/auth";
-import AuthRoute from "components/AuthRoute";
-import {GroupPage} from "pages/GroupPage";
+import { GroupPage } from "pages/GroupPage";
+import Login from "pages/Login/Login";
+import { Me } from "pages/Me/ui/Me/Me";
+import { Registration } from "pages/Registration/ui/Registration";
 import TestEdit from "pages/TestEdit/TestEdit";
+import { User } from "pages/User/User";
+import React, { Suspense, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { Route, Routes } from "react-router-dom";
 import {Test} from "pages/Test/Test";
 function App() {
     const dispatch = useAppDispatch();
     const _inited = useSelector(selectorInited);
-    console.log(_inited)
     useEffect(() => {
         dispatch(fetchAuthMe());
     }, [dispatch]);
@@ -99,6 +98,7 @@ function App() {
                         element={
                             <PageLayoutAuth>
                                 <Container maxWidth="lg"  style={{display:'flex', justifyContent:'center',margin:'auto',paddingTop:"120px"}}>
+                                    {/* <Test/> */}
                                     <Test/>
                                 </Container>
                             </PageLayoutAuth>

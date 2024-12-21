@@ -13,10 +13,11 @@ interface TableUsersProps {
     data: any; // Массив данных
     columns: Column[]; // Массив настроек столбцов
     onCreateUser?: (fullName:string)=>void; // Массив настроек столбцов
+    filePDFName?: string;
 }
 
 export const TableUsers = (props: TableUsersProps) => {
-    const {className,data,columns,onCreateUser,inputPlaceholder} = props;
+    const {className,data,columns,onCreateUser,inputPlaceholder,filePDFName = 'список_пользователей'} = props;
     const tableRef = useRef<HTMLTableElement | null>(null);
     const [fullNameValue, setFullNameValue] = useState('');
 
@@ -24,13 +25,11 @@ export const TableUsers = (props: TableUsersProps) => {
         console.log('Row clicked:', row);
     };
     const handleDownloadPDF = () => {
-        generatePDF(tableRef.current, 'преподователи.pdf');
+        generatePDF(tableRef.current, `${filePDFName}.pdf`);
     };
 
     return (
         <div className={classNames(cls.TableTeachers, {}, [className])}>
-
-
             {data.length > 0 ?
                 <div ref={tableRef}>
                     <Table data={data || []} columns={columns} onRowClick={handleRowClick}/>
