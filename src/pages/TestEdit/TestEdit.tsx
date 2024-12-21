@@ -27,6 +27,7 @@ import {ITest} from "entities/Test/model/types/test";
 import formatDateTimeForInput from "shared/lib/formatDateTimeForInput/formatDateTimeForInput";
 import {useGetGroupsQuery} from "entities/Group/model/slice/groupSlice";
 import Loader from "shared/ui/Loader/Loader";
+import {TableTestResults} from "entities/Test/ui/TableTestResults/TableTestResults";
 
 interface TestEditProps {
     className?: string;
@@ -65,12 +66,10 @@ const TestEdit = memo((props: TestEditProps) => {
     const [tabsValue, setTabsValue] = useState(0);
     const [testFormData, setTestFormData] = useState<ITest>();
     const isCreateMode = id === undefined;
-    //@ts-ignore
-    const { data: testAllResult,refetch:refetchTestResult } = useGetTestAllResultsQuery({ test: id || ""});
+
     const handleChangeTabs = (event: SyntheticEvent, newValue:any) => {
         setTabsValue(newValue);
     };
-    console.log(testAllResult)
     useEffect(()=>{
        document.title = 'Редактирование теста'
     },[])
@@ -107,41 +106,9 @@ const TestEdit = memo((props: TestEditProps) => {
                       <TestForm testData={testData} refetchGetTest={refetchGetTest} onChangeTestFormData={setTestFormData} updateTestData={updateTestData}/>
                     </TabPanel>
 
-                            <TabPanel value={tabsValue} index={1}>
-                                {/*{(!quizResultsIsLoading && quizResults?.quizResults.length !== 0) && <div>*/}
-                                {/*    <TableContainer component={Paper}>*/}
-                                {/*        <Table sx={{minWidth: 650}} aria-label="simple table">*/}
-                                {/*            <TableHead>*/}
-                                {/*                <TableRow>*/}
-                                {/*                    <TableCell>Имя пользователя</TableCell>*/}
-                                {/*                    <TableCell align="right">Правильных вопросов</TableCell>*/}
-
-                                {/*                </TableRow>*/}
-                                {/*            </TableHead>*/}
-                                {/*            <TableBody>*/}
-                                {/*                {(quizResults !== null) && quizResults.quizResults.map((quizResult, index) => {*/}
-                                {/*                    if (((index + 1) % 2) !== 0) {*/}
-                                {/*                        return (*/}
-                                {/*                            <TableRow*/}
-                                {/*                                key={quizResult.userName}*/}
-                                {/*                                sx={{'&:last-child td, &:last-child th': {border: 0}}}*/}
-                                {/*                            >*/}
-                                {/*                                <TableCell align="left">{quizResult.userName}</TableCell>*/}
-                                {/*                                <TableCell*/}
-                                {/*                                    align="right">{`${quizResult.countUser} из ${quizResult.countAll}`}</TableCell>*/}
-                                {/*                            </TableRow>*/}
-                                {/*                        )*/}
-                                {/*                    }*/}
-
-                                {/*                })}*/}
-                                {/*            </TableBody>*/}
-                                {/*        </Table>*/}
-                                {/*    </TableContainer>*/}
-                                {/*</div>*/}
-                                {/*}*/}
-                                {/*{(quizResults?.quizResults.length === 0 && quizResultsIsLoading === false) &&*/}
-                                {/*    <h1 style={{textAlign: 'center'}}>Пока что никто не прошёл опрос</h1>}*/}
-                            </TabPanel>
+                    <TabPanel value={tabsValue} index={1}>
+                        <TableTestResults id={id || ""}/>
+                    </TabPanel>
 
                     <TabPanel value={tabsValue} index={2}>
                         <div className={cls.settingsBlock}>

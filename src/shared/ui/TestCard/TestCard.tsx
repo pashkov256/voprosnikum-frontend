@@ -15,7 +15,7 @@ export const TestCard = (props: TestCardProps) => {
     const navigate = useNavigate();
 
     return (
-        <Link className={cls.Card} to={`/quiz/${test._id}/edit`}>
+        <Link className={cls.Card} to={`/test/${test._id}/edit`}>
             <div className={cls.CardItem}>
                 <span className={cls.CardItemTitle}>Тема:</span>
                 <span className={cls.CardItemData}>{test.name}</span>
