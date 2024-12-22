@@ -11,14 +11,13 @@ import { RiQuestionAnswerLine } from "react-icons/ri";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { classNames } from 'shared/lib/classNames/classNames';
-import formatDate from "shared/lib/formatDate/formatDate";
-import { getMinutesDifferenceFromNow } from "shared/lib/getMinutesDifferenceFromNow/getMinutesDifferenceFromNow";
+import {formatDate} from "shared/lib/date";
 import isPastDate from "shared/lib/isPastDate/isPastDate";
 import { Button, ButtonTheme } from "shared/ui/Button/Button";
 import { Input } from "shared/ui/Input/Input";
 import Loader from "shared/ui/Loader/Loader";
 import cls from './Test.module.scss';
-import {formatTimeDifference} from "shared/lib/formatTimeDifference/formatTimeDifference";
+import {formatTimeDifference} from "shared/lib/date/formatTimeDifference";
 
 interface TestProps {
     className?: string;
@@ -252,7 +251,8 @@ export const Test = (props: TestProps) => {
         }
         return (
             <div className={cls.testWrapper}>
-                {testData.timeLimit !== 0 && <h1 className={cls.testSecondLeftTitle}
+
+                {(testData.timeLimit !== 0 ) && !isComplete && <h1 className={cls.testSecondLeftTitle}
                                                  style={(testSecondsLeft !== null && !(testSecondsLeft > 0) || testResult?.completedAt || "") ? {display: "none"} : {}}>Осталось
                     времени на
                     тест: {Math.floor((testSecondsLeft || 0) / 60)}:{(testSecondsLeft || 0) % 60}</h1>}

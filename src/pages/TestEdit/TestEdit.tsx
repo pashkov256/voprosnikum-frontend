@@ -24,7 +24,7 @@ import TextField from "@mui/material/TextField";
 import {Button} from "shared/ui/Button/Button";
 import {TestForm} from "entities/Test/ui/TestForm/TestForm";
 import {ITest} from "entities/Test/model/types/test";
-import formatDateTimeForInput from "shared/lib/formatDateTimeForInput/formatDateTimeForInput";
+import {formatDateTimeForInput} from "shared/lib/date";
 import {useGetGroupsQuery} from "entities/Group/model/slice/groupSlice";
 import Loader from "shared/ui/Loader/Loader";
 import {TableTestResults} from "entities/Test/ui/TableTestResults/TableTestResults";

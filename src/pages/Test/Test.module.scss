@@ -92,7 +92,7 @@
   transition: 0.3s;
   border-radius: 8px;
   border:0px;
-
+  user-select: none;
 }
 
 .quiz-question:disabled{
@@ -126,6 +126,7 @@
   font-size: 32px;
   text-align: center;
   margin: 0;
+  user-select: none;
 }
 
 
