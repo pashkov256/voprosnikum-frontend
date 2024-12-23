@@ -1,0 +1,142 @@
+.teacherName{
+  font-size: 20px!important;
+  font-weight: 500!important;
+  margin-bottom: 16px;
+}
+
+.textError{
+  font-size: 16px;
+}
+
+.teacherTests{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 24px;
+
+}
+
+.test{
+  display: flex;
+  flex-direction: column;
+  width: 32%;
+  gap: 10px;
+  padding: 30px 48px 24px 16px;
+  box-shadow: rgba(14, 63, 126, 0.06) 0px 0px 0px 1px, rgba(42, 51, 70, 0.03) 0px 1px 1px -0.5px, rgba(42, 51, 70, 0.04) 0px 2px 2px -1px, rgba(42, 51, 70, 0.04) 0px 3px 3px -1.5px, rgba(42, 51, 70, 0.03) 0px 5px 5px -2.5px, rgba(42, 51, 70, 0.03) 0px 10px 10px -5px, rgba(42, 51, 70, 0.03) 0px 24px 24px -8px;
+  transition: 0.5s ease-in-out;
+  border-radius: 10px;
+  position: relative;
+  text-decoration: none;
+  background-color: #fff;
+  height: 240px;
+  }
+
+
+.testIcon{
+  font-size: 28px;
+}
+
+.testDetails{
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  }
+.testLink{
+    color: var(--main-color);
+    font-size: 24px;}
+
+.testDetailsBlock{
+  display: flex;
+  align-items: center;
+
+  gap: 6px;
+}
+
+.testDetailsTitle{
+  color: #282c34;
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+}
+.testDetailsText{
+  color: #282c34;
+  font-size: 18px;
+  font-weight: 400;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin: 0;
+}
+
+
+@media(max-width: 1300px){
+  .testDetailsTitle{
+    font-size: 17px;
+  }.testDetailsText{
+     font-size: 17px;
+   }
+  .testIcon{
+    font-size: 30px;
+  }
+}
+
+@media(max-width:1150px){
+  .test{
+    width: 48%;
+  }
+}
+@media(max-width:950px){
+  .test{
+    width: 100%;
+    height: max-content;
+  }
+}
+@media(max-width:600px){
+
+  .testDetailsTitle{
+    font-size: 15px;
+  }.testDetailsText{
+     font-size: 15px;
+   }
+  .testIcon{
+    font-size: 28px;
+  }
+  .test{
+    gap: 6px;
+  }
+  .teacherTests{
+    gap: 12px;
+  }
+}
+@media(max-width:500px){
+  .test{
+    gap: 5px;
+    padding: 30px 48px 24px 12px;
+
+  }
+  .testItem{
+    gap: 6px;
+  }
+
+  .testDetailsTitle{
+    font-size: 14px;
+  }.testDetailsText{
+     font-size: 14px;
+   }
+  .testIcon{
+    font-size: 24px;
+  }
+  .teacherName{
+    font-size: 18px!important;
+  }
+  .textError{
+    font-size: 14px;
+  }
+}
+
+@media(max-width: 390px){
+  .teacherName{
+    font-size: 16px!important;
+  }
+}

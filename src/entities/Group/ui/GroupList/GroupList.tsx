@@ -27,7 +27,7 @@ export const GroupList = (props: GroupListProps) => {
     return (
         <div className={classNames(cls.GroupBlock, {}, [className])}>
             {haveCreateMode && <div className={cls.groupForm}>
-                <Input placeholder={"Название группы"} value={groupName} onChange={(fullName)=>setGroupName(fullName)}/>
+                <Input className={cls.input} placeholder={"Название группы"} value={groupName} onChange={(fullName)=>setGroupName(fullName)}/>
                 <Button
                     theme={ButtonTheme.BACKGROUND}
                     className={cls.ButtonGroupCreate}

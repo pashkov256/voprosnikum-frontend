@@ -17,12 +17,13 @@ export interface ITest {
     description?: string;
     teacher: string | {fullName:string};
     group: string; //id
-    deadline: string;
+    deadline?: string;
     createdAt?: string;
     updatedAt?: string;
     timeLimit: number;
     questions:IQuestion[];
     haveTestResult?:boolean;
+    isResultVisibleAfterDeadline:boolean;
 }
 
 export interface  ITestAnswer{
@@ -39,6 +40,7 @@ export interface ITestResult{
     dateStart?:string;
     completionTime?:string;
     score?:number;
+    points: number;
     _id:string;
 }
 

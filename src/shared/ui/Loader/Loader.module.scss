@@ -1,1 +1,8 @@
-.Loader{height:30vh;width:100%;display:flex;justify-content:center;align-items:center}
+.Loader{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  left: calc(50% - 20px);
+  top: calc(50% - 40px);
+}

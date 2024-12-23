@@ -11,7 +11,8 @@ import {
 import Loader from "shared/ui/Loader/Loader";
 import { useGetTeachersMinimalQuery } from "entities/User/model/slice/userSlice";
 import { useState, useEffect } from "react";
-import { Select, MenuItem, Chip, InputLabel, FormControl } from '@mui/material';
+import {Select, MenuItem, Chip, InputLabel, FormControl, Container} from '@mui/material';
+import {Block} from "shared/ui/Block/Block";
 
 interface GroupPageProps {
     className?: string;
@@ -66,14 +67,15 @@ export const GroupPage = (props: GroupPageProps) => {
     }
 
     return (
+        <Container maxWidth="xl" className={cls.groupContainer}>
         <div className={classNames(cls.Group, {}, [className])}>
-            <div className={cls.GroupBlock}>
-                <Text title={`Группа ${groupData?.name || ''}`} size={TextSize.L} />
+            <Block >
+                <Text className={cls.groupTitle} title={`Группа ${groupData?.name || ''}`} size={TextSize.L} />
                 <TableStudents groupId={groupId || ""} />
-            </div>
+            </Block>
 
-            <div className={classNames(cls.addTeachersBlock, {}, [cls.GroupBlock])}>
-                <Text title="Преподаватели группы" size={TextSize.L}/>
+            <Block className={classNames(cls.addTeachersBlock, {}, [])}>
+                <Text className={cls.groupTitle} title="Преподаватели группы" size={TextSize.L}/>
                 {/*<InputLabel id="multiple-names-label">Добавьте преподавателей для группы</InputLabel>*/}
                 <Select
                     labelId="multiple-names-label"
@@ -84,7 +86,7 @@ export const GroupPage = (props: GroupPageProps) => {
                     renderValue={(selected) => (
                         <div>
                             {selected.map((value) => (
-                                <Chip key={value} label={value} />
+                                <Chip key={value} label={value} className={cls.selectChip}/>
                             ))}
                         </div>
                     )}
@@ -96,7 +98,8 @@ export const GroupPage = (props: GroupPageProps) => {
                         </MenuItem>
                     ))}
                 </Select>
-            </div>
+            </Block>
         </div>
+        </Container>
     );
 };

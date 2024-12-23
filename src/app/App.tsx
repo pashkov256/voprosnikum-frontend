@@ -52,10 +52,8 @@ function App() {
                         path="/me"
                         element={
                             <AuthRoute>
-                                <Container maxWidth="xl">
                                     <Header/>
                                     <Me/>
-                                </Container>
                             </AuthRoute>
 
                         }
@@ -64,10 +62,8 @@ function App() {
                         path="/group/:groupId"
                         element={
                             <AuthRoute>
-                                <Container maxWidth="xl">
                                     <Header/>
                                     <GroupPage/>
-                                </Container>
                             </AuthRoute>
 
                         }
@@ -84,65 +80,15 @@ function App() {
                         }
                     />
                     <Route
-                        path="/quiz/:quizId"
-                        element={
-                            <PageLayoutAuth>
-                                <Container maxWidth="lg"  style={{display:'flex', justifyContent:'center',margin:'auto',paddingTop:"80px"}}>
-                                    <Quiz/>
-                                </Container>
-                            </PageLayoutAuth>
-                        }
-                    />
-                    <Route
                         path="/test/:testId"
                         element={
                             <PageLayoutAuth>
-                                <Container maxWidth="lg"  style={{display:'flex', justifyContent:'center',margin:'auto',paddingTop:"120px"}}>
-                                    {/* <Test/> */}
                                     <Test/>
-                                </Container>
                             </PageLayoutAuth>
                         }
                     />
-                    <Route
-                        path="/test/:testId"
-                        element={
-                            <PageLayoutAuth>
-                                <Container maxWidth="lg"  style={{display:'flex', justifyContent:'center',margin:'auto',width:'1100px',paddingTop:"80px"}}>
-                                    <Quiz/>
-                                </Container>
-                            </PageLayoutAuth>
-                        }
-                    />
-                    {/*<Route*/}
-                    {/*    path="/quiz/:quizId/edit"*/}
-                    {/*    element={*/}
-                    {/*        <PageLayoutAuth haveBorder={false}>*/}
-                    {/*            <QuizEdit/>*/}
-                    {/*        </PageLayoutAuth>*/}
-
-                    {/*    }*/}
-                    {/*/>*/}
-                    {/*<Route*/}
-                    {/*    path="/quiz/create"*/}
-                    {/*    element={*/}
-                    {/*        <PageLayoutAuth haveBorder={false}>*/}
-                    {/*            <QuizEdit/>*/}
-                    {/*        </PageLayoutAuth>*/}
-
-                    {/*    }*/}
-                    {/*/>  */}
                     <Route
                         path="/quiz/:quizId/edit"
-                        element={
-                            <PageLayoutAuth haveBorder={false}>
-                                <QuizEdit/>
-                            </PageLayoutAuth>
-
-                        }
-                    />
-                    <Route
-                        path="/quiz/create"
                         element={
                             <PageLayoutAuth haveBorder={false}>
                                 <QuizEdit/>

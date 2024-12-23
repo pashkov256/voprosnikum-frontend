@@ -17,7 +17,7 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  height: 70vh;
+  height: 90vh;
 }
 
 .form{
@@ -35,7 +35,7 @@
   color: white;
   font-weight: 600;
   transition: 0.3s ease;
-
+  height: 44px;
 }
 
 .loginInput {
@@ -45,11 +45,10 @@
   width: 100%;
   border-radius: 8px;
   outline: none;
-  border: 1.3px solid #000 !important;
+  border: 1px solid #ccc;
   color: #111;
   background-color: #fff;
   transition: none;
-  margin-bottom: 10px;
 }
 
 .loginButton:hover {
@@ -72,7 +71,7 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 10px;
 }
 
 
@@ -86,10 +85,20 @@
   .loginBox{
     width: 60vw;
   }
+  .loginInput{
+    font-size: 13px!important;
+  }
+  .form{
+    gap: 12px;
+  }
 }
 
 @media(max-width:500px){
   .loginBox{
-    width: 80vw;
+    width: 90vw;
   }
+}
+
+@media(max-height: 500px){
+
 }

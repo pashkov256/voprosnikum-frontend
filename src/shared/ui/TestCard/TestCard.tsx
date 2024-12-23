@@ -4,6 +4,7 @@ import { RiDeleteBinLine } from "react-icons/ri";
 import { RiShareForwardLine } from "react-icons/ri";
 import { Link, useNavigate } from "react-router-dom";
 import {CLIENT_PROD_URL, SERVER_URL} from "shared/const/const";
+import {formatDate, testIsOpenByDate} from "shared/lib/date";
 
 interface TestCardProps {
     className?: string;
@@ -45,20 +46,20 @@ export const TestCard = (props: TestCardProps) => {
             </div>
             <div className={cls.CardItem}>
                 <span className={cls.CardItemTitle}>Создано:</span>
-                <span className={cls.CardItemData}>{test.createdAt}</span>
+                <span className={cls.CardItemData}>{formatDate(test.createdAt || "")}</span>
             </div>
             {test?.deadline && <div className={cls.CardItem}>
                 <span className={cls.CardItemTitle}>Открыт до:</span>
-                <span className={cls.CardItemData}>{test.deadline}</span>
+                <span className={cls.CardItemData}>{formatDate(test?.deadline || "")}</span>
             </div>}
             <div className={cls.CardItem}>
-                <span className={cls.CardItemTitle}>Открыт:</span>
-                {/* <span className={cls.CardItemData}>{quizDateActual(quiz?.availableUntil || '') ? 'Да' : 'Нет'}</span> */}
+                <span className={cls.CardItemTitle}>Доступен:</span>
+                 <span className={cls.CardItemData}>{testIsOpenByDate(test?.deadline || '') || !test?.deadline ? 'Да' : 'Нет'}</span>
             </div>
-            <div className={cls.CardItem}>
-                <span className={cls.CardItemTitle}>Людей прошло:</span>
-                {/* <span className={cls.CardItemData}>{Math.floor(test.peoplePassed / 2)}</span> */}
-            </div>
+            {/*<div className={cls.CardItem}>*/}
+            {/*    <span className={cls.CardItemTitle}>Людей прошло:</span>*/}
+            {/*     <span className={cls.CardItemData}>{Math.floor(test.peoplePassed / 2)}</span> */}
+            {/*</div>*/}
         </Link>
     );
 };

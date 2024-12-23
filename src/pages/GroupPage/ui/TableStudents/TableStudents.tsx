@@ -16,7 +16,7 @@ export const TableStudents = ({groupId}:{groupId:string}) => {
     const tableRef = useRef<HTMLTableElement | null>(null); //  реф  таблицы
 
     const columns = [
-        { header: 'Имя Фамилия', accessor: 'fullName' },
+        { header: 'ФИО', accessor: 'fullName' },
         { header: 'Логин', accessor: 'login' },
         { header: 'Пароль', accessor: 'plainPassword' },
     ];
@@ -38,7 +38,13 @@ export const TableStudents = ({groupId}:{groupId:string}) => {
         refetch()
     }
     return (
-        <TableUsers data={data || []} columns={columns} onCreateUser={onCreateUser} inputPlaceholder={"Имя и фамилия студента"}/>
+        <TableUsers
+            data={data || []}
+            columns={columns}
+            onCreateUser={onCreateUser}
+            inputPlaceholder={"ФИО студента"}
+            fileJPGName={"Студенты"}
+        />
     )
 
 };

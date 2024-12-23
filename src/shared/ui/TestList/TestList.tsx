@@ -10,14 +10,16 @@ import { TestCard } from '../TestCard/TestCard';
 interface TestListProps {
     className?: string;
     userId: string;
+    sortGroupBy: string;
     tests?: ITest[];
 }
 
 export const TestList = (props: TestListProps) => {
 
-    const { userId } = props;
+    const { userId,sortGroupBy } = props;
     const [createTest, { isLoading: newTestDataIsLoading }] = useCreateTestMutation();
-    const {data:tests,isLoading:testsIsLoading} = useGetTestsByTeacherQuery(userId)
+    const {data:tests,isLoading:testsIsLoading} = useGetTestsByTeacherQuery({teacherId:userId,sortGroupBy})
+    console.log(tests)
     const navigate = useNavigate();
     const handleCreateTest = async () => {
         try {
@@ -31,10 +33,10 @@ export const TestList = (props: TestListProps) => {
     return (
         <div className={cls.CardList}>
             <button className={cls.CardAdd} onClick={handleCreateTest}>
-                <IoIosAddCircleOutline size={64} color={'#000'} />
+                <IoIosAddCircleOutline size={64} color={'#000'} className={cls.iconAdd}/>
                 <span>Создать тест</span>
             </button>
-            {(tests && !testsIsLoading) && tests.map((test) => <TestCard test={test} />)  }
+                {(tests && !testsIsLoading) && tests.map((test) => <TestCard test={test} />)  }
         </div>
     );
 };

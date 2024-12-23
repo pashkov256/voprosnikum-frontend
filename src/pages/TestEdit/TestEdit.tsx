@@ -1,25 +1,8 @@
-import { classNames } from 'shared/lib/classNames/classNames';
 import cls from 'pages/TestEdit/TestEdit.module.scss';
 import {useNavigate, useParams} from "react-router-dom";
 import React, {memo, SyntheticEvent, useEffect, useState} from "react";
-import {
-    useGetTestAllResultsQuery,
-    useGetTestByIdQuery,
-    useGetTestResultQuery,
-    useLazyGetTestByIdQuery,
-    useUpdateTestMutation
-} from "entities/Test/model/slice/testSlice";
+import {useGetTestByIdQuery, useUpdateTestMutation} from "entities/Test/model/slice/testSlice";
 import {Box, Container, MenuItem, Select, SelectChangeEvent, Tab, Tabs} from "@mui/material";
-import axios from "api/api";
-import {SERVER_URL} from "shared/const/const";
-import {QuizForm} from "components/QuizForm/QuizForm";
-import TableContainer from "@mui/material/TableContainer";
-import Paper from "@mui/material/Paper";
-import Table from "@mui/material/Table";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import TableBody from "@mui/material/TableBody";
 import TextField from "@mui/material/TextField";
 import {Button} from "shared/ui/Button/Button";
 import {TestForm} from "entities/Test/ui/TestForm/TestForm";
@@ -28,6 +11,8 @@ import {formatDateTimeForInput} from "shared/lib/date";
 import {useGetGroupsQuery} from "entities/Group/model/slice/groupSlice";
 import Loader from "shared/ui/Loader/Loader";
 import {TableTestResults} from "entities/Test/ui/TableTestResults/TableTestResults";
+import {useSelector} from "react-redux";
+import {RootState} from "app/providers/StoreProvider/config/store";
 
 interface TestEditProps {
     className?: string;
@@ -59,10 +44,11 @@ function TabPanel(props:any) {
 const TestEdit = memo((props: TestEditProps) => {
     const { className } = props;
     const { id } = useParams();
+    const userData = useSelector((state: RootState) => state.auth.data);
     const {data:testData,isLoading:testDataIsLoading,refetch:refetchGetTest} = useGetTestByIdQuery({_id:id || ""})
     const [updateTestData,{isLoading:updateTestIsLoaing}] = useUpdateTestMutation()
     const {data:groupsData,isLoading:groupsDataIsLoading} = useGetGroupsQuery()
-
+    const navigate = useNavigate()
     const [tabsValue, setTabsValue] = useState(0);
     const [testFormData, setTestFormData] = useState<ITest>();
     const isCreateMode = id === undefined;
@@ -76,6 +62,10 @@ const TestEdit = memo((props: TestEditProps) => {
 
 
     if(testData && groupsData ){
+        //@ts-ignore
+        if(userData._id !== testData.teacher._id){
+            navigate('/')
+        }
         return (
             <div className={cls.TestCreate}>
                 <div className={cls.tabPanels}>
@@ -92,6 +82,7 @@ const TestEdit = memo((props: TestEditProps) => {
                                 if(testFormData){
                                     console.log(testFormData)
                                     updateTestData({...testFormData})
+                                    alert("Успешно обновлено")
                                 }
                             }}
                         >
@@ -101,70 +92,100 @@ const TestEdit = memo((props: TestEditProps) => {
 
                 </div>
 
-                <div className={cls.TestContainer}>
                     <TabPanel value={tabsValue} index={0}>
-                      <TestForm testData={testData} refetchGetTest={refetchGetTest} onChangeTestFormData={setTestFormData} updateTestData={updateTestData}/>
+                        <Container maxWidth="md" className={cls.tabContent}>
+                            <TestForm testData={testData} refetchGetTest={refetchGetTest} onChangeTestFormData={setTestFormData} updateTestData={updateTestData}/>
+                        </Container>
                     </TabPanel>
 
                     <TabPanel value={tabsValue} index={1}>
-                        <TableTestResults id={id || ""}/>
+                        <Container maxWidth="lg" className={cls.tabContent}>
+                            <TableTestResults id={id || ""}/>
+                        </Container>
                     </TabPanel>
 
                     <TabPanel value={tabsValue} index={2}>
-                        <div className={cls.settingsBlock}>
-                            <div className={cls.setting}>
-                                <h3 className={cls.settingsTitle}>Опрос доступен до:</h3>
+                        <Container maxWidth="md" className={cls.tabContent}>
+                            <div className={cls.settingsBlock}>
+                                <div className={cls.setting}>
+                                    <h3 className={cls.settingsTitle}>Опрос доступен до:</h3>
 
-                                <TextField value={formatDateTimeForInput(testFormData?.deadline || '')}
-                                           className={cls.settingsInput} type={"datetime-local"}
-                                           onChange={(e) => {
-                                               //@ts-ignore
-                                               setTestFormData((prevState) => {
-                                                   console.log(e.target.value)
-                                                   return {
-                                                       ...prevState, deadline:
-                                                       e.target.value
-                                                   }
-                                               })
-                                           }}/>
-                            </div>
-
-                            <div className={cls.setting}>
-                                <h3 className={cls.settingsTitle}>Время прохождения теста (минуты)</h3>
-
-                                <TextField value={testFormData?.timeLimit === 0 ? "" : testFormData?.timeLimit}
-                                           className={cls.settingsInput} type={"number"} placeholder={"В минутах"}
-                                           onChange={(e) => {
-                                               //@ts-ignore
-                                               setTestFormData((prevState) => {
+                                    <TextField value={formatDateTimeForInput(testFormData?.deadline || '')}
+                                               className={cls.settingsInput} type={"datetime-local"}
+                                               onChange={(e) => {
                                                    //@ts-ignore
-                                                   return {...prevState, timeLimit: Number(e.target.value)}
-                                               })
-                                           }}/>
-                            </div>
+                                                   setTestFormData((prevState) => {
+                                                       console.log(e.target.value)
+                                                       return {
+                                                           ...prevState, deadline:
+                                                           e.target.value
+                                                       }
+                                                   })
+                                               }}/>
+                                </div>
 
-                            <div className={cls.setting}>
-                                <h3 className={cls.settingsTitle}>Для какой группы тест</h3>
+                                <div className={cls.setting}>
+                                    <h3 className={cls.settingsTitle}>Время прохождения теста (минуты)</h3>
 
-                                <Select
-                                    //@ts-ignore
-                                    value={groupsData.find((group)=>group._id === testFormData?.group)?.name}
-                                    onChange={(e: SelectChangeEvent<string>) => //@ts-ignore
-                                        setTestFormData((prevState) => {
-                                            //@ts-ignore
-                                            return {...prevState, group: groupsData.find((group)=> group.name == e.target.value)._id}
-                                        })
+                                    <TextField value={testFormData?.timeLimit === 0 ? "" : testFormData?.timeLimit}
+                                               className={cls.settingsInput} type={"number"} placeholder={"В минутах"}
+                                               onChange={(e) => {
+                                                   //@ts-ignore
+                                                   setTestFormData((prevState) => {
+                                                       //@ts-ignore
+                                                       return {...prevState, timeLimit: Number(e.target.value)}
+                                                   })
+                                               }}/>
+                                </div>
+
+                                <div className={cls.setting}>
+                                    <h3 className={cls.settingsTitle}>Для какой группы тест</h3>
+
+                                    <Select
+                                        //@ts-ignore
+                                        value={groupsData.find((group) => group._id === testFormData?.group)?.name}
+                                        onChange={(e: SelectChangeEvent<string>) => //@ts-ignore
+                                            setTestFormData((prevState) => {
+
+                                                return {
+                                                    ...prevState,
+                                                    //@ts-ignore
+                                                    group: groupsData.find((group) => group.name == e.target.value)._id
+                                                }
+                                            })
+                                        }
+                                        className={cls.selectForm}
+                                        variant="outlined"
+                                    >
+                                        {groupsData.map((group) => <MenuItem
+                                            value={group.name}>{group.name}</MenuItem>)}
+                                    </Select>
+                                </div>
+
+                                {testFormData &&
+                                    <div className={cls.settingInline}>
+                                        <input
+                                            checked={testFormData.isResultVisibleAfterDeadline}
+                                            type="checkbox"
+                                            className={cls.settingCheckbox}
+                                            name={"isResultVisibleAfterDeadline"}
+                                            onChange={(e) => //@ts-ignore
+                                                setTestFormData((prevState) => {
+                                                    return {
+                                                        ...prevState,
+                                                        isResultVisibleAfterDeadline: e.target.checked
+                                                    }
+                                                })
+                                            }
+                                        />
+                                        <label htmlFor={"isResultVisibleAfterDeadline"} className={cls.settingLabel}>Показывать
+                                            студенту результат теста только после истечения срока сдачи?</label>
+                                    </div>
                                 }
-                                    className={cls.selectForm}
-                                    variant="outlined"
-                                >
-                                    {groupsData.map((group)=><MenuItem value={group.name}>{group.name}</MenuItem>)}
-                                </Select>
-                            </div>
 
-                        </div>
+                            </div>
+                        </Container>
                     </TabPanel>
-                </div>
             </div>
         )
     }

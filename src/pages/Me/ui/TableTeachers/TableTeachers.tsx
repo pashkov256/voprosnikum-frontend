@@ -7,7 +7,7 @@ import Loader from "shared/ui/Loader/Loader";
 interface TableTeachersProps {
 }
 const columns = [
-    { header: 'Имя Фамилия', accessor: 'fullName' },
+    { header: 'ФИО', accessor: 'fullName' },
     { header: 'Логин', accessor: 'login' },
     { header: 'Пароль', accessor: 'plainPassword' },
 ];
@@ -29,7 +29,7 @@ export const TableTeachers = (props: TableTeachersProps) => {
     }
 
     return (
-        <TableUsers filePDFName={"Преподаватели"} data={data || []} columns={columns} onCreateUser={onCreateUser} inputPlaceholder={"Имя и фамилия преподавателя"}/>
+        <TableUsers fileJPGName={"Преподаватели"} data={data || []} columns={columns} onCreateUser={onCreateUser} inputPlaceholder={"ФИО преподавателя"}/>
     )
 
 };

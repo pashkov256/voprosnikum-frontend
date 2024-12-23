@@ -13,3 +13,57 @@
   align-items: center;
   gap: 12px;
 }
+
+
+
+@media(max-width: 900px){
+  .TableCreateUserForm{
+    width: 60%;
+  }
+
+}
+
+@media(max-width: 800px){
+  .TableCreateUser{
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    margin-top: 24px;
+  }
+  .TableCreateUserForm{
+    width: 100%;
+  }
+}
+@media(max-width: 800px){
+  .btnDownload{
+    font-size: 13px;
+    padding: 4px 12px;
+  }
+  .btnAddUser{
+    font-size: 13px;
+    padding: 4px 12px;
+  }
+}
+
+@media(max-width: 600px){
+  .TableCreateUserForm{
+    gap: 10px;
+  }
+}
+
+@media(max-width: 550px){
+  .input{
+    font-size: 12px!important;
+    padding: 4px 4px 4px 10px!important;
+  }
+  .btnDownload{
+    font-size: 12px!important;
+    font-weight: 500;
+  }
+  .btnAddUser{
+    font-size: 12px!important;
+    font-weight: 500;
+  }
+}
+
+

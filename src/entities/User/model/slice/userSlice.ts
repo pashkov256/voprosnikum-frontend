@@ -3,9 +3,25 @@ import {SERVER_URL} from "shared/const/const";
 import {IUser} from "entities/User";
 import {IGroup} from "entities/Group/model/types/group";
 
-interface ITeacherAndTests {
-    groupName:string;
+export interface ITeacherAndTests {
+        fullName:string,
+        tests:{
+            createdAt:string,
+            deadline:string,
+            name:string,
+            teacher:string,
+            testIsComplete:boolean,
+            questions:string[],
+            timeLimit:number,
+            _id:string,
+        }[],
+        _id:string,
+    }
 
+
+export interface ITeachersAndTests {
+    groupName:string,
+    teachers:ITeacherAndTests[]
 }
 
 export const userApi = createApi({
@@ -28,7 +44,7 @@ export const userApi = createApi({
                 method:"GET",
             }),
         }),
-        getTeacherAndTests: builder.query<void,void>({
+        getTeacherAndTests: builder.query<ITeachersAndTests,void>({
             query: () => ({
                 url:`/groups/teachers-tests`,
                 method:"GET",

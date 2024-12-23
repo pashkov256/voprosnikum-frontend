@@ -15,4 +15,23 @@
   }
 }
 
+@media (max-width: 900px) {
+  .GroupCard{
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 600px) {
+  .GroupCard{
+    font-size: 14px;
+    padding: 8px;
+  }
+}
+
+@media (max-width: 500px) {
+  .GroupCard{
+    font-size: 12px;
+    padding: 8px;
+  }
+}
 

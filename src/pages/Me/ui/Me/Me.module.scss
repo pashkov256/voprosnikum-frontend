@@ -4,6 +4,11 @@
   flex-direction: column;
   gap: 10px;
 }
+
+.meContainer{
+  padding-bottom: 12px;
+}
+
 .userCardWrapper{
   display: flex;
   flex-direction: column;
@@ -45,4 +50,30 @@
   font-weight: 600;
   color: #222;
   margin-bottom: 24px;
+}
+
+
+@media(max-width: 900px){
+  .meTitle{
+    font-size: 26px!important;
+  }
+}
+
+@media (max-width: 700px) {
+  .meTitle{
+    font-size: 22px!important;
+  }
+  .meContainer{
+    margin-top: 80px;
+  }
+}
+@media (max-width: 550px) {
+  .meTitle{
+    font-size: 20px!important;
+    margin-bottom: 5px;
+  }
+  .meContainer{
+    padding-left: 10px;
+    padding-right: 10px;
+  }
 }

@@ -207,7 +207,7 @@ export const TestForm = memo((props: TestFormProps) => {
                     value={testFormData?.name || ""}
                     onChange={handleTestNameChange}
                     textSize={InputTextSize.XL}
-                    placeholder={'Заголовок опроса'}
+                    placeholder={'Название теста'}
                     style={{ width: '100%' }}
                 />
             </div>
