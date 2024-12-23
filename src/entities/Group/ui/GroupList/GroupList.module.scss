@@ -25,3 +25,47 @@
 .groupList{
   margin-top: 6px;
 }
+
+@media(max-width: 900px){
+  .groupForm{
+    max-width: 60%;
+  }
+}
+@media(max-width: 600px){
+  .groupForm{
+    max-width: 100%;
+    gap: 10px;
+  }
+  .ButtonGroupCreate{
+    font-size: 13px;
+    padding: 4px 12px;
+  }
+  .GroupBlock{
+    gap: 12px;
+  }
+}
+
+
+@media(max-width: 800px){
+  .ButtonGroupCreate{
+    font-size: 13px;
+    padding: 4px 12px;
+  }
+}
+
+
+@media(max-width: 550px){
+  .input{
+    font-size: 12px!important;
+    padding: 4px 4px 4px 10px;
+  }
+  .btnDownload{
+    font-size: 11px;
+    font-weight: 500;
+  }
+  .btnAddUser{
+    font-size: 11px;
+    font-weight: 500;
+  }
+}
+

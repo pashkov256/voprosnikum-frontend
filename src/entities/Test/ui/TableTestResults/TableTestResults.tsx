@@ -14,6 +14,8 @@ import {
     Paper,
 } from '@mui/material';
 import {formatDate, formatDateTimeForInput} from "shared/lib/date";
+import {textAlign} from "html2canvas/dist/types/css/property-descriptors/text-align";
+import {getColorByScore} from "shared/lib/getColorByScore/getColorByScore";
 
 interface TableTestResultsProps {
     id: string;
@@ -24,6 +26,7 @@ interface TestResult {
         fullName: string;
     };
     score: number;
+    points: number;
     completionTime: string; // Предположим, это строка
     dateStart: string; // Предположим, это строка
 }
@@ -31,8 +34,8 @@ interface TestResult {
 export const TableTestResults: React.FC<TableTestResultsProps> = ({ id }) => {
     const { data: testAllResults, isLoading: testAllResultsIsLoading, error: testAllResultsError } = useGetTestAllResultsQuery(id);
 
-    const [order, setOrder] = useState<'asc' | 'desc'>('asc');
-    const [orderBy, setOrderBy] = useState<keyof TestResult>('student');
+    const [order, setOrder] = useState<'asc' | 'desc'>('desc');
+    const [orderBy, setOrderBy] = useState<keyof TestResult>('score');
 
     const handleRequestSort = (property: keyof TestResult) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -60,7 +63,7 @@ export const TableTestResults: React.FC<TableTestResultsProps> = ({ id }) => {
 
     return (
         <div className={classNames(cls.TableTeachers, {}, [])}>
-            <TableContainer component={Paper}>
+            {testAllResults?.length !== 0 ? ( <TableContainer component={Paper}>
                 <Table>
                     <TableHead>
                         <TableRow>
@@ -70,7 +73,7 @@ export const TableTestResults: React.FC<TableTestResultsProps> = ({ id }) => {
                                     direction={orderBy === 'student' ? order : 'asc'}
                                     onClick={() => handleRequestSort('student')}
                                 >
-                                    Имя фамилия
+                                    ФИО
                                 </TableSortLabel>
                             </TableCell>
                             <TableCell className={cls.tableCell}>
@@ -82,6 +85,7 @@ export const TableTestResults: React.FC<TableTestResultsProps> = ({ id }) => {
                                     Оценка
                                 </TableSortLabel>
                             </TableCell>
+
                             <TableCell className={cls.tableCell}>
                                 <TableSortLabel
                                     active={orderBy === 'completionTime'}
@@ -110,16 +114,15 @@ export const TableTestResults: React.FC<TableTestResultsProps> = ({ id }) => {
                             <TableRow key={index}>
                                 {/*@ts-ignore*/}
                                 <TableCell className={cls.tableCell}>{row.student?.fullName || ""}</TableCell>
-                                <TableCell className={cls.tableCell} style={{color:(row.score || 1) <= 2 ? '#FF0000' :
-                                        (row.score || 1) === 3 ? '#FFA500' :
-                                            (row.score || 1) === 4 ? '#4CAF50' : (row.score || 1) === 5 ? '#388E3C' :  "#000000",fontWeight:700}}>{row.score}</TableCell>
+                                <TableCell className={cls.tableCell} style={{color:getColorByScore(row?.score || 1),fontWeight:700}}>{row?.score || 0}</TableCell>
+                                {/*<TableCell className={cls.tableCell} style={{color:getColorByScore(row?.score || 1),fontWeight:700}}>{row.score}</TableCell>*/}
                                 <TableCell className={cls.tableCell}>{row.completionTime ? row.completionTime : "-"}</TableCell>
                                 <TableCell className={cls.tableCell}>{formatDate(row.dateStart || "")}</TableCell><TableCell className={cls.tableCell}>{row.completedAt ? "Да" : "Нет"}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
                 </Table>
-            </TableContainer>
+            </TableContainer>) : <h2 style={{textAlign:"center"}}>Тест ещё никто не прошёл</h2>}
         </div>
     );
 };

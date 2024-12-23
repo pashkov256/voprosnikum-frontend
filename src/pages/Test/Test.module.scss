@@ -2,21 +2,25 @@
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   width: 100%;
   //height:max-content;
-  min-height: 65vh;
+  max-height: 700px;
+  height: 65vh;
   display: flex;
   flex-direction: column;
   align-items:center;
   justify-content: center;
   border-radius:12px;
-  position: relative;
+  //position: relative;
   margin-bottom: 80px;
   background-color: #f8f8f8;
 }
 
-.testSecondLeftTitle{
-  font-size: 25px;
-  text-align: center;
-  font-weight: 600;
+@media(max-height: 950px){
+  .quiz{
+    min-height: 80vh;
+  }
+  .quizWithoutImage{
+    min-height: 60vh;
+  }
 }
 
 .testWrapper{
@@ -32,27 +36,54 @@
   background-color: #fff;
   border-radius: 12px;
   gap: 20px;
-  .blockStartInfoWrapper{
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    .blockStartInfo{
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      .blockStartInfoLeft{
-        color: #000;
-        font-size: 20px;
-        font-weight: 600;
-      }
-      .blockStartInfoRight{
-        color: #333;
-        font-size: 20px;
-        font-weight: 500;
-      }
-    }
-  }
+}
+.blockStartInfoWrapper{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.blockStartInfoLeft{
+  color: #000;
+  font-size: 20px;
+  font-weight: 600;
+}
+.blockStartInfoRight{
+  color: #333;
+  font-size: 20px;
+  font-weight: 400;
+}
+.blockStartInfo{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.blockFinish{
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 40%;
+  left: calc(50%);
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+  background-color: #fff;
+  border-radius: 12px;
+  gap: 20px;
+}
+
+.blockFinishInfoLeft{
+  color: #000;
+  font-size: 23px;
+  font-weight: 600;
+}
+.blockFinishInfoRight{
+  color: #333;
+  font-size: 23px;
+  font-weight: 500;
 }
 
 .buttonStart{
@@ -105,13 +136,12 @@
   outline: 1px solid #c3c3c3;
 }
 
-
-.quiz-question:hover{
-  cursor: pointer;
-  background-color: #f5f5f5;
+@media (hover: hover) {
+  .quiz-question:hover{
+    cursor: pointer;
+    background-color: #f5f5f5;
+  }
 }
-
-
 
 .question-text-wrapper{
   display: flex;
@@ -119,6 +149,7 @@
   align-items: center;
   width: 100%;
   margin-bottom: 32px;
+  margin-top: 24px;
 }
 
 
@@ -137,7 +168,8 @@
   width: 90%;
   min-height: 80%;
   height: 100%;
-  padding: 90px 0px;
+  padding: 80px 0px 40px 0px;
+  position: relative;
 }
 
 .btn-continue{
@@ -210,7 +242,7 @@
 
 .question-count-text{
   font-size: 24px;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .timeIsLeftError{
@@ -237,4 +269,382 @@
 
 .shortAnswerInput{
   width: 100%;
+}
+.testContainer{
+  display: flex;
+  justify-content: center;
+  margin: auto;
+  padding-top: 120px;
+}
+.wrapperWithTimer{
+
+}
+
+.iconTestSecondLeft{
+  margin-right: 5px;
+}
+
+.testSecondLeftBlock{
+  position: absolute;
+  top: 118px;
+  right: 48px;
+  display: flex;
+  align-items: center;
+}
+
+.testSecondLeftTitle{
+  font-size: 25px;
+  text-align: center;
+  font-weight: 400;
+}
+.testSecondLeftTimer{
+  font-size: 25px;
+  font-weight: 400;
+  width: 80px;
+  text-align: center;
+}
+
+.testSecondLeftText{
+  font-size: 25px;
+  font-weight: 400;
+}
+
+
+//position: absolute;
+//top: 69px;
+//right: -120px;
+
+@media(max-width: 1500px){
+  .testSecondLeftBlock{
+    right: 12px;
+  }
+}
+
+.wrapperWithTimer{
+  position: relative;
+}
+.testSecondLeftBlock{
+  position: absolute;
+  bottom: -30px;
+  left: calc(50%);
+  justify-content: center;
+  margin-bottom: 24px;
+  height: max-content;
+  top: unset;
+  width: max-content;
+  transform: translate(-50%, -50%);
+}
+@media(max-width: 1400px){
+
+}
+
+
+
+@media(max-width:1200px ){
+  .testWrapper{
+    width: 90%;
+  }
+
+  .blockStart{
+    width: 70%;
+  }
+  .blockStartInfo{
+    gap: 8px;
+  }
+  .blockStartInfoLeft{
+    font-size: 18px;
+  }
+  .blockStartInfoRight{
+    font-size: 18px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
+  }
+}
+
+@media(max-width: 1100px){
+  .testWrapper{
+    width: 100%;
+  }
+  .testContainer{
+    padding-top: 100px;
+  }
+  .quiz-questions{
+    gap: unset;
+    row-gap: 16px;
+  }
+  //.quiz-question{
+  //  width: 48.5%;
+  //}
+}
+
+@media(max-width: 1000px){
+  .question-text{
+    font-size: 26px;
+  }
+  .question-count-text{
+    font-size: 20px;
+  }
+  .timer-text{
+    font-size: 20px;
+  }
+  .iconQuestion{
+    width: 28px;
+    height: 28px;
+  }
+  .iconQuestionTimer{
+    width: 28px;
+    height: 28px;
+  }
+
+  .testSecondLeftTimer{
+    font-size: 22px;
+    width: 75px;
+  }
+  .testSecondLeftText{
+    font-size: 22px;
+  }
+  .iconTestSecondLeft{
+    width: 28px;
+    height: 28px;
+  }
+  .btn-continue{
+    font-size: 18px;
+  }
+  .testSecondLeftBlock{
+    bottom: -10px;
+  }
+  .blockFinish{
+    width: 60%;
+  }
+  .blockFinishInfoLeft{
+    font-size: 16px;
+  }
+  .blockFinishInfoRight{
+    font-size: 16px;
+  }
+}
+
+
+@media(max-width: 900px){
+  .blockStart{
+    width: 80%;
+  }
+  .blockStartInfoWrapper{
+    gap: 7px;
+  }
+  .blockStartInfo{
+    gap: 6px;
+  }
+  .blockStartInfoLeft{
+    font-size: 16px;
+  }
+  .blockStartInfoRight{
+       font-size: 16px;
+  }
+  .buttonStart{
+    font-size: 16px;
+  }
+
+}
+@media (hover: none) {
+  .quiz-question:hover {
+    background-color: #fff;
+  }
+  .optionSelected:hover{
+    background-color: #efefef!important;
+    outline: 1px solid #c3c3c3!important;
+  }
+}
+
+@media(max-width: 780px){
+  .quizImage{
+    width: 60%;
+  }
+  .question-text{
+    font-size: 23px;
+  }
+  .question-count-text{
+    font-size: 18px;
+  }
+
+  .iconTestSecondLeft{
+    width: 28px;
+    height: 28px;
+  }
+  .btn-continue{
+    font-size: 16px;
+  }
+  .quiz-wrapper{
+    width: 95%;
+  }
+}
+
+@media(max-width: 670px){
+
+  .question-text{
+    font-size: 22px;
+  }
+  .question-count-text{
+    font-size: 18px;
+  }
+  .iconQuestion{
+    width: 24px;
+    height: 24px;
+  }
+  .iconQuestionTimer{
+    width: 24px;
+    height: 24px;
+  }
+  .testSecondLeftTimer{
+    font-size: 20px;
+    width: 75px;
+  }
+  .btn-continue{
+    font-size: 16px;
+  }
+
+  .quiz-wrapper{
+    width: 95%;
+  }
+
+  .testContainer{
+    padding-left: 10px!important;
+    padding-right: 10px!important;
+  }
+
+  .quiz{
+    //box-shadow: none;
+    //background-color:#f5f5f5;
+  }
+
+  .quiz-question-count{
+    top: 22px;
+    left: 10px;
+  }
+  .quiz-timer{
+    top: 22px;
+    right: 10px;
+    width: max-content;
+  }
+
+  .testInnerWrapper{
+    margin-top: 70px;
+  }
+  .quiz-wrapper{
+    padding: 5px 0px 40px 0px;
+  }
+  .testSecondLeftBlock{
+    margin-bottom: 0px;
+  }
+
+  .testContainer{
+    padding-top:80px;
+  }
+
+  .testSecondLeftBlock{
+    bottom: 10px;
+  }
+
+  .blockStart{
+    width: 95%;
+  }
+
+  .buttonStart{
+    font-size: 14px;
+  }
+}
+
+@media(max-width: 600px){
+
+}
+
+@media(max-width: 500px){
+  .blockStart{
+    width: 100%;
+    padding: 24px 16px;
+    gap: 12px;
+  }
+  .blockStartInfoWrapper{
+    gap: 5px;
+  }
+  .blockStartInfo{
+    gap: 3px;
+  }
+  .blockStartInfoLeft{
+    font-size: 14px;
+  }
+  .blockStartInfoRight{
+    font-size: 14px;
+  }
+  .buttonStart{
+    font-size: 14px;
+  }
+
+  .question-text{
+    font-size: 18px;
+  }
+
+  .testSecondLeftBlock{
+    bottom: 20px;
+  }
+  .quizImage{
+    width: 80%;
+  }
+  .quiz-wrapper{
+    padding-bottom: 24px;
+  }
+  .quiz-question{
+    font-size: 11px;
+  }
+  .btn-continue{
+    font-size: 14px;
+    margin-top: 12px;
+  }
+
+  .question-count-text{
+    font-size: 15px;
+  }
+  .question-text-wrapper{
+    margin-top: 0;
+  }
+  .iconQuestion{
+    width: 20px;
+    height: 20px;
+  }
+  .iconQuestionTimer{
+    width: 20px;
+    height: 20px;
+  }
+
+  .testSecondLeftTimer{
+    font-size: 18px;
+    width: 65px;
+  }.testSecondLeftText{
+    font-size: 18px;
+  }
+  .iconTestSecondLeft{
+    margin: 0;
+  }
+
+  .blockFinish{
+    width: 70%;
+  }
+}
+@media(max-width: 390px){
+  .blockFinish{
+    width: 90%;
+  }
+  .blockStartInfo{
+    gap: 2px;
+  }
+  .blockStartInfoLeft{
+    font-size: 13px;
+  }
+  .blockStartInfoRight{
+    font-size: 13px;
+  }
+  .buttonStart{
+    font-size: 11px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+  }
+
 }

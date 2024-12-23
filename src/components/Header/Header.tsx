@@ -30,7 +30,7 @@ const Header = (props: HeaderProps) => {
                                 window.location.reload()
                             }}>Выйти</span>
                             <Link to={`/me`}>
-                                <FaUserCircle size={"36px"}  fill={"#222"}/>
+                                <FaUserCircle size={"36px"}  className={cls.iconUser} fill={"#222"}/>
                             </Link>
                        </> : (
                             <>

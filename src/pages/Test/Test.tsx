@@ -11,14 +11,16 @@ import { RiQuestionAnswerLine } from "react-icons/ri";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { classNames } from 'shared/lib/classNames/classNames';
-import {formatDate} from "shared/lib/date";
+import {formatDate, testIsOpenByDate} from "shared/lib/date";
 import isPastDate from "shared/lib/isPastDate/isPastDate";
 import { Button, ButtonTheme } from "shared/ui/Button/Button";
 import { Input } from "shared/ui/Input/Input";
 import Loader from "shared/ui/Loader/Loader";
 import cls from './Test.module.scss';
 import {formatTimeDifference} from "shared/lib/date/formatTimeDifference";
-
+import {getColorByScore} from "shared/lib/getColorByScore/getColorByScore";
+import {Container} from "@mui/material";
+import { IoMdTime } from "react-icons/io";
 interface TestProps {
     className?: string;
 }
@@ -47,20 +49,55 @@ export const Test = (props: TestProps) => {
     const [testSecondsLeft, setTestSecondsLeft] = useState<number | null>(null); // Новый таймер на весь тест
 
     const navigate = useNavigate();
-
+    console.log(secondsLeft)
     // Таймер для вопросов
+
     useEffect(() => {
         if (secondsLeft === null) return;
-
         if (secondsLeft > 0) {
             const timer = setTimeout(() => setSecondsLeft(secondsLeft - 1), 1000);
             return () => clearTimeout(timer);
         } else {
-            alert("Время вышло на вопрос! :(");
-            setButtonsIsDisabled(true);
-            setUserAnswers((prev) => [...prev, { correct: false }]);
+            let c = async ()=>{
+                alert("Время вышло на вопрос!");
+
+                setSecondsLeft(null)
+                setButtonsIsDisabled(true);
+                //@ts-ignore
+                await createTestAnswer({testResult:testResult?._id || "",question:testData.questions[currentQuestion]._id,isCorrect:false,isTimeFail:true})
+                // if(!createTestResultIsLoading){
+                //     await refetchTestResult()
+                //     // setButtonsIsDisabled(false);
+                // }
+                //@ts-ignore
+                if(currentQuestion +2 !== testData.questions.length){
+                    setCurrentQuestion((prev)=>prev+1)
+                }
+                if(!createTestResultIsLoading){
+                    await refetchTestResult()
+                    // setButtonsIsDisabled(false);
+                }
+
+
+                setUserAnswers((prev) => [...prev, { correct: false }]);
+                setButtonsIsDisabled(false);
+            }
+            c()
         }
     }, [secondsLeft]);
+
+    // useEffect(() => {
+    //     if (secondsLeft === null) return;
+    //
+    //     if (secondsLeft > 0) {
+    //         const timer = setTimeout(() => setSecondsLeft(secondsLeft - 1), 1000);
+    //         return () => clearTimeout(timer);
+    //     } else {
+    //         alert("Время вышло на вопрос! :(");
+    //         setButtonsIsDisabled(true);
+    //         setUserAnswers((prev) => [...prev, { correct: false }]);
+    //     }
+    // }, [secondsLeft]);
 
     // Таймер для всего теста
     useEffect(() => {
@@ -69,15 +106,18 @@ export const Test = (props: TestProps) => {
             const timer = setTimeout(() => setTestSecondsLeft(testSecondsLeft - 1), 1000);
             return () => clearTimeout(timer);
         } else {
-            setIsComplete(true);
-            alert("ВРЕМЯ КОНЧИЛОСЬ НА ТЕСТ!");
-            navigate('/')
+
+
+            const completedAt = new Date().toISOString()
+            updateTestResult({completedAt,completionTime:formatTimeDifference(testResult?.dateStart || "",completedAt),id:testResult?._id || ""})
+            alert("Время выполнения теста кончилось!");
+            navigate(`/test/${testData?._id || ""}`)
         }
     }, [testSecondsLeft]);
 
     // Инициализация данных теста и таймера на тест
 
-    const setupTestBasedOnResults = ()=>{
+    const setupTestBasedOnResults = async ()=>{
         if(testResult !== undefined){
             if (testStarted) {
                 initialTestTimer()
@@ -88,10 +128,36 @@ export const Test = (props: TestProps) => {
                         }
                     }
                 }
+                console.log(`testResult?.testAnswers?.length  ${testResult?.testAnswers?.length}`)
+                // @ts-ignore
+
+                console.log({currentQuestion,QUESTIONSLENGTH:testData.questions.length})
+                console.log({isComplete})
+                // console.log(`testData?.questions[testResult?.testAnswers?.length +1].timeLimit`)
+                // @ts-ignore
+
+                if((currentQuestion !== testData.questions.length) && !isComplete){
+                    // @ts-ignore
+                    if (testData.questions[currentQuestion].timeLimit !== undefined) {
+                    // if (testData.questions[testResult.testAnswers.length].timeLimit !== undefined) {
+                        // @ts-ignore
+                        setSecondsLeft(testData.questions[currentQuestion].timeLimit);
+
+                    }
+                } else {
+                    setTestSecondsLeft(null)
+                    const completedAt = new Date().toISOString()
+                    await updateTestResult({completedAt,completionTime:formatTimeDifference(testResult?.dateStart || "",completedAt),id:testResult?._id || ""})
+                    if(!createTestAnswerIsLoading && !createTestResultIsLoading){
+                        console.log(testResult)
+
+                        setIsComplete(true);
+                        setTestSecondsLeft(null)
+                    }
+                }
             }
             if(testResult?.completedAt){//тесть пройден
-                setTestIsOverdue(true)
-                alert('ТЕСТ ПРОЙДЕН completedAt есть')
+                setIsComplete(true)
             }else {//тест не пройден
                 setCurrentQuestion(testResult?.testAnswers?.length || 0)
                 initialTestTimer()
@@ -107,14 +173,28 @@ export const Test = (props: TestProps) => {
                 if (isPastDate(testData?.deadline)) {//актуален ли тест?
                     setupTestBasedOnResults()
                 } else {
-                    alert("Тест не актуален");
-                    navigate('/');
+                    if(!testData.isResultVisibleAfterDeadline){
+                        alert("Тест не актуален");
+                        navigate('/');
+                    }
+                    if(testResult){
+                        if(testResult?.completedAt){
+                            setIsComplete(true)
+                        }
+                    }
                 }
             } else {
                 setupTestBasedOnResults()
             }
+
         }
     }, [testData, testStarted, testResult]);
+
+    useEffect(()=>{
+        if(isComplete){
+            setSecondsLeft(null)
+        }
+    },[isComplete])
 
     const initialTestTimer = (dateStart?:string | undefined)=>{
         if (testData?.timeLimit) {
@@ -135,8 +215,7 @@ export const Test = (props: TestProps) => {
     }
 
     const handleStartTest = async () => {
-        console.log("testResult", 'background: #222; color: #bada55')
-        console.log(testResult)
+        setButtonsIsDisabled(false);
         if(!testResult){
             const newDateStart = new Date().toISOString()
             //@ts-ignore
@@ -152,7 +231,9 @@ export const Test = (props: TestProps) => {
 
         }else {
             if(testResult.completedAt){//ТЕСТ ЗАВЕРШЕН
-                alert('УЖЕ ЗАВЕРШЕН АЛЬФА')
+                // alert('УЖЕ ЗАВЕРШЕН АЛЬФА')
+                setIsComplete(true)
+
             } else {
                 initialTestTimer()
             }
@@ -160,46 +241,66 @@ export const Test = (props: TestProps) => {
     };
 
     const handleNextQuestion = async () => {
-        console.log(testResult)
-        console.log("TEST REUSLT ON CLICK")
+        // console.log(testResult)
+        // console.log("TEST REUSLT ON CLICK")
+        setSecondsLeft(null);
+
         if(currentQuestion >=( testData?.questions?.length || 1)){
-            alert('ЗАВЕРШЕНО')
-            console.log("ZAVERSHENO")
+            // alert('ЗАВЕРШЕНО')
+            // console.log("ZAVERSHENO")
         }
         if (currentQuestion >= (testData?.questions?.length || 1) - 1) {
             console.log(testResult)
             console.log(`testResult?._id ${testResult?._id}`)
             //@ts-ignore
+            // if(testData.questions[currentQuestion].type == "short-answer"){
+            //     //@ts-ignore
+            //     await createTestAnswer({testResult:testResult?._id || "",question:testData.questions[currentQuestion]._id,isCorrect: shortAnswerValue == testData.questions[currentQuestion].correctAnswers[0],shortAnswerValue:shortAnswerValue})
+            // }else {
+            //     //@ts-ignore
+            //     await createTestAnswer({testResult:testResult?._id || "",question:testData.questions[currentQuestion]._id,isCorrect:selectedOptions.every(option => testData.questions[currentQuestion].correctAnswers.includes(option))})
+            // }
             if(testData.questions[currentQuestion].type == "short-answer"){
                 //@ts-ignore
                 await createTestAnswer({testResult:testResult?._id || "",question:testData.questions[currentQuestion]._id,isCorrect: shortAnswerValue == testData.questions[currentQuestion].correctAnswers[0]})
             }else {
                 //@ts-ignore
-                await createTestAnswer({testResult:testResult?._id || "",question:testData.questions[currentQuestion]._id,isCorrect:selectedOptions.every(option => testData.questions[currentQuestion].correctAnswers.includes(option))})
+                await createTestAnswer({testResult:testResult?._id || "",question:testData.questions[currentQuestion]._id,correctAnswers:testData.questions[currentQuestion].correctAnswers,selectedAnswerOptions:selectedOptions})
             }
+            // setCurrentQuestion(1)
 
-            await refetchTestResult()
             const completedAt = new Date().toISOString()
             await updateTestResult({completedAt,completionTime:formatTimeDifference(testResult?.dateStart || "",completedAt),id:testResult?._id || ""})
+            await refetchTestResult()
             if(!createTestAnswerIsLoading && !createTestResultIsLoading){
                 console.log(testResult)
 
                 setIsComplete(true);
+
                 setTestSecondsLeft(null)
+
                 alert("ZAVER")
             }
 
         } else {
+            setCurrentQuestion((prev) => prev + 1);
             //@ts-ignore
+            // if(testData.questions[currentQuestion].type == "short-answer"){
+            //     //@ts-ignore
+            //     await createTestAnswer({testResult:testResult?._id || "",question:testData.questions[currentQuestion]._id,isCorrect: shortAnswerValue == testData.questions[currentQuestion].correctAnswers[0]})
+            //
+            // }else {
+            //     //@ts-ignore
+            //     await createTestAnswer({testResult:testResult?._id || "",question:testData.questions[currentQuestion]._id,isCorrect:selectedOptions.every(option => testData.questions[currentQuestion].correctAnswers.includes(option))})
+            // }
             if(testData.questions[currentQuestion].type == "short-answer"){
                 //@ts-ignore
                 await createTestAnswer({testResult:testResult?._id || "",question:testData.questions[currentQuestion]._id,isCorrect: shortAnswerValue == testData.questions[currentQuestion].correctAnswers[0]})
-
             }else {
                 //@ts-ignore
-                await createTestAnswer({testResult:testResult?._id || "",question:testData.questions[currentQuestion]._id,isCorrect:selectedOptions.every(option => testData.questions[currentQuestion].correctAnswers.includes(option))})
+                await createTestAnswer({testResult:testResult?._id || "",question:testData.questions[currentQuestion]._id,correctAnswers:testData.questions[currentQuestion].correctAnswers,selectedAnswerOptions:selectedOptions})
             }
-            setCurrentQuestion((prev) => prev + 1);
+            // setCurrentQuestion((prev) => prev + 1);
             setSelectedOptions([]);
             setButtonsIsDisabled(false);
             setShortAnswerValue("")
@@ -217,8 +318,9 @@ export const Test = (props: TestProps) => {
         return <Loader />;
     }
     if (testData) {
-        if (!testStarted) {
+        if (!testStarted && !isComplete) {
             return (
+                <Container maxWidth="lg"  className={cls.testContainer}>
                 <div className={cls.blockStart}>
                     <div className={cls.blockStartInfoWrapper}>
                         <div className={cls.blockStartInfo}>
@@ -247,32 +349,85 @@ export const Test = (props: TestProps) => {
                         Начать тест
                     </Button>
                 </div>
+                </Container>
             );
         }
-        return (
-            <div className={cls.testWrapper}>
 
-                {(testData.timeLimit !== 0 ) && !isComplete && <h1 className={cls.testSecondLeftTitle}
-                                                 style={(testSecondsLeft !== null && !(testSecondsLeft > 0) || testResult?.completedAt || "") ? {display: "none"} : {}}>Осталось
-                    времени на
-                    тест: {Math.floor((testSecondsLeft || 0) / 60)}:{(testSecondsLeft || 0) % 60}</h1>}
-                <div className={cls.quiz}>
+        if(isComplete && testResult) {
+
+            let resultBlock = (
+                <Container maxWidth="lg" className={cls.testContainer}>
+                    <div className={cls.blockFinish}>
+                        <div className={cls.blockStartInfoWrapper}>
+                            <div className={cls.blockStartInfo}>
+                                <span className={cls.blockFinishInfoLeft}>Оценка:</span>
+                                <span className={cls.blockFinishInfoRight} style={{
+                                    color: getColorByScore(testResult?.score || 1),
+                                    fontWeight: 700
+                                }}>{testResult.score}</span>
+                            </div>
+                            <div className={cls.blockStartInfo}>
+                                <span className={cls.blockFinishInfoLeft}>Пройдено за:</span>
+                                <span className={cls.blockFinishInfoRight}>{testResult.completionTime} мин</span>
+                            </div>
+                        </div>
+                    </div>
+                </Container>
+            )
+
+            if (testData?.deadline && testData.isResultVisibleAfterDeadline) {
+                if (!testIsOpenByDate(testData.deadline)) {
+                    console.log("open")
+                    return resultBlock
+                } else {
+                    return (
+                        <Container maxWidth="lg" className={cls.testContainer}>
+                            <h2>Ваш результат отправлен преподавателю</h2>
+                        </Container>
+                    )
+
+                }
+            }
+            return resultBlock
+        }
+
+        return (//(testSecondsLeft !== null &&
+            <Container maxWidth="lg" className={classNames(cls.testContainer,{[cls.wrapperWithTimer]:!(testSecondsLeft !== null && !(testSecondsLeft > 0))},[])}>
+            <div className={classNames(cls.testWrapper,{},[])} >
+                {(testData.timeLimit !== 0) && !isComplete && <div
+                    className={cls.testSecondLeftBlock}
+                    style={(testSecondsLeft !== null && !(testSecondsLeft > 0) || testResult?.completedAt || "") ? {display: "none"} : {}}
+                >
+
+                        <IoMdTime size={32}  className={cls.iconTestSecondLeft}/>
+
+                        <span className={cls.testSecondLeftTimer}>
+
+                            {Math.floor((testSecondsLeft || 0) / 60)}:
+                                {(testSecondsLeft || 0) % 60 < 10
+                                    ? `0${(testSecondsLeft || 0) % 60}`
+                                    : (testSecondsLeft || 0) % 60}
+                        </span>
+                        <span className={cls.testSecondLeftText}>мин</span>
+
+                </div>}
+                <div className={classNames(cls.quiz,{[cls.quizWithoutImage]:(testData.questions[currentQuestion].imageUrl !== undefined)},[])}>
                     <div className={cls["quiz-wrapper"]}>
                         {(testSecondsLeft !== null && !(testSecondsLeft > 0)) ? <h1>Время кончилось</h1> : <>
-                            {currentQuestion !== testData.questions.length ? (
+                            {(currentQuestion !== testData.questions.length) && !isComplete ? (
                                 <>
-                                    {secondsLeft !== null && (
+                                {secondsLeft !== null && (
                                         <div className={classNames(cls["quiz-timer"], {}, [cls.quizIconBlock])}>
-                                            <LuTimer size={32}/>
-                                            <span className={cls["timer-text"]}>{secondsLeft}</span>
+                                            <LuTimer size={32} className={cls.iconQuestionTimer}/>
+                                            <span className={cls["question-count-text"]}>{secondsLeft}</span>
                                         </div>
                                     )}
                                     <div className={classNames(cls["quiz-question-count"], {}, [cls.quizIconBlock])}>
-                                        <RiQuestionAnswerLine size={32}/>
+                                        <RiQuestionAnswerLine size={32} className={cls.iconQuestion}/>
                                         <span
                                             className={cls["question-count-text"]}>{currentQuestion + 1} из {testData.questions.length}</span>
                                     </div>
-                                    <div style={{width: '100%'}}>
+                                    <div className={cls.testInnerWrapper} style={{width: '100%'}}>
                                         <div className={cls["question-text-wrapper"]}>
                                             <h3 className={cls["question-text"]}>{testData.questions[currentQuestion].title1}</h3>
                                         </div>
@@ -327,6 +482,7 @@ export const Test = (props: TestProps) => {
                     </div>
                 </div>
             </div>
+            </Container>
         );
     }
 

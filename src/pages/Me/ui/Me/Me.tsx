@@ -7,6 +7,9 @@ import {useAppSelector} from "app/providers/StoreProvider/config/slices/auth";
 import {QuizCardList} from "components/QuizCardList/QuizCardList";
 import {TeachersList} from "pages/Me/ui/TeachersList/TeachersList";
 import { TestList } from 'shared/ui/TestList/TestList';
+import {Block} from "shared/ui/Block/Block";
+import {TestsFilter} from "entities/Test/ui/TestsFilter/TestsFilter";
+import {Container} from "@mui/material";
 
 interface UserProps {
     className?: string;
@@ -14,47 +17,43 @@ interface UserProps {
 
 export const Me = (props: UserProps) => {
     const { className } = props;
-    const authData = useAppSelector((state)=>state.auth.data)
+    const userData = useAppSelector((state)=>state.auth.data)
     return (
-        <div className={cls.Me}>
-            {
-                //@ts-ignore
-                authData.role !== "student" ? <>
-                        <div className={cls.meBlock}>
-                            <div>
-                                <Text title={"Группы"} size={TextSize.L} className={cls.meTitle}/>
-                                <GroupList/>
-                            </div>
-                        </div>
+        <Container maxWidth="xl" className={cls.meContainer}>
+            <div className={cls.Me}>
+                {
+                    //@ts-ignore
+                    userData.role !== "student" ? <>
+                            <Block>
+                                <div>
+                                    <Text title={"Группы"} size={TextSize.L} className={cls.meTitle}/>
+                                    <GroupList/>
+                                </div>
+                            </Block>
 
-                        {  //@ts-ignore
-                            authData.role === "teacher" &&
-                            <div className={cls.meBlock}>
-                                <Text title={"Ваши тесты"} size={TextSize.L} className={cls.meTitle}/>
-                                {/*@ts-ignore*/}
-                            <TestList  userId={authData._id}/>
-                        </div>
-                    }
+                            {  //@ts-ignore
+                                userData.role === "teacher" &&
+                                //@ts-ignore
+                                <TestsFilter userData={userData} userId={userData?._id || ""}/>
+                            }
 
-                    {  //@ts-ignore
-                        authData.role === "admin" &&
-                        <div className={cls.meBlock}>
-                            <Text title={"Список преподавателей"} size={TextSize.L} className={cls.meTitle}/>
-                            <TableTeachers/>
-                        </div>
-                    }
+                            {  //@ts-ignore
+                                userData.role === "admin" &&
+                                <Block>
+                                    <Text title={"Список преподавателей"} size={TextSize.L} className={cls.meTitle}/>
+                                    <TableTeachers/>
+                                </Block>
+                            }
 
-                </>
-            :
-            <>
-                <div className={cls.meBlock}>
-                    <TeachersList/>
-                </div>
-            </>
-            }
+                        </>
+                        :
+                        <>
+                            <TeachersList/>
+                        </>
+                }
+            </div>
+        </Container>
 
-
-        </div>
     )
 
 };

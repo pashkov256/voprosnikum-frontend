@@ -1,7 +1,7 @@
 .Card{
     display: flex;
     flex-direction: column;
-    width: 414px;
+    width: 32%;
     gap:13px;
     padding: 30px 48px 24px 16px;
     box-shadow: rgba(14, 63, 126, 0.06) 0px 0px 0px 1px, rgba(42, 51, 70, 0.03) 0px 1px 1px -0.5px, rgba(42, 51, 70, 0.04) 0px 2px 2px -1px, rgba(42, 51, 70, 0.04) 0px 3px 3px -1.5px, rgba(42, 51, 70, 0.03) 0px 5px 5px -2.5px, rgba(42, 51, 70, 0.03) 0px 10px 10px -5px, rgba(42, 51, 70, 0.03) 0px 24px 24px -8px;
@@ -10,54 +10,104 @@
     position: relative;
     text-decoration: none;
     background-color: #fff;
-  
+  height: 240px;
     &:hover{
       box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px;
       cursor: pointer;
     }
-  
-    .CardItem{
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-  
-    .CardItemTitle{
-      color: #282c34;
-      font-size: 20px;
-      font-weight: 600;
-    }
-    .CardItemData{
-      color: #282c34;
-      font-size: 18px;
-      font-weight: 400;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
+
+
   }
-  
-  
-  .CardIcons{
+
+.CardItem{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.CardItemTitle{
+  color: #282c34;
+  font-size: 20px;
+  font-weight: 600;
+}
+.CardItemData{
+  color: #282c34;
+  font-size: 18px;
+  font-weight: 400;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.CardIcons{
     position: absolute;
     display: flex;
     flex-direction: column;
     top: 24px;
     right: 12px;
     gap: 14px;
-  
-    .CardIcon{
-      font-size: 36px;
-      color: #282c34;
-      transition: 0.4s ease-in-out;
-      z-index: 9999;
-  
-      &:hover{
-        color: #575757;
-      }
-    }
-  
+}
+.CardIcon{
+  font-size: 36px;
+  color: #282c34;
+  transition: 0.4s ease-in-out;
+  //z-index: 9999;
+
+  &:hover{
+    color: #575757;
   }
-  
-  
-  
+}
+
+@media(max-width: 1300px){
+  .CardItemTitle{
+    font-size: 17px;
+  }.CardItemData{
+    font-size: 17px;
+  }
+  .CardIcon{
+    font-size: 30px;
+  }
+}
+
+@media(max-width:1150px){
+  .Card{
+    width: 48%;
+  }
+}
+@media(max-width:950px){
+  .Card{
+    width: 100%;
+    height: max-content;
+  }
+}
+@media(max-width:600px){
+  .Card{
+    gap: 8px;
+  }
+  .CardItemTitle{
+    font-size: 15px;
+  }.CardItemData{
+     font-size: 15px;
+   }
+  .CardIcon{
+    font-size: 28px;
+  }
+}
+@media(max-width:450px){
+  .Card{
+    gap: 5px;
+    padding: 30px 48px 24px 12px;
+  }
+  .CardItem{
+    gap: 6px;
+  }
+
+  .CardItemTitle{
+    font-size: 14px;
+  }.CardItemData{
+     font-size: 14px;
+   }
+  .CardIcon{
+    font-size: 24px;
+  }
+}

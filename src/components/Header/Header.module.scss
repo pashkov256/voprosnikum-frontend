@@ -59,6 +59,7 @@
   font-weight: 700;
   color: #000;
   margin-right: 14px;
+  cursor: pointer;
 }
 .link:hover {
   text-decoration: underline;
@@ -135,5 +136,29 @@
   margin-left: 4px;
 }
 
-
-
+@media(max-width: 560px){
+  .logo{
+    font-size: 18px;
+  }
+  .link{
+    font-size: 16px;
+    margin-right: 0;
+  }
+  .iconUser{
+    width: 30px;
+    height: 30px;
+  }
+}
+@media(max-width: 400px){
+  .logo{
+    font-size: 16px;
+  }
+  .link{
+    font-size: 14px;
+    margin-right: 0;
+  }
+  .iconUser{
+    width: 25px;
+    height: 25px;
+  }
+}

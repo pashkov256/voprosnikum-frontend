@@ -19,8 +19,14 @@ export const testApi = createApi({
         },
     }),
     endpoints: (builder) => ({
-        getTestsByTeacher: builder.query<ITest[], string>({
-            query: (teacherId: string) => `/tests/teacher/${teacherId}`,
+        getTestsByTeacher: builder.query<ITest[], {teacherId:string,sortGroupBy:string}>({
+            query: ({teacherId,sortGroupBy}) =>
+            ({
+                url:`/tests/teacher/${teacherId}`,
+                method:"POST",
+                body:{sortGroupBy}
+            })
+            ,
         }),
         getTeachers: builder.query<IUser, void>({
             query: () => `/user/teachers`,
@@ -50,14 +56,14 @@ export const testApi = createApi({
             query: ({teacher}) => ({
                 url:"/tests",
                 method:"POST",
-                body:{ teacher,name:"Новый тест" },
+                body:{ teacher,name:"Название нового теста" },
             }),
         }),
         updateTest: builder.mutation<ITest, ITest>({
-            query: ({name,description,teacher,questions,_id,createdAt,deadline,timeLimit,group}) => ({
+            query: ({name,description,teacher,questions,_id,createdAt,deadline,timeLimit,group,isResultVisibleAfterDeadline}) => ({
                 url:`/tests/${_id}`,
                 method:"PUT",
-                body:{name,description,teacher,questions,_id,createdAt,deadline,timeLimit,group},
+                body:{name,description,teacher,questions,_id,createdAt,deadline,timeLimit,group,isResultVisibleAfterDeadline},
             }),
         }),
         createTestResult: builder.mutation<ITestResult, ITestResult>({
@@ -79,11 +85,11 @@ export const testApi = createApi({
                 method:"GET",
             }),
         }),
-        createTestAnswer: builder.mutation<void , { testResult:string, question:string,isCorrect:boolean}>({
-            query: ({ testResult, question,isCorrect}) => ({
+        createTestAnswer: builder.mutation<void , { testResult:string, question:string,isCorrect?:boolean,selectedAnswerOptions?:string[],correctAnswers?:string,isTimeFail?:boolean}>({
+            query: ({ testResult, question,isCorrect,selectedAnswerOptions,correctAnswers,isTimeFail}) => ({
                 url:`/test/create-answer`,
                 method:"POST",
-                body:{ testResult, question,isCorrect}
+                body:{ testResult, question,isCorrect,selectedAnswerOptions,correctAnswers,isTimeFail}
             }),
         }),
         updateTestResult: builder.mutation<void , { completedAt?:string, dateStart?:string,completionTime?:string,id:string}>({

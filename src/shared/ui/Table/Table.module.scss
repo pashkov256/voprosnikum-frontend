@@ -26,3 +26,52 @@
   background-color: var(--main-color);
   color: white;
 }
+
+@media(max-width: 900px){
+  .Table th{
+    font-size: 13px;
+  }
+  .Table td{
+    font-size: 13px;
+  }
+}
+
+@media(max-width: 600px){
+  .Table th{
+    font-size: 11px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+  .Table td{
+    font-size: 11px;
+  }
+}
+
+@media(max-width: 600px){
+
+  .Table td{
+    padding: 5px;
+  }
+}
+@media(max-width: 420px){
+
+  .Table th{
+    font-size: 11px;
+    padding-top: 5px;
+  }
+  .Table td{
+    font-size: 10px;
+    padding: 3px;
+  }
+}
+@media(max-width: 360px){
+
+  .Table th{
+    font-size: 10px;
+    padding-top: 5px;
+  }
+  .Table td{
+    font-size: 8px;
+    padding: 3px;
+  }
+}

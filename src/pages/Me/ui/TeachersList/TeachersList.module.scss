@@ -1,0 +1,16 @@
+
+.TeachersList{
+  display: flex;flex-direction: column;
+  gap: 20px;
+}
+
+@media(max-width: 500px){
+  .title{
+    text-align: center;
+    margin-bottom: 0px!important;
+    font-size: 22px!important;
+  }
+  .textError{
+    text-align: center;
+  }
+}

@@ -3,8 +3,13 @@
 }
 
 .select{
-  min-width: 300px;
-  width: 30%;
+  //min-width: 300px;
+  min-width: 30%;
+  //padding: 12px 32px 12px 12px!important;
+  width: max-content;
+}
+.selectChip{
+  margin-left: 4px;
 }
 
 .GroupBlock{
@@ -16,3 +21,40 @@
   background-color: #fff;
   border-radius: 12px;
 }
+
+@media(max-width: 900px){
+  .groupTitle{
+    font-size: 26px!important;
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 700px) {
+  .groupTitle{
+    font-size: 22px!important;
+  }
+  .groupContainer{
+    margin-top: 80px;
+  }
+  .select{
+    min-width: 100%!important;
+    width: 100%!important;
+  }
+  .selectChip{
+    font-size: 10px!important;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+}
+
+@media (max-width: 550px) {
+  .groupTitle{
+    font-size: 20px!important;
+    margin-bottom: 5px;
+  }
+  .groupContainer{
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
+
