@@ -14,18 +14,63 @@
   background-color: #f8f8f8;
 }
 
-@media(max-height: 950px){
+@media(max-height: 900px){
   .quiz{
     min-height: 80vh;
   }
   .quizWithoutImage{
-    min-height: 110vh!important;
+    min-height: 80vh!important;
 
   }
   .quizWithImage{
     min-height: 70vh;
   }
 }
+
+@media(max-height: 900px){
+
+  .quizWithoutImage{
+    min-height: 78vh!important;
+
+  }
+}
+
+
+
+
+@media(max-height: 780px){
+  .quizWithoutImage{
+    min-height: 100vh!important;
+
+  }
+  .quizImage{
+    width: 40%!important;
+  }
+  .testContainer{
+    padding-top: 100px!important;
+  }
+}
+@media(max-height: 600px){
+
+  .quizWithoutImage{
+    min-height: 110vh!important;
+
+  }
+}
+
+
+@media(max-height: 500px){
+
+  .quizWithoutImage{
+    min-height: 120vh!important;
+
+  }
+  .quizImage{
+    width: 40%!important;
+  }
+}
+
+
 .quizWithoutImage{
   min-height: 60vh;
 }
@@ -267,7 +312,7 @@
 }
 
 .quizImage{
-  width: 30%;
+  width: 50%;
   border-radius: 10px;
   background-size: cover;
   background-repeat: no-repeat;
