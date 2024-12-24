@@ -86,12 +86,7 @@ export const TestForm = memo((props: TestFormProps) => {
                 return {
                     ...prevData,
                     questions: prevData.questions.map((q) =>
-                        q._id === questionId ? { ...q, type, options: [
-                                "Вариант Ответа №1",
-                                "Вариант Ответа №2",
-                                "Вариант Ответа №3",
-                                "Вариант Ответа №4",
-                            ], correctAnswers: ["Вариант Ответа №1"] } : q
+                        q._id === questionId ? { ...q, type } : q
                     ),
                 }
             }
