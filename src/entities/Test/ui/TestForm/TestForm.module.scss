@@ -141,11 +141,15 @@
 
 .textarea{
   border: 1px solid #eee;
-  border: radius 12px;
   min-height: 150px;
   padding: 12px 8px;
   border-radius:8px;
   resize: none;
   font-size: 16px;
   margin-top: 14px;
+}
+
+.singleChoice{
+  display: flex;
+  gap: 5px;
 }

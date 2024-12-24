@@ -111,7 +111,7 @@ export const Test = (props: TestProps) => {
             const completedAt = new Date().toISOString()
             updateTestResult({completedAt,completionTime:formatTimeDifference(testResult?.dateStart || "",completedAt),id:testResult?._id || ""})
             alert("Время выполнения теста кончилось!");
-            navigate(`/test/${testData?._id || ""}`)
+            window.location.reload();
         }
     }, [testSecondsLeft]);
 
@@ -263,9 +263,14 @@ export const Test = (props: TestProps) => {
             if(testData.questions[currentQuestion].type == "short-answer"){
                 //@ts-ignore
                 await createTestAnswer({testResult:testResult?._id || "",question:testData.questions[currentQuestion]._id,isCorrect: shortAnswerValue == testData.questions[currentQuestion].correctAnswers[0]})
-            }else {
+                     //@ts-ignore
+            }else if(testData.questions[currentQuestion].type == "multiple-choice"){
                 //@ts-ignore
                 await createTestAnswer({testResult:testResult?._id || "",question:testData.questions[currentQuestion]._id,correctAnswers:testData.questions[currentQuestion].correctAnswers,selectedAnswerOptions:selectedOptions})
+                     //@ts-ignore
+            }  else if(testData.questions[currentQuestion].type == "single-choice"){
+                //@ts-ignore
+                await createTestAnswer({testResult:testResult?._id || "",question:testData.questions[currentQuestion]._id,isCorrect: selectedOptions.includes(testData.questions[currentQuestion].correctAnswers[0])})
             }
             // setCurrentQuestion(1)
 
@@ -296,9 +301,14 @@ export const Test = (props: TestProps) => {
             if(testData.questions[currentQuestion].type == "short-answer"){
                 //@ts-ignore
                 await createTestAnswer({testResult:testResult?._id || "",question:testData.questions[currentQuestion]._id,isCorrect: shortAnswerValue == testData.questions[currentQuestion].correctAnswers[0]})
-            }else {
+                //@ts-ignore
+            }else if(testData.questions[currentQuestion].type == "multiple-choice"){
                 //@ts-ignore
                 await createTestAnswer({testResult:testResult?._id || "",question:testData.questions[currentQuestion]._id,correctAnswers:testData.questions[currentQuestion].correctAnswers,selectedAnswerOptions:selectedOptions})
+                //@ts-ignore
+            } else if(testData.questions[currentQuestion].type == "single-choice"){
+                //@ts-ignore
+                await createTestAnswer({testResult:testResult?._id || "",question:testData.questions[currentQuestion]._id,isCorrect: selectedOptions.includes(testData.questions[currentQuestion].correctAnswers[0])})
             }
             // setCurrentQuestion((prev) => prev + 1);
             setSelectedOptions([]);
@@ -437,7 +447,12 @@ export const Test = (props: TestProps) => {
                                                      className={cls["quizImage"]}/>
                                             </div>
                                         )}
-                                        {testData.questions[currentQuestion].type === "multiple-choice" ? (
+
+                                        {testData.questions[currentQuestion].type === "multiple-choice" ?
+                                            <p
+                                                className={cls.choiseTypeText}>Выберите несколько вариантов ответа</p> : testData.questions[currentQuestion].type === "single-choice" &&
+                                            <p className={cls.choiseTypeText}>Выберите один вариант ответа</p>}
+                                        {testData.questions[currentQuestion].type === "multiple-choice" || testData.questions[currentQuestion].type === "single-choice" ? (
                                             <div className={cls["quiz-questions"]}>
                                                 {testData.questions[currentQuestion].options.map((option: string) => (
                                                     <button
@@ -445,9 +460,17 @@ export const Test = (props: TestProps) => {
                                                         className={classNames(cls["quiz-question"], {
                                                             [cls.optionSelected]: selectedOptions.includes(option),
                                                         })}
-                                                        onClick={() => setSelectedOptions((prev) =>
-                                                            prev.includes(option) ? prev.filter((o) => o !== option) : [...prev, option]
-                                                        )}
+                                                        onClick={() => {
+                                                            if(testData.questions[currentQuestion].type === "multiple-choice"){
+                                                                setSelectedOptions((prev) =>
+                                                                    prev.includes(option) ? prev.filter((o) => o !== option) : [...prev, option]
+                                                                )
+                                                            } else {
+                                                                setSelectedOptions((prev) =>
+                                                                    prev.includes(option) ? prev.filter((o) => o !== option) : [ option]
+                                                                )
+                                                            }
+                                                        }}
                                                         disabled={buttonsIsDisabled}
                                                     >
                                                         {option}

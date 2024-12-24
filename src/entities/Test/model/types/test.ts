@@ -3,7 +3,7 @@ export interface IQuestion {
     test: string;
     title: string | null;
     title1?: string | null;
-    type: 'short-answer' | 'multiple-choice';
+    type: 'short-answer' | 'multiple-choice' | 'single-choice';
     options: string[];
     correctAnswers: string[];
     imageUrl?: string | null;

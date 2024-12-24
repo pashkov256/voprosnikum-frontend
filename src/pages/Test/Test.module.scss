@@ -320,6 +320,13 @@
   }
 }
 
+.choiseTypeText{
+  font-size: 16px;
+  margin-bottom: 14px;
+  text-align: center;
+}
+
+
 .wrapperWithTimer{
   position: relative;
 }
@@ -475,6 +482,9 @@
   .quiz-wrapper{
     width: 95%;
   }
+  .choiseTypeText{
+    font-size: 14px;
+  }
 }
 
 @media(max-width: 670px){
@@ -627,6 +637,9 @@
   .blockFinish{
     width: 70%;
   }
+  .choiseTypeText{
+    font-size: 13px;
+  }
 }
 @media(max-width: 390px){
   .blockFinish{
@@ -646,5 +659,7 @@
     padding-top: 4px;
     padding-bottom: 4px;
   }
-
+  .choiseTypeText{
+    font-size: 12px;
+  }
 }
