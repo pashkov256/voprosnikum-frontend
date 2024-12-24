@@ -19,8 +19,15 @@
     min-height: 80vh;
   }
   .quizWithoutImage{
-    min-height: 60vh;
+    min-height: 110vh!important;
+
   }
+  .quizWithImage{
+    min-height: 70vh;
+  }
+}
+.quizWithoutImage{
+  min-height: 60vh;
 }
 
 .testWrapper{
@@ -260,7 +267,7 @@
 }
 
 .quizImage{
-  width: 50%;
+  width: 30%;
   border-radius: 10px;
   background-size: cover;
   background-repeat: no-repeat;
@@ -563,7 +570,13 @@
 }
 
 @media(max-width: 600px){
+  .quizWithoutImage{
+    min-height: 90vh!important;
 
+  }
+  .quizWithImage{
+    min-height: 60%;
+  }
 }
 
 @media(max-width: 500px){
@@ -596,7 +609,7 @@
     bottom: 20px;
   }
   .quizImage{
-    width: 80%;
+    width: 65%;
   }
   .quiz-wrapper{
     padding-bottom: 24px;

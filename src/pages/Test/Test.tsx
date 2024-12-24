@@ -284,7 +284,6 @@ export const Test = (props: TestProps) => {
 
                 setTestSecondsLeft(null)
 
-                alert("ZAVER")
             }
 
         } else {
@@ -421,7 +420,7 @@ export const Test = (props: TestProps) => {
                         <span className={cls.testSecondLeftText}>мин</span>
 
                 </div>}
-                <div className={classNames(cls.quiz,{[cls.quizWithoutImage]:(testData.questions[currentQuestion].imageUrl !== undefined)},[])}>
+                <div className={classNames(cls.quiz,{[cls.quizWithoutImage]:(testData.questions[currentQuestion].imageUrl !== undefined && testData.questions[currentQuestion].imageUrl !== '' && testData.questions[currentQuestion].imageUrl !== null),[cls.quizWithImage]:(testData.questions[currentQuestion].imageUrl === undefined ||  testData.questions[currentQuestion].imageUrl == '' ||  testData.questions[currentQuestion].imageUrl == null)},[])}>
                     <div className={cls["quiz-wrapper"]}>
                         {(testSecondsLeft !== null && !(testSecondsLeft > 0)) ? <h1>Время кончилось</h1> : <>
                             {(currentQuestion !== testData.questions.length) && !isComplete ? (
