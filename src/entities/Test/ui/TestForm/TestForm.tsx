@@ -61,7 +61,7 @@ export const TestForm = memo((props: TestFormProps) => {
         }));
     };
 
-    const handleQuestionTypeChange = (questionId: string, type: "short-answer" | "multiple-choice" ) => {
+    const handleQuestionTypeChange = (questionId: string, type: "short-answer" | "multiple-choice" | "single-choice") => {
         setTestFormData((prevData) => {
             if(type === "short-answer"){
                 return {
@@ -70,7 +70,7 @@ export const TestForm = memo((props: TestFormProps) => {
                         q._id === questionId ? { ...q, type, options:[] ,correctAnswers: ["Ваш текстовый ответ"]} : q
                     ),
                 }
-            } else {
+            } else if(type === 'multiple-choice'){
                 return {
                     ...prevData,
                     questions: prevData.questions.map((q) =>
@@ -82,7 +82,15 @@ export const TestForm = memo((props: TestFormProps) => {
                             ], correctAnswers: ["Вариант Ответа №1"] } : q
                     ),
                 }
+            } else {
+                return {
+                    ...prevData,
+                    questions: prevData.questions.map((q) =>
+                        q._id === questionId ? { ...q, type } : q
+                    ),
+                }
             }
+
 
         });
     };
@@ -200,6 +208,22 @@ export const TestForm = memo((props: TestFormProps) => {
         }));
     };
 
+    const handleSingleChoiceToggle = (questionTitle: string, option: string) => {
+        setTestFormData((prevData) => ({
+            ...prevData,
+            questions: prevData.questions.map((q) => {
+                if (q.title === questionTitle) {
+                    return {
+                        ...q,
+                        correctAnswers: [option], // Устанавливаем единственный правильный ответ
+                    };
+                }
+                return q;
+            }),
+        }));
+    };
+
+
     return (
         <div className={cls.TestForm}>
             <div className={cls.TestFormBlock}>
@@ -225,13 +249,14 @@ export const TestForm = memo((props: TestFormProps) => {
                     />
 
                     <Select
-                        value={question.type || "multiple-choice"}
-                        onChange={(e: SelectChangeEvent<"short-answer" | "multiple-choice">) => handleQuestionTypeChange(question._id || "", e.target.value as "short-answer" | "multiple-choice")}
+                        value={question?.type}
+                        onChange={(e: SelectChangeEvent<"short-answer" | "multiple-choice" | 'single-choice'>) => handleQuestionTypeChange(question._id || "", e.target.value as "short-answer" | "multiple-choice" | 'single-choice')}
 
                         className={cls.selectForm}
                         variant="outlined"
                     >
                         <MenuItem value="short-answer">Короткий ответ</MenuItem>
+                        <MenuItem value="single-choice">Одиночный выбор</MenuItem>
                         <MenuItem value="multiple-choice">Множественный выбор</MenuItem>
                     </Select>
 
@@ -279,7 +304,7 @@ export const TestForm = memo((props: TestFormProps) => {
                                 >
                                     + Добавить вариант ответа
                                 </button>
-                            </div> : <>
+                            </div> : question.type === 'short-answer' ?  <>
                                 {question.correctAnswers.map((correctAnswer, index) => (
                                     <div className={cls.shortAnswerBlock}>
                                         <TextField
@@ -292,7 +317,43 @@ export const TestForm = memo((props: TestFormProps) => {
                                             variant={"standard"}
                                         /></div>
                                 ))}
-                            </>}
+                            </> : question.type === 'single-choice' && (
+                                <div className={cls.AnswerOptions}>
+                                    {question.options.map((option, index) => (
+                                        <div className={cls.singleChoice} key={index}>
+                                            <label className={cls.AnswerOptionLabel}>
+                                                <input
+                                                    type="radio"
+                                                    name={`question-${question.title}`}
+                                                    value={option}
+                                                    checked={question.correctAnswers[0] === option}
+                                                    onChange={() => handleSingleChoiceToggle(question.title || "", option)}
+                                                    className={cls.AnswerOptionRadio}
+                                                />
+                                            </label>
+                                            <TextField
+                                                value={option}
+                                                onChange={(e) =>
+                                                    handleOptionChange(question.title || "", index, e.target.value)
+                                                }
+                                                variant={"standard"}
+                                            />
+                                            <IoIosClose
+                                                className={cls.Icon}
+                                                title={"Удалить вариант ответа"}
+                                                onClick={() => handleDeleteOption(question.title || "", index)}
+                                            />
+                                        </div>
+                                    ))}
+
+                                    <button
+                                        className={cls.AddAnswerOption}
+                                        onClick={() => handleAddOption(question.title || "")}
+                                    >
+                                        + Добавить вариант ответа
+                                    </button>
+                                </div>
+                            )}
 
                         <div className={cls.QuestionSettings}>
                             <TextField
@@ -320,6 +381,8 @@ export const TestForm = memo((props: TestFormProps) => {
                     </div>
                 </div>
             ))}
+
+
 
 
                 <textarea className={cls.textarea} value={textAreaValue} onChange={(e)=>setTextAreaValue(e.target.value)} placeholder="Вставьте ваш вопрос с вариантами ответа (пример)

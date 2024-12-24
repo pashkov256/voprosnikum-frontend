@@ -14,13 +14,65 @@
   background-color: #f8f8f8;
 }
 
-@media(max-height: 950px){
+@media(max-height: 900px){
   .quiz{
     min-height: 80vh;
   }
   .quizWithoutImage{
-    min-height: 60vh;
+    min-height: 80vh!important;
+
   }
+  .quizWithImage{
+    min-height: 70vh;
+  }
+}
+
+@media(max-height: 900px){
+
+  .quizWithoutImage{
+    min-height: 78vh!important;
+
+  }
+}
+
+
+
+
+@media(max-height: 780px){
+  .quizWithoutImage{
+    min-height: 100vh!important;
+
+  }
+  .quizImage{
+    width: 40%!important;
+  }
+  .testContainer{
+    padding-top: 100px!important;
+  }
+}
+@media(max-height: 600px){
+
+  .quizWithoutImage{
+    min-height: 110vh!important;
+
+  }
+}
+
+
+@media(max-height: 500px){
+
+  .quizWithoutImage{
+    min-height: 120vh!important;
+
+  }
+  .quizImage{
+    width: 40%!important;
+  }
+}
+
+
+.quizWithoutImage{
+  min-height: 60vh;
 }
 
 .testWrapper{
@@ -320,6 +372,13 @@
   }
 }
 
+.choiseTypeText{
+  font-size: 16px;
+  margin-bottom: 14px;
+  text-align: center;
+}
+
+
 .wrapperWithTimer{
   position: relative;
 }
@@ -475,6 +534,9 @@
   .quiz-wrapper{
     width: 95%;
   }
+  .choiseTypeText{
+    font-size: 14px;
+  }
 }
 
 @media(max-width: 670px){
@@ -553,7 +615,13 @@
 }
 
 @media(max-width: 600px){
+  .quizWithoutImage{
+    min-height: 90vh!important;
 
+  }
+  .quizWithImage{
+    min-height: 60%;
+  }
 }
 
 @media(max-width: 500px){
@@ -586,7 +654,7 @@
     bottom: 20px;
   }
   .quizImage{
-    width: 80%;
+    width: 65%;
   }
   .quiz-wrapper{
     padding-bottom: 24px;
@@ -627,6 +695,9 @@
   .blockFinish{
     width: 70%;
   }
+  .choiseTypeText{
+    font-size: 13px;
+  }
 }
 @media(max-width: 390px){
   .blockFinish{
@@ -646,5 +717,7 @@
     padding-top: 4px;
     padding-bottom: 4px;
   }
-
+  .choiseTypeText{
+    font-size: 12px;
+  }
 }

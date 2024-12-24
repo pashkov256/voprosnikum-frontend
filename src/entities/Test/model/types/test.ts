@@ -1,15 +1,15 @@
-
-export interface IQuestion {
-    test: string;
-    title: string | null;
-    title1?: string | null;
-    type: 'short-answer' | 'multiple-choice';
-    options: string[];
-    correctAnswers: string[];
-    imageUrl?: string | null;
-    timeLimit?: number;
-    _id?:string;
-}
+            
+            export interface IQuestion {
+                test: string;
+                title: string | null;
+                title1?: string | null;
+                type: 'short-answer' | 'multiple-choice' | 'single-choice';
+                options: string[];
+                correctAnswers: string[];
+                imageUrl?: string | null;
+                timeLimit?: number;
+                _id?:string;
+            }
 
 export interface ITest {
     _id: string;

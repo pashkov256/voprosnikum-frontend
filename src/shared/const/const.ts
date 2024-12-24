@@ -1,4 +1,4 @@
-export const CLIENT_PROD_URL = "http://localhost:3000"
+export const CLIENT_PROD_URL = "https://voprosnikum.netlify.app"
 // export const SERVER_URL = "https://quiz-backend-5lbl.onrender.com"
 // export const SERVER_URL = "http://192.168.0.102:3333"
 // export const SERVER_URL = "http://localhost:3333"
