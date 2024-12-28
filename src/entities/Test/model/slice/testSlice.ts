@@ -99,8 +99,14 @@ export const testApi = createApi({
                 body:{ completedAt, dateStart,completionTime}
             }),
         }),
+        deleteTest: builder.mutation<void , string>({
+            query: (id) => ({
+                url:`/tests/${id}`,
+                method:"DELETE",
+            }),
+        }),
     }),
 });
 
 
-export const { useGetTestsByTeacherQuery ,useGetTeachersQuery,useCreateUserByAdminMutation,useLazyGetTestByIdQuery,useCreateQuestionMutation,useCreateTestMutation,useGetTestByIdQuery,useUpdateTestMutation,useCreateTestResultMutation,useGetTestResultQuery,useCreateTestAnswerMutation,useGetTestAllResultsQuery,useUpdateTestResultMutation} = testApi
+export const { useGetTestsByTeacherQuery ,useGetTeachersQuery,useCreateUserByAdminMutation,useLazyGetTestByIdQuery,useCreateQuestionMutation,useCreateTestMutation,useGetTestByIdQuery,useUpdateTestMutation,useCreateTestResultMutation,useGetTestResultQuery,useCreateTestAnswerMutation,useGetTestAllResultsQuery,useUpdateTestResultMutation,useDeleteTestMutation} = testApi

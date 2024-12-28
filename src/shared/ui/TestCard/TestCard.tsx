@@ -5,6 +5,7 @@ import { RiShareForwardLine } from "react-icons/ri";
 import { Link, useNavigate } from "react-router-dom";
 import {CLIENT_PROD_URL, SERVER_URL} from "shared/const/const";
 import {formatDate, testIsOpenByDate} from "shared/lib/date";
+import {useDeleteTestMutation} from "entities/Test/model/slice/testSlice";
 
 interface TestCardProps {
     className?: string;
@@ -14,7 +15,7 @@ interface TestCardProps {
 export const TestCard = (props: TestCardProps) => {
     const { className, test } = props;
     const navigate = useNavigate();
-
+    const [testDelete] = useDeleteTestMutation()
     return (
         <Link className={cls.Card} to={`/test/${test._id}/edit`}>
             <div className={cls.CardItem}>
@@ -22,17 +23,19 @@ export const TestCard = (props: TestCardProps) => {
                 <span className={cls.CardItemData}>{test.name}</span>
             </div>
             <div className={cls.CardIcons}>
-                {/* <RiDeleteBinLine className={cls.CardIcon} onClick={async (event) => {
+                <RiDeleteBinLine className={cls.CardIcon} onClick={async (event) => {
                     event.preventDefault();
                     event.stopPropagation()
                     try {
-                        await axios.delete(`${SERVER_URL}/quiz/${test._id}/delete`);
+                        // await axios.delete(`${SERVER_URL}/quiz/${test._id}/delete`);
+                        testDelete(test._id)
                         alert("Успешно удалено!")
-                        navigate('/login')
+                        // navigate('/me')
+                        window.location.reload()
                     } catch (e) {
                         console.log(e)
                     }
-                }}/> */}
+                }}/>
                 <RiShareForwardLine className={cls.CardIcon} onClick={(event) => {
                     event.preventDefault();
                     event.stopPropagation();
