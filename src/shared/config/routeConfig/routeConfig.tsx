@@ -1,12 +1,12 @@
 import {RouteProps} from "react-router-dom";
 import RedirectAuthRoute from "app/router/ui/RedirectAuthRoute";
 import React from "react";
-import Login from "pages/Login/Login";
-import {Me} from "pages/Me";
+import LoginPage from "pages/LoginPage/ui/LoginPage";
+import {MePage} from "pages/MePage";
 import Header from "components/Header/Header";
 import {GroupPage} from "pages/GroupPage";
-import {Test} from "pages/Test/Test";
-import TestEdit from "pages/TestEdit/TestEdit";
+import {TestPage} from "pages/TestPage";
+import {TestEditPage} from "pages/TestEditPage";
 import {Container} from "@mui/material";
 
 export type AppRoutesProps = RouteProps & {
@@ -48,14 +48,14 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
         path: RoutePath.login,
         element:<>
             <Header/>
-            <Login/>
+            <LoginPage/>
         </>,
     },
     [AppRoutes.ME]: {
         path: RoutePath.me,
         element: <>
             <Header/>
-            <Me/>
+            <MePage/>
         </>,
         authOnly: true,
     },
@@ -71,7 +71,7 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
         path: `${RoutePath.test}:testId`,
         element: <>
             <Header/>
-            <Test/>
+            <TestPage/>
         </>,
         authOnly: true,
     },
@@ -79,7 +79,7 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
         path: `${RoutePath.test_create}`,
         element: <>
             <Header haveBorder={false}/>
-            <TestEdit/>
+            <TestEditPage/>
         </>,
         authOnly: true,
     },
@@ -87,7 +87,7 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
         path: `${RoutePath.test_edit}`,
         element:<>
             <Header haveBorder={false}/>
-            <TestEdit/>
+            <TestEditPage/>
         </>,
         authOnly: true,
     },
