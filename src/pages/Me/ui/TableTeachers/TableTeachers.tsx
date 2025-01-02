@@ -1,7 +1,7 @@
-import {useCreateUserByAdminMutation, useGetTeachersQuery} from "entities/Test/model/slice/testSlice";
-import {useRef} from "react";
-import {generatePDF} from "shared/lib/generatePDF/generatePDF";
-import {TableUsers} from "pages/Me/ui/TableUsers/TableUsers";
+import { useCreateUserByAdminMutation, useGetTeachersQuery } from "entities/Test/model/slice/testSlice";
+import { TableUsers } from "pages/Me/ui/TableUsers/TableUsers";
+import { useRef } from "react";
+import { generatePDF } from "shared/lib/generatePDF/generatePDF";
 import Loader from "shared/ui/Loader/Loader";
 
 interface TableTeachersProps {
@@ -21,7 +21,7 @@ export const TableTeachers = (props: TableTeachersProps) => {
     }
 
     if(isLoading){
-        return  <Loader/>
+        return  <div></div>
     }
 
     if(error){

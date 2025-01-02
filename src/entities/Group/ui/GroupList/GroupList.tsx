@@ -42,7 +42,7 @@ export const GroupList = (props: GroupListProps) => {
                     Добавить
                 </Button>
             </div>}
-            {isLoading ? <Loader/> : data ? (
+            { (data && !isLoading)  ? (
               <div className={cls.groupList}>
                   {data.map((group) => (
                       <GroupCard name={group.name} _id={group._id} key={group._id}/>
