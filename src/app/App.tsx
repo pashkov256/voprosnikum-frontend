@@ -11,12 +11,13 @@ import { GroupPage } from "pages/GroupPage";
 import Login from "pages/Login/Login";
 import { Me } from "pages/Me/ui/Me/Me";
 import { Registration } from "pages/Registration/ui/Registration";
+import { Test } from "pages/Test/Test";
 import TestEdit from "pages/TestEdit/TestEdit";
 import { User } from "pages/User/User";
 import React, { Suspense, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Route, Routes } from "react-router-dom";
-import {Test} from "pages/Test/Test";
+import Loader from "shared/ui/Loader/Loader";
 function App() {
     const dispatch = useAppDispatch();
     const _inited = useSelector(selectorInited);
@@ -25,7 +26,7 @@ function App() {
     }, [dispatch]);
     return (
         <>
-            {_inited &&  <Suspense fallback="">
+            {_inited ?  <Suspense fallback="">
                 <Routes>
                     <Route
                         path="/login"
@@ -130,7 +131,7 @@ function App() {
                         }
                     />
                 </Routes>
-            </Suspense>}
+            </Suspense> : <Loader/>}
         </>
     );
 }
