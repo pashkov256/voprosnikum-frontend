@@ -5,16 +5,12 @@ import { fetchAuthMe, selectorIsAuth } from "app/providers/StoreProvider/config/
 import { RootState } from "app/providers/StoreProvider/config/store";
 
 function RedirectAuthRoute() {
-    const dispatch = useDispatch();
     const isAuth = useSelector(selectorIsAuth);
     const userDataIsLoading = useSelector((state: RootState) => state.auth.status) === "loading";
-
-    console.log(isAuth)
 
     if (userDataIsLoading) {
         return <div>Loading...</div>;
     }
-
 
     if (isAuth) {
         //@ts-ignore
