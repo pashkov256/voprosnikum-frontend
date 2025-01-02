@@ -1,15 +1,13 @@
 
-<div style="text-align: center;">
-    <img src="https://raw.githubusercontent.com/pashkov256/media/refs/heads/main/voprosnikum/logo.png" alt="Project Banner" />
-</div>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/pashkov256/media/refs/heads/main/voprosnikum/logo.png" alt="Project Banner" />
+</p>
 
----
 ## Описание
-Это фронтенд часть веб-сервиса для проведения тестирования студентов в учебном заведении. Система предназначена для удобного управления тестами, студентами и преподавателями.
+Frontend часть веб-сервиса для проведения тестирования студентов в учебном заведении. Система предназначена для удобного управления тестами, студентами и преподавателями.
 
----
+
 ## Стек технологий
-
 <div>
 <img src="https://raw.githubusercontent.com/devicons/devicon/refs/heads/master/icons/react/react-original-wordmark.svg" title="React" alt="React" width="40" height="40"/>&nbsp;
 <img src="https://raw.githubusercontent.com/devicons/devicon/refs/heads/master/icons/typescript/typescript-original.svg" title="JavaScript" alt="JavaScript" width="40" height="40"/>&nbsp;
@@ -17,7 +15,6 @@
 </div>
 
 
----
 
 ## Основные Функции
 
@@ -39,7 +36,7 @@
     - Прохождение тестов с различными типами вопросов (текстовый ответ, одиночный выбор, множественный выбор).
     - Просмотр результатов, если преподаватель разрешил их отображение.
 
----
+
 
 ## Основные Страницы
 
