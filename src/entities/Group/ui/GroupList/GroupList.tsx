@@ -51,7 +51,6 @@ export const GroupList = (props: GroupListProps) => {
             ) : (
                 <div>Нет доступных групп</div>
             ) }
-
         </div>
     )
 
