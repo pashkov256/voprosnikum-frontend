@@ -1,2 +1,2 @@
-export {GroupPageAsync as GroupPage} from "./ui/GroupPage/GroupPage.async";
+export {GroupPage} from "./ui/GroupPage/GroupPage";
 
