@@ -1,12 +1,12 @@
 import {RouteProps} from "react-router-dom";
 import RedirectAuthRoute from "app/router/ui/RedirectAuthRoute";
 import React from "react";
-import LoginPage from "pages/LoginPage/ui/LoginPage";
-import {MePage} from "pages/MePage";
+import Login from "pages/Login/Login";
+import {Me} from "pages/Me";
 import Header from "components/Header/Header";
 import {GroupPage} from "pages/GroupPage";
-import {TestPage} from "pages/TestPage";
-import {TestEditPage} from "pages/TestEditPage";
+import {Test} from "pages/Test/Test";
+import TestEdit from "pages/TestEdit/TestEdit";
 import {Container} from "@mui/material";
 
 export type AppRoutesProps = RouteProps & {
@@ -30,7 +30,7 @@ export const RoutePath: Record<AppRoutes, string> = {
     [AppRoutes.LOGIN]: '/login',
     [AppRoutes.ME]: '/me', // + :id
     [AppRoutes.GROUP]: '/group/', // + :groupId
-    [AppRoutes.TEST]: '/test/', // + :testId
+    [AppRoutes.TEST]: '/test', // + :testId
     [AppRoutes.TEST_CREATE]: '/test/create',
     [AppRoutes.TEST_EDIT]: '/test/:id/edit',
     // LAST
@@ -48,14 +48,14 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
         path: RoutePath.login,
         element:<>
             <Header/>
-            <LoginPage/>
+            <Login/>
         </>,
     },
     [AppRoutes.ME]: {
         path: RoutePath.me,
         element: <>
             <Header/>
-            <MePage/>
+            <Me/>
         </>,
         authOnly: true,
     },
@@ -71,7 +71,7 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
         path: `${RoutePath.test}:testId`,
         element: <>
             <Header/>
-            <TestPage/>
+            <Test/>
         </>,
         authOnly: true,
     },
@@ -79,7 +79,7 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
         path: `${RoutePath.test_create}`,
         element: <>
             <Header haveBorder={false}/>
-            <TestEditPage/>
+            <TestEdit/>
         </>,
         authOnly: true,
     },
@@ -87,7 +87,7 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
         path: `${RoutePath.test_edit}`,
         element:<>
             <Header haveBorder={false}/>
-            <TestEditPage/>
+            <TestEdit/>
         </>,
         authOnly: true,
     },

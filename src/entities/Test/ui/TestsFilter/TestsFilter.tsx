@@ -4,7 +4,7 @@ import { Block } from "shared/ui/Block/Block";
 import { Text, TextSize } from "shared/ui/Text/Text";
 import { TestList } from "shared/ui/TestList/TestList";
 import React from "react";
-import meCls from 'pages/MePage/ui/MePage/MePage.module.scss';
+import meCls from 'pages/Me/ui/Me/Me.module.scss';
 
 interface TestsFilterProps {
     className?: string;
