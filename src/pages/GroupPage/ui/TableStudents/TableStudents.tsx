@@ -4,7 +4,7 @@ import {useCreateUserByAdminMutation, useGetTeachersQuery} from "entities/Test/m
 import {useRef} from "react";
 import {generatePDF} from "shared/lib/generatePDF/generatePDF";
 import Loader from "shared/ui/Loader/Loader";
-import {TableUsers} from "pages/MePage/ui/TableUsers/TableUsers";
+import {TableUsers} from "pages/Me/ui/TableUsers/TableUsers";
 import {Column} from "shared/ui/Table/Table";
 import {useGetStudentsByGroupQuery} from "entities/Group/model/slice/groupSlice";
 

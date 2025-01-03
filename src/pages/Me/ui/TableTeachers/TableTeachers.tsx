@@ -1,5 +1,5 @@
 import { useCreateUserByAdminMutation, useGetTeachersQuery } from "entities/Test/model/slice/testSlice";
-import { TableUsers } from "../TableUsers/TableUsers";
+import { TableUsers } from "pages/Me/ui/TableUsers/TableUsers";
 import { useRef } from "react";
 import { generatePDF } from "shared/lib/generatePDF/generatePDF";
 import Loader from "shared/ui/Loader/Loader";
