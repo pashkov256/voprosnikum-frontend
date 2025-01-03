@@ -1,4 +1,4 @@
-import cls from 'pages/TestEdit/TestEdit.module.scss';
+import cls from './TestEditPage.module.scss';
 import {useNavigate, useParams} from "react-router-dom";
 import React, {memo, SyntheticEvent, useEffect, useState} from "react";
 import {useGetTestByIdQuery, useUpdateTestMutation} from "entities/Test/model/slice/testSlice";
@@ -41,7 +41,7 @@ function TabPanel(props:any) {
     );
 }
 
-const TestEdit = memo((props: TestEditProps) => {
+const TestEditPage = memo((props: TestEditProps) => {
     const { className } = props;
     const { id } = useParams();
     const userData = useSelector((state: RootState) => state.auth.data);
@@ -192,4 +192,4 @@ const TestEdit = memo((props: TestEditProps) => {
     return <Loader/>
 });
 
-export default TestEdit;
+export default TestEditPage;

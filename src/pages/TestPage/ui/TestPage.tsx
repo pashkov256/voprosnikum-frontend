@@ -16,7 +16,7 @@ import isPastDate from "shared/lib/isPastDate/isPastDate";
 import { Button, ButtonTheme } from "shared/ui/Button/Button";
 import { Input } from "shared/ui/Input/Input";
 import Loader from "shared/ui/Loader/Loader";
-import cls from './Test.module.scss';
+import cls from 'pages/TestPage/ui/TestPage.module.scss';
 import {formatTimeDifference} from "shared/lib/date/formatTimeDifference";
 import {getColorByScore} from "shared/lib/getColorByScore/getColorByScore";
 import {Container} from "@mui/material";
@@ -25,7 +25,7 @@ interface TestProps {
     className?: string;
 }
 
-export const Test = (props: TestProps) => {
+const TestPage = (props: TestProps) => {
     const { className } = props;
     const { testId } = useParams<{testId:string}>();
     const userData = useSelector((state: RootState) => state.auth.data);
@@ -336,6 +336,11 @@ export const Test = (props: TestProps) => {
                             <span className={cls.blockStartInfoLeft}>Название теста:</span>
                             <span className={cls.blockStartInfoRight}>{testData.name}</span>
                         </div>
+                        {testData.description && <div className={cls.blockStartInfo}>
+                            <span className={cls.blockStartInfoLeft}>Описание теста:
+                            <span className={classNames(cls.blockStartInfoRight,{},[cls.blockStartInfoDescription])}>{testData.description}</span>
+                            </span>
+                        </div>}
                         <div className={cls.blockStartInfo}>
                             <span className={cls.blockStartInfoLeft}>Преподаватель:</span>
                             {/* @ts-ignore */}
@@ -510,3 +515,5 @@ export const Test = (props: TestProps) => {
 
     return <div></div>;
 };
+
+export default TestPage
