@@ -3,9 +3,9 @@ import cls from './TeachersList.module.scss';
 import {useGetTeacherAndTestsQuery} from "entities/User/model/slice/userSlice";
 import Loader from "shared/ui/Loader/Loader";
 import {Text, TextSize, TextTheme} from "shared/ui/Text/Text";
-import {TeacherTests} from "pages/Me/ui/TeacherTests/TeacherTests";
+import {TeacherTests} from "../TeacherTests/TeacherTests";
 import {Block} from "shared/ui/Block/Block";
-import clsMe from 'pages/Me/ui/Me/Me.module.scss'
+import clsMe from '../MePage/MePage.module.scss'
 interface TeachersListProps {
     className?: string;
 }

@@ -8,9 +8,9 @@ import { useSelector } from "react-redux";
 import { Navigate } from "react-router";
 import { Button } from "shared/ui/Button/Button";
 import { Input } from "shared/ui/Input/Input";
-import styles from "./Login.module.scss";
+import styles from "pages/LoginPage/ui/LoginPage.module.scss";
 
-const Login = () => {
+const LoginPage = () => {
     document.title = "Авторизация";
     const isAuth = useSelector(selectorIsAuth);
     const [loginFormData,setLoginFormData] = useState({
@@ -53,14 +53,14 @@ const Login = () => {
                             placeholder="Укажите логин"
                             onChange={(login)=>{
                                 setLoginFormData({...loginFormData,login})
-                            }}  
+                            }}
                         />
                         <Input
                             className={styles.loginInput}
                             placeholder="Укажите пароль"
                             onChange={(password)=>{
                                 setLoginFormData({...loginFormData,password})
-                            }} 
+                            }}
                             type={"password"}
                         />
                     </div>
@@ -77,4 +77,4 @@ const Login = () => {
     );
 };
 
-export default Login
+export default LoginPage

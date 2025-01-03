@@ -100,6 +100,8 @@
   color: #000;
   font-size: 20px;
   font-weight: 600;
+  align-items: flex-start!important;
+  margin: 0;
 }
 .blockStartInfoRight{
   color: #333;
@@ -110,6 +112,11 @@
   display: flex;
   align-items: center;
   gap: 12px;
+}
+
+.blockStartInfoDescription{
+  margin-left: 12px;
+  white-space: unset!important;
 }
 
 .blockFinish{
@@ -410,6 +417,10 @@
   .blockStartInfo{
     gap: 8px;
   }
+  .blockStartInfoDescription{
+    margin-left: 8px;
+  }
+
   .blockStartInfoLeft{
     font-size: 18px;
   }
@@ -492,6 +503,10 @@
   .blockStartInfo{
     gap: 6px;
   }
+  .blockStartInfoDescription{
+    margin-left: 6px;
+  }
+
   .blockStartInfoLeft{
     font-size: 16px;
   }
@@ -636,6 +651,10 @@
   .blockStartInfo{
     gap: 3px;
   }
+  .blockStartInfoDescription{
+    margin-left: 3px;
+  }
+
   .blockStartInfoLeft{
     font-size: 14px;
   }
@@ -706,6 +725,10 @@
   .blockStartInfo{
     gap: 2px;
   }
+  .blockStartInfoDescription{
+    margin-left: 2px;
+  }
+
   .blockStartInfoLeft{
     font-size: 13px;
   }
