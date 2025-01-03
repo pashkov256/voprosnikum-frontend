@@ -30,7 +30,7 @@ export const RoutePath: Record<AppRoutes, string> = {
     [AppRoutes.LOGIN]: '/login',
     [AppRoutes.ME]: '/me', // + :id
     [AppRoutes.GROUP]: '/group/', // + :groupId
-    [AppRoutes.TEST]: '/test', // + :testId
+    [AppRoutes.TEST]: '/test/', // + :testId
     [AppRoutes.TEST_CREATE]: '/test/create',
     [AppRoutes.TEST_EDIT]: '/test/:id/edit',
     // LAST
