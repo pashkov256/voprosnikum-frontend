@@ -1,5 +1,5 @@
 import { classNames } from 'shared/lib/classNames/classNames';
-import cls from './Group.module.scss';
+import cls from './GroupPage.module.scss';
 import { TableStudents } from "pages/GroupPage/ui/TableStudents/TableStudents";
 import { useParams } from "react-router-dom";
 import { Text, TextSize } from 'shared/ui/Text/Text';
@@ -18,7 +18,7 @@ interface GroupPageProps {
     className?: string;
 }
 
-export const GroupPage = (props: GroupPageProps) => {
+const GroupPage = (props: GroupPageProps) => {
     const { className } = props;
     const { groupId } = useParams();
     const { isLoading: groupIsLoading, data: groupData, error: groupError } = useGetGroupByIdQuery(groupId || "");
@@ -103,3 +103,4 @@ export const GroupPage = (props: GroupPageProps) => {
         </Container>
     );
 };
+export default GroupPage
