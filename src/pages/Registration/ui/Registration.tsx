@@ -4,7 +4,7 @@ import {useForm} from "react-hook-form";
 import {useSelector} from "react-redux";
 import {Navigate} from "react-router-dom";
 import {fetchRegister, selectorIsAuth} from "app/providers/StoreProvider/config/slices/auth";
-import styles from "pages/Login/Login.module.scss";
+import styles from "pages/LoginPage/Login.module.scss";
 import {useAppDispatch} from "app/providers/StoreProvider/config/store";
 
 export const Registration = () => {

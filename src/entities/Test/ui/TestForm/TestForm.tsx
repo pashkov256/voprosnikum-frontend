@@ -1,12 +1,17 @@
-import React, { memo, useEffect, useState } from "react";
+import React, {memo, useEffect, useState} from "react";
 import cls from './TestForm.module.scss';
-import QuizFormInput, { InputTextSize } from "./TestFormInput";
-import {TextField, Select, MenuItem, SelectChangeEvent} from "@mui/material";
-import { RiDeleteBinLine } from "react-icons/ri";
-import { IoIosClose } from "react-icons/io";
-import { ITest } from "entities/Test/model/types/test";
-import { useCreateQuestionMutation } from "entities/Test/model/slice/testSlice";
-import TestFormInput from "./TestFormInput";
+import QuizFormInput from "./TestFormInput";
+import TestFormInput, {InputTextSize} from "./TestFormInput";
+import {InputLabel, MenuItem, Select, SelectChangeEvent, TextField} from "@mui/material";
+import {RiDeleteBinLine} from "react-icons/ri";
+import {IoIosClose} from "react-icons/io";
+import {ITest} from "entities/Test/model/types/test";
+import {useCreateQuestionMutation} from "entities/Test/model/slice/testSlice";
+import {TextArea} from "shared/ui/TextArea/TextArea";
+import {Button, ButtonTheme} from "shared/ui/Button/Button";
+import {Text, TextSize} from "shared/ui/Text/Text";
+import {Input} from "shared/ui/Input/Input";
+
 interface TestFormProps {
     className?: string;
     testData: ITest;
@@ -34,8 +39,8 @@ export const TestForm = memo((props: TestFormProps) => {
         console.log({...testFormData})
         await createQuestion({
             test: testFormData._id,
-            title: title || "Нажмите чтобы изменить вопрос №" + (testFormData.questions.length + 1),
-            title1: title || "Нажмите чтобы изменить вопрос №" + (testFormData.questions.length + 1),
+            title: title || "Вопрос №" + (testFormData.questions.length + 1),
+            title1: title || "Вопрос №" + (testFormData.questions.length + 1),
             options: (options && options.length !== 0) ? options : [
                 "Вариант Ответа №1",
                 "Вариант Ответа №2",
@@ -44,7 +49,8 @@ export const TestForm = memo((props: TestFormProps) => {
             ],
             type: "multiple-choice",
             //@ts-ignore
-            correctAnswers: options[0] || ["Вариант Ответа №1"],
+            correctAnswers: options[0] || ["Вариант Ответа №1",
+                "Вариант Ответа №3"],
         });
         refetchGetTest?.();
     };
@@ -58,6 +64,12 @@ export const TestForm = memo((props: TestFormProps) => {
         setTestFormData((prevData) => ({
             ...prevData,
             name,
+        }));
+    };
+    const handleTestDescriptionChange = (description: string) => {
+        setTestFormData((prevData) => ({
+            ...prevData,
+            description,
         }));
     };
 
@@ -227,27 +239,50 @@ export const TestForm = memo((props: TestFormProps) => {
     return (
         <div className={cls.TestForm}>
             <div className={cls.TestFormBlock}>
-                <QuizFormInput
+                <TextField
                     value={testFormData?.name || ""}
-                    onChange={handleTestNameChange}
-                    textSize={InputTextSize.XL}
-                    placeholder={'Название теста'}
+                    onChange={(e)=>{
+                        handleTestNameChange(e.target.value);
+                    }}
+                    label='Название теста'
                     style={{ width: '100%' }}
+                    variant="standard"
+                />
+
+                <TextField
+                    value={testFormData?.description || ""}
+                    onChange={(e)=>{
+                        handleTestDescriptionChange(e.target.value);
+                    }}
+                    className={cls.textareaDescription}
+                    label="Описание теста"
+                    multiline
+                    rows={3}
                 />
             </div>
 
             {testFormData.questions.map((question) => (
                 <div key={question.title + question.type} className={cls.TestFormBlock}>
-                    <TestFormInput
+                    <TextField
                         className={cls.input}
                         value={question.title1 || "" }
-                        onChange={(e) =>
-                            handleImageURLChange1(question.title || "", e)
-                        }
-                        style={{ width: '100%', fontSize: "18px" }}
-                        placeholder={"Введите заголовок вопроса"}
+                        onChange={(e)=>{
+                            handleImageURLChange1(question.title || "", e.target.value);
+                        }}
+                        label={'Вопрос'}
+                        style={{ width: '100%' }}
+                        variant="standard"
                     />
 
+                    {/*<TestFormInput*/}
+                    {/*    className={cls.input}*/}
+                    {/*    value={question.title1 || "" }*/}
+                    {/*    onChange={(e) =>*/}
+                    {/*        handleImageURLChange1(question.title || "", e)*/}
+                    {/*    }*/}
+                    {/*    style={{ width: '100%', fontSize: "18px" }}*/}
+                    {/*    placeholder={"Введите заголовок вопроса"}*/}
+                    {/*/>*/}
                     <Select
                         value={question?.type}
                         onChange={(e: SelectChangeEvent<"short-answer" | "multiple-choice" | 'single-choice'>) => handleQuestionTypeChange(question._id || "", e.target.value as "short-answer" | "multiple-choice" | 'single-choice')}
@@ -314,6 +349,7 @@ export const TestForm = memo((props: TestFormProps) => {
                                                 handleShortAnswer(question._id || "", e.target.value)
                                             }
                                             placeholder={"Текстовый ответ"}
+                                            label={"Текстовый ответ"}
                                             variant={"standard"}
                                         /></div>
                                 ))}
@@ -358,12 +394,13 @@ export const TestForm = memo((props: TestFormProps) => {
                         <div className={cls.QuestionSettings}>
                             <TextField
                                 className={cls.input}
-                                value={question.timeLimit}
+                                value={question.timeLimit !== 0 ? question.timeLimit : ""}
                                 type={"number"}
                                 onChange={(e) =>
                                     handleTimeLimitChange(question.title || "", Number(e.target.value))
                                 }
-                                placeholder="Время выполнения (сек)"
+                                placeholder="Укажите время выполнения"
+                                label="Время выполнения (сек)"
                                 variant="standard"
                             />
 
@@ -374,7 +411,8 @@ export const TestForm = memo((props: TestFormProps) => {
                                 onChange={(e) =>
                                     handleImageURLChange(question._id || "", e.target.value)
                                 }
-                                placeholder={"Ссылка на изображение"}
+                                placeholder={"Укажите ссылку на изображение"}
+                                label={"Ссылка на изображение"}
                                 variant={"standard"}
                             />
                         </div>
@@ -382,20 +420,17 @@ export const TestForm = memo((props: TestFormProps) => {
                 </div>
             ))}
 
-
-
-
-                <textarea className={cls.textarea} value={textAreaValue} onChange={(e)=>setTextAreaValue(e.target.value)} placeholder="Вставьте ваш вопрос с вариантами ответа (пример)
+                <TextArea
+                    className={cls.textareaNewQuestion}
+                    onChange={(value)=>setTextAreaValue(value)} value={textAreaValue} placeholder="Вставьте ваш вопрос с вариантами ответа (пример)
                 ⠀
                 Кто создал Linux?¶
                      Ада Лавлейс ¶
                      Алан Тьюринг¶
                      Линус Торвальдс¶
-                "></textarea>
+                "/>
 
-
-
-                <button
+                <Button
                     className={cls.AddQuestion}
                     onClick={()=>{
                         const splitedValue = textAreaValue.split('\n')
@@ -405,9 +440,10 @@ export const TestForm = memo((props: TestFormProps) => {
                         setTextAreaValue('')
                     }}
                     disabled={createQuestionIsLoading}
+                    theme={ButtonTheme.BACKGROUND}
                 >
                     + Добавить новый вопрос
-                </button>
+                </Button>
 
         </div>
     );
