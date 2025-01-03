@@ -336,6 +336,11 @@ const TestPage = (props: TestProps) => {
                             <span className={cls.blockStartInfoLeft}>Название теста:</span>
                             <span className={cls.blockStartInfoRight}>{testData.name}</span>
                         </div>
+                        {testData.description && <div className={cls.blockStartInfo}>
+                            <span className={cls.blockStartInfoLeft}>Описание теста:
+                            <span className={classNames(cls.blockStartInfoRight,{},[cls.blockStartInfoDescription])}>{testData.description}</span>
+                            </span>
+                        </div>}
                         <div className={cls.blockStartInfo}>
                             <span className={cls.blockStartInfoLeft}>Преподаватель:</span>
                             {/* @ts-ignore */}
