@@ -1,13 +1,13 @@
-import {RouteProps} from "react-router-dom";
+import { Container } from "@mui/material";
 import RedirectAuthRoute from "app/router/ui/RedirectAuthRoute";
-import React from "react";
-import LoginPage from "pages/LoginPage/ui/LoginPage";
-import {MePage} from "pages/MePage";
 import Header from "components/Header/Header";
-import {GroupPage} from "pages/GroupPage";
-import {TestPage} from "pages/TestPage";
-import {TestEditPage} from "pages/TestEditPage";
-import {Container} from "@mui/material";
+import { GroupPage } from "pages/GroupPage";
+import LoginPage from "pages/LoginPage/ui/LoginPage";
+import { MePage } from "pages/MePage";
+import { TestEditPage } from "pages/TestEditPage";
+import TestPage from "pages/TestPage/ui/TestPage";
+import React from "react";
+import { RouteProps } from "react-router-dom";
 
 export type AppRoutesProps = RouteProps & {
     authOnly?: boolean;
@@ -41,61 +41,61 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
     [AppRoutes.MAIN]: {
         path: RoutePath.main,
         element: <>
-            <RedirectAuthRoute/>
+            <RedirectAuthRoute />
         </>,
     },
     [AppRoutes.LOGIN]: {
         path: RoutePath.login,
-        element:<>
-            <Header/>
-            <LoginPage/>
+        element: <>
+            <Header />
+            <LoginPage />
         </>,
     },
     [AppRoutes.ME]: {
         path: RoutePath.me,
         element: <>
-            <Header/>
-            <MePage/>
+            <Header />
+            <MePage />
         </>,
         authOnly: true,
     },
     [AppRoutes.GROUP]: {
         path: `${RoutePath.group}:groupId`,
-        element:  <>
-            <Header/>
-            <GroupPage/>
+        element: <>
+            <Header />
+            <GroupPage />
         </>,
         authOnly: true,
     },
     [AppRoutes.TEST]: {
         path: `${RoutePath.test}:testId`,
         element: <>
-            <Header/>
-            <TestPage/>
+            <Header />
+            <TestPage />
         </>,
         authOnly: true,
     },
     [AppRoutes.TEST_CREATE]: {
         path: `${RoutePath.test_create}`,
         element: <>
-            <Header haveBorder={false}/>
-            <TestEditPage/>
+            <Header haveBorder={false} />
+            <TestEditPage />
         </>,
         authOnly: true,
     },
     [AppRoutes.TEST_EDIT]: {
         path: `${RoutePath.test_edit}`,
-        element:<>
-            <Header haveBorder={false}/>
-            <TestEditPage/>
+        element: <>
+            <Header haveBorder={false} />
+            <TestEditPage />
         </>,
         authOnly: true,
     },
     // last
     [AppRoutes.NOT_FOUND]: {
         path: RoutePath.not_found,
-        element:  <Container maxWidth="lg" style={{textAlign:'center'}}>
-            <span style={{fontSize:'72px',fontWeight:"700"}}>404</span>
+        element: <Container maxWidth="lg" style={{ textAlign: 'center' }}>
+            <span style={{ fontSize: '72px', fontWeight: "700" }}>404</span>
         </Container>,
     },
 };

@@ -1,9 +1,9 @@
-import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import axios from 'api/api'
-import {RootState} from "app/providers/StoreProvider/config/store";
-import {UserData} from "model/IUser";
-import {TypedUseSelectorHook, useSelector} from "react-redux";
-import {IUser} from "entities/User";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from 'api/api';
+import { RootState } from "app/providers/StoreProvider/config/store";
+import { IUser } from "entities/User";
+import { UserData } from "model/IUser";
+import { TypedUseSelectorHook, useSelector } from "react-redux";
 
 export const fetchAuth = createAsyncThunk("auth/fetchAuth", async (params) => {
     const {data} = await axios.post("/auth/login", params);
@@ -22,7 +22,24 @@ export const fetchRegister = createAsyncThunk(
     }
 );
 
-const initialState = {
+interface initialStateType {
+    data:{
+        _id:string,
+        fullName:string,
+        role:string,
+        login:string,
+        group?:string,
+        groupsTeacher?:string[],
+        createdAt:string,
+        updatedAt:string,
+        token:string,
+        plainPassword?:string,
+    } | null,
+    status:"loading" | "error" | "loaded",
+    _inited:boolean
+}
+
+const initialState:initialStateType = {
     data:   null,
     status: "loading",
     _inited: false,

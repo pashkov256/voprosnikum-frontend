@@ -1,16 +1,15 @@
-import React, {memo, useEffect, useState} from "react";
+import { InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
+import { useCreateQuestionMutation } from "entities/Test/model/slice/testSlice";
+import { ITest } from "entities/Test/model/types/test";
+import React, { memo, useEffect, useState } from "react";
+import { IoIosClose } from "react-icons/io";
+import { RiDeleteBinLine } from "react-icons/ri";
+import { Button, ButtonTheme } from "shared/ui/Button/Button";
+import { Input } from "shared/ui/Input/Input";
+import { Text, TextSize } from "shared/ui/Text/Text";
+import { TextArea } from "shared/ui/TextArea/TextArea";
 import cls from './TestForm.module.scss';
-import QuizFormInput from "./TestFormInput";
-import TestFormInput, {InputTextSize} from "./TestFormInput";
-import {InputLabel, MenuItem, Select, SelectChangeEvent, TextField} from "@mui/material";
-import {RiDeleteBinLine} from "react-icons/ri";
-import {IoIosClose} from "react-icons/io";
-import {ITest} from "entities/Test/model/types/test";
-import {useCreateQuestionMutation} from "entities/Test/model/slice/testSlice";
-import {TextArea} from "shared/ui/TextArea/TextArea";
-import {Button, ButtonTheme} from "shared/ui/Button/Button";
-import {Text, TextSize} from "shared/ui/Text/Text";
-import {Input} from "shared/ui/Input/Input";
+import { InputTextSize, default as QuizFormInput, default as TestFormInput } from "./TestFormInput";
 
 interface TestFormProps {
     className?: string;
@@ -34,7 +33,6 @@ export const TestForm = memo((props: TestFormProps) => {
     }, [testFormData]);
 
     const createNewQuestion = async (title?:string | undefined,options?:string[] | undefined) => {
-        //@ts-ignore
         await updateTestData({...testFormData});
         console.log({...testFormData})
         await createQuestion({
@@ -82,18 +80,6 @@ export const TestForm = memo((props: TestFormProps) => {
                         q._id === questionId ? { ...q, type, options:[] ,correctAnswers: ["Ваш текстовый ответ"]} : q
                     ),
                 }
-            } else if(type === 'multiple-choice'){
-                return {
-                    ...prevData,
-                    questions: prevData.questions.map((q) =>
-                        q._id === questionId ? { ...q, type, options: [
-                                "Вариант Ответа №1",
-                                "Вариант Ответа №2",
-                                "Вариант Ответа №3",
-                                "Вариант Ответа №4",
-                            ], correctAnswers: ["Вариант Ответа №1"] } : q
-                    ),
-                }
             } else {
                 return {
                     ...prevData,
@@ -102,7 +88,6 @@ export const TestForm = memo((props: TestFormProps) => {
                     ),
                 }
             }
-
 
         });
     };
@@ -116,7 +101,7 @@ export const TestForm = memo((props: TestFormProps) => {
         }));
     };
 
-    const handleTimeLimitChange = (questionTitle: string, timeLimit: number) => {
+    const handleTimeLimitChange = (questionTitle: string, timeLimit: number | undefined) => {
         setTestFormData((prevData) => ({
             ...prevData,
             questions: prevData.questions.map((q) =>
@@ -273,16 +258,6 @@ export const TestForm = memo((props: TestFormProps) => {
                         style={{ width: '100%' }}
                         variant="standard"
                     />
-
-                    {/*<TestFormInput*/}
-                    {/*    className={cls.input}*/}
-                    {/*    value={question.title1 || "" }*/}
-                    {/*    onChange={(e) =>*/}
-                    {/*        handleImageURLChange1(question.title || "", e)*/}
-                    {/*    }*/}
-                    {/*    style={{ width: '100%', fontSize: "18px" }}*/}
-                    {/*    placeholder={"Введите заголовок вопроса"}*/}
-                    {/*/>*/}
                     <Select
                         value={question?.type}
                         onChange={(e: SelectChangeEvent<"short-answer" | "multiple-choice" | 'single-choice'>) => handleQuestionTypeChange(question._id || "", e.target.value as "short-answer" | "multiple-choice" | 'single-choice')}
@@ -394,10 +369,10 @@ export const TestForm = memo((props: TestFormProps) => {
                         <div className={cls.QuestionSettings}>
                             <TextField
                                 className={cls.input}
-                                value={question.timeLimit !== 0 ? question.timeLimit : ""}
+                                value={question.timeLimit !== 0 && question.timeLimit !== null && question.timeLimit !== undefined ? question.timeLimit : ""}
                                 type={"number"}
                                 onChange={(e) =>
-                                    handleTimeLimitChange(question.title || "", Number(e.target.value))
+                                    handleTimeLimitChange(question.title || "",Number(e.target.value)  === 0 ? undefined:Number(e.target.value))
                                 }
                                 placeholder="Укажите время выполнения"
                                 label="Время выполнения (сек)"
