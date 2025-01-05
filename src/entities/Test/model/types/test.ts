@@ -7,7 +7,7 @@ export interface IQuestion {
     correctAnswers: string[];
     imageUrl?: string | null;
     timeLimit?: number;
-    _id?:string;
+    _id:string;
 }
 
 export interface ITest {
@@ -34,7 +34,7 @@ export interface  ITestAnswer{
 export interface ITestResult{
     test:string;
     student:string;
-    testAnswers?:ITestAnswer[];
+    testAnswers:ITestAnswer[];
     completedAt?:string;
     dateStart?:string;
     completionTime?:string;
@@ -43,15 +43,21 @@ export interface ITestResult{
     _id:string;
 }
 
-export interface ITestNoPopulate {
+export interface ITestWithPopulate {
     _id: string;
     name: string;
     description?: string;
-    teacher: string;
     group: string; //id
-    deadline: string;
+    deadline?: string;
     createdAt?: string;
     updatedAt?: string;
-    questions:string[];
+    timeLimit: number;
+    questions:IQuestion[];
+    haveTestResult?:boolean;
+    isResultVisibleAfterDeadline:boolean;
+    teacher: {
+        fullName:string
+    };
+
 }
 

@@ -1,8 +1,8 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import {IQuestion, ITest, ITestAnswer, ITestNoPopulate, ITestResult} from '../types/test'
-import {SERVER_URL} from "shared/const/const";
-import {IUser} from "entities/User";
-import {IAnswer} from "model/IQuiz";
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { IUser } from "entities/User";
+import { IAnswer } from "model/IQuiz";
+import { SERVER_URL } from "shared/const/const";
+import { IQuestion, ITest, ITestAnswer, ITestResult, ITestWithPopulate } from '../types/test';
 
 export const testApi = createApi({
     reducerPath: 'testApi',
@@ -31,7 +31,7 @@ export const testApi = createApi({
         getTeachers: builder.query<IUser, void>({
             query: () => `/user/teachers`,
         }),
-        getTestById: builder.query<ITest,{_id:string}>({
+        getTestById: builder.query<ITestWithPopulate,{_id:string}>({
             query: ({_id}) => ({
                 url:`/tests/${_id}`,
                 method:"GET",
@@ -73,7 +73,7 @@ export const testApi = createApi({
                 body:{ test, student, dateStart},
             }),
         }),
-        getTestResult: builder.query<ITestResult, ITestResult>({
+        getTestResult: builder.query<ITestResult,{ test:string, student:string}>({
             query: ({ test, student}) => ({
                 url:`/test/${test}/student/${student}`,
                 method:"GET",
@@ -85,7 +85,7 @@ export const testApi = createApi({
                 method:"GET",
             }),
         }),
-        createTestAnswer: builder.mutation<void , { testResult:string, question:string,isCorrect?:boolean,selectedAnswerOptions?:string[],correctAnswers?:string,isTimeFail?:boolean}>({
+        createTestAnswer: builder.mutation<void , { testResult:string, question:string,isCorrect?:boolean,selectedAnswerOptions?:string[],correctAnswers?:string[],isTimeFail?:boolean}>({
             query: ({ testResult, question,isCorrect,selectedAnswerOptions,correctAnswers,isTimeFail}) => ({
                 url:`/test/create-answer`,
                 method:"POST",
