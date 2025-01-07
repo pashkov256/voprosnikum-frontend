@@ -6,6 +6,7 @@ import {
     useGetTestResultQuery,
     useUpdateTestResultMutation
 } from 'entities/Test/model/slice/testSlice';
+import { IQuestion } from 'entities/Test/model/types/test';
 import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from "react-router-dom";
@@ -28,7 +29,7 @@ const TestPage = () => {
     const [isComplete, setIsComplete] = useState(false); // Завершен ли тест
     const [questionSecondsLeft, setQuestionSecondsLeft] = useState<number | null>(null); // Таймер на текущий ВОПРОС теста
     const [buttonsIsDisabled, setButtonsIsDisabled] = useState(false);
-    const { data: testData, isLoading: testDataIsLoading } = useGetTestByIdQuery({ _id: testId || "" }); // Получение данных теста
+    const { data: testData, isLoading: testDataIsLoading } = useGetTestByIdQuery({ _id: testId || "", mode: "student" }); // Получение данных теста
     const { data: testResult, isLoading: testResultIsLoading, refetch: refetchTestResult } = useGetTestResultQuery({ test: testId || "", student: userData?._id || "" });//получение результата теста
     const [createTestResult] = useCreateTestResultMutation(); // Создание результата теста
     const [createTestAnswer] = useCreateTestAnswerMutation(); // Создание ответа на вопрос
@@ -97,7 +98,7 @@ const TestPage = () => {
                 alert('Время на вопрос кончилось')
                 setQuestionSecondsLeft(null)//обнуление состояние таймера вопроса
                 setButtonsIsDisabled(true);
-                createTestAnswer({ testResult: testResult?._id || "", question: (currentQuestionData || testData.questions[currentQuestion])._id, isCorrect: false, isTimeFail: true })
+                createTestAnswer({ testResult: testResult?._id || "", question: (currentQuestionData || testData.questions[currentQuestion])?._id || "", isCorrect: false, isTimeFail: true, questionType: currentQuestionData?.type || 'single-choice' })
                 // createTestAnswer({ testResult: testResult?._id || "", question: testData.questions[currentQuestion]._id, isCorrect: false, isTimeFail: true })
                 if (currentQuestion + 1 >= testData.questions.length) {
                     finalizeTest()
@@ -187,6 +188,8 @@ const TestPage = () => {
         setQuestionSecondsLeft(null)
     };
 
+
+
     const handleNextQuestion = useCallback(async () => {
         setQuestionSecondsLeft(null)
         if (testData) {
@@ -200,21 +203,30 @@ const TestPage = () => {
                     isCorrect?: boolean,
                     correctAnswers?: string[],
                     selectedAnswerOptions?: string[],
-                    isTimeFail?: boolean
+                    isTimeFail?: boolean,
+                    questionType: IQuestion['type'],
+                    shortAnswer: string;
+                    selectedOptions: string[];
                 } = {
                     testResult: testResult?._id || "",
-                    question: question._id,
+                    question: question?._id || "",
+                    questionType: question.type,
+                    shortAnswer: shortAnswerValue,
+                    selectedOptions: selectedOptions
                 }
 
-                if (question.type === 'short-answer') {
-                    answerPayload.isCorrect = shortAnswerValue === question.correctAnswers[0];
-                } else if (question.type === 'multiple-choice') {
-                    answerPayload.selectedAnswerOptions = selectedOptions;
-                    answerPayload.correctAnswers = question.correctAnswers;
-                } else if (question.type === 'single-choice') {
-                    answerPayload.isCorrect = selectedOptions.includes(question.correctAnswers[0]);
-                }
-                await createTestAnswer(answerPayload).unwrap();
+                // if (question.type === 'short-answer') {
+                //     // answerPayload.isCorrect = shortAnswerValue === question.correctAnswers[0];
+                //     // answerPayload.short
+                // } else if (question.type === 'multiple-choice') {
+                //     answerPayload.selectedAnswerOptions = selectedOptions;
+                //     answerPayload.correctAnswers = question.correctAnswers;
+                // } else if (question.type === 'single-choice') {
+                //     answerPayload.isCorrect = selectedOptions.includes(question.correctAnswers[0]);
+                // }
+                console.log(answerPayload);
+
+                await createTestAnswer(answerPayload);
 
                 // Очистка данных после отправки ответа
                 setSelectedOptions([]);

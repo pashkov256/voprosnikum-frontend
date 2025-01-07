@@ -1,13 +1,16 @@
 export interface IQuestion {
+    _id: string;
     test: string;
     title: string | null;
     title1?: string | null;
     type: 'short-answer' | 'multiple-choice' | 'single-choice';
     options: string[];
     correctAnswers: string[];
+    shortAnswer: string;
+    selectedOptions: string[];
     imageUrl?: string | null;
     timeLimit?: number;
-    _id: string;
+    isNewQuestion?: boolean;
 }
 
 export interface ITest {
@@ -20,6 +23,7 @@ export interface ITest {
     createdAt?: string;
     updatedAt?: string;
     timeLimit: number;
+    maxPoints: number;
     questions: IQuestion[];
     countRandomizedQuestionsSets: number;
     randomizedQuestionsSets: number[][];
@@ -29,7 +33,10 @@ export interface ITest {
 
 export interface ITestAnswer {
     question: string,
-    content: string[],
+    pointsAwarded: number,
+    shortAnswer: string,
+    selectedOptions: string[],
+    isTimeFail: boolean,
     isCorrect: boolean,
 }
 
