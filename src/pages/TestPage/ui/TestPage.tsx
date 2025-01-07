@@ -11,11 +11,11 @@ import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from "react-router-dom";
 import { formatTimeDifference } from 'shared/lib/date';
 import isPastDate from 'shared/lib/isPastDate/isPastDate';
+import { shuffle } from 'shared/lib/shuffle/shuffle';
 import Loader from 'shared/ui/Loader/Loader';
 import { Test } from './Test';
 import { TestResult } from './TestResult';
 import { TestStart } from './TestStart';
-
 const TestPage = () => {
     const { testId } = useParams(); // Получаем ID теста из URL
     const navigate = useNavigate();
@@ -33,12 +33,14 @@ const TestPage = () => {
     const [createTestResult] = useCreateTestResultMutation(); // Создание результата теста
     const [createTestAnswer] = useCreateTestAnswerMutation(); // Создание ответа на вопрос
     const [updateTestResult] = useUpdateTestResultMutation()//обновление результата теста
+    const currentQuestionData = (testResult && testData?.randomizedQuestionsSets?.length !== 0 && testData?.isQuestionsRandomized) ? testData?.questions[testData?.randomizedQuestionsSets[testResult?.randomizedQuestionsSetIndex][currentQuestion]] : testData?.questions[currentQuestion];
+
 
     const handleStartTest = async () => {//старт теста по клику
         try {
             const newDateStart = new Date().toISOString()
             //@ts-ignore
-            await createTestResult({ test: testId, student: userData._id, dateStart: newDateStart });
+            await createTestResult({ test: testId, student: userData._id, dateStart: newDateStart, randomizedQuestionsSetIndex: Math.floor(Math.random() * testData?.randomizedQuestionsSets.length) });
             await refetchTestResult()
             setStartTest(true);
             initialTestTimer(newDateStart)
@@ -95,7 +97,8 @@ const TestPage = () => {
                 alert('Время на вопрос кончилось')
                 setQuestionSecondsLeft(null)//обнуление состояние таймера вопроса
                 setButtonsIsDisabled(true);
-                createTestAnswer({ testResult: testResult?._id || "", question: testData.questions[currentQuestion]._id, isCorrect: false, isTimeFail: true })
+                createTestAnswer({ testResult: testResult?._id || "", question: (currentQuestionData || testData.questions[currentQuestion])._id, isCorrect: false, isTimeFail: true })
+                // createTestAnswer({ testResult: testResult?._id || "", question: testData.questions[currentQuestion]._id, isCorrect: false, isTimeFail: true })
                 if (currentQuestion + 1 >= testData.questions.length) {
                     finalizeTest()
                 } else {
@@ -140,12 +143,24 @@ const TestPage = () => {
 
 
     const setupTimerForCurrentQuestion = async (currentQuestionProps?: number) => {
-        let currentQuestionForTimer = currentQuestionProps !== undefined ? currentQuestionProps : currentQuestion
-        if (!testData || !testData.questions[currentQuestionForTimer]) return;
+        console.log(testData);
 
-        const questionTimeLimit = testData.questions[currentQuestionForTimer === 0 ? 0 : currentQuestionForTimer]?.timeLimit;
+
+        let currentQuestionForTimer = currentQuestionProps !== undefined ? currentQuestionProps : currentQuestion
+        if (!testData || !(currentQuestionData || testData.questions[currentQuestionForTimer])) return;
+        // !if (!testData || !testData.questions[currentQuestionForTimer]) return;
+        const questionTimeLimit = (testData?.randomizedQuestionsSets.length !== 0 && testData.isQuestionsRandomized) ? testData?.questions[testData?.randomizedQuestionsSets[testResult?.randomizedQuestionsSetIndex || 0][currentQuestionForTimer === 0 ? 0 : currentQuestionForTimer]]?.timeLimit : testData.questions[currentQuestionForTimer === 0 ? 0 : currentQuestionForTimer]?.timeLimit;
+        console.log({ questionTimeLimit });
+
+        console.log({ currentQuestionForTimer });
+
+
+
+
+
 
         if (questionTimeLimit !== undefined) {
+            //@ts-ignore
             setQuestionSecondsLeft(questionTimeLimit); // Устанавливаем таймер на текущий вопрос
         }
 
@@ -175,7 +190,7 @@ const TestPage = () => {
     const handleNextQuestion = useCallback(async () => {
         setQuestionSecondsLeft(null)
         if (testData) {
-            const question = testData.questions[currentQuestion];
+            const question = currentQuestionData || testData.questions[currentQuestion];
 
             // Отправка ответа
             try {
@@ -251,6 +266,7 @@ const TestPage = () => {
         <Test
             testData={testData}
             currentQuestion={currentQuestion}
+            currentQuestionData={currentQuestionData || testData.questions[currentQuestion]}
             selectedOptions={selectedOptions}
             setSelectedOptions={setSelectedOptions}
             handleNextQuestion={handleNextQuestion}
