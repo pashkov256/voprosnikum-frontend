@@ -31,9 +31,9 @@ export const testApi = createApi({
         getTeachers: builder.query<IUser, void>({
             query: () => `/user/teachers`,
         }),
-        getTestById: builder.query<ITestWithPopulate, { _id: string }>({
-            query: ({ _id }) => ({
-                url: `/tests/${_id}`,
+        getTestById: builder.query<ITestWithPopulate, { _id: string, mode: "student" | "full" }>({
+            query: ({ _id, mode }) => ({
+                url: `/tests/${_id}/${mode}`,
                 method: "GET",
             }),
         }),
@@ -85,11 +85,11 @@ export const testApi = createApi({
                 method: "GET",
             }),
         }),
-        createTestAnswer: builder.mutation<void, { testResult: string, question: string, isCorrect?: boolean, selectedAnswerOptions?: string[], correctAnswers?: string[], isTimeFail?: boolean }>({
-            query: ({ testResult, question, isCorrect, selectedAnswerOptions, correctAnswers, isTimeFail }) => ({
+        createTestAnswer: builder.mutation<void, { testResult: string, shortAnswer?: string, question: string, isCorrect?: boolean, selectedOptions?: string[], correctAnswers?: string[], isTimeFail?: boolean, questionType: IQuestion['type'] }>({
+            query: ({ testResult, question, isCorrect, selectedOptions, correctAnswers, isTimeFail, questionType, shortAnswer }) => ({
                 url: `/test/create-answer`,
                 method: "POST",
-                body: { testResult, question, isCorrect, selectedAnswerOptions, correctAnswers, isTimeFail }
+                body: { testResult, question, isCorrect, selectedOptions, correctAnswers, isTimeFail, questionType, shortAnswer }
             }),
         }),
         updateTestResult: builder.mutation<void, { completedAt?: string, dateStart?: string, completionTime?: string, id: string }>({

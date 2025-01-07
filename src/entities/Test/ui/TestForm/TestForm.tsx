@@ -34,29 +34,36 @@ export const TestForm = memo((props: TestFormProps) => {
     }, [testFormData]);
 
     const createNewQuestion = async (title?: string | undefined, options?: string[] | undefined) => {
-        await updateTestData({ ...testFormData, randomizedQuestionsSets: createRandomizedQuestionsSets(testFormData.questions.length + 1, testFormData.countRandomizedQuestionsSets) });
+        //@ts-ignore
+        setTestFormData((prevData) => {
+            console.log(createRandomizedQuestionsSets(testFormData.questions.length + 1, testFormData.countRandomizedQuestionsSets));
 
-        console.log({ ...testFormData })
-        await createQuestion({
-            test: testFormData._id,
-            title: title || "Вопрос №" + (testFormData.questions.length + 1),
-            title1: title || "Вопрос №" + (testFormData.questions.length + 1),
-            options: (options && options.length !== 0) ? options : [
-                "Вариант Ответа №1",
-                "Вариант Ответа №2",
-                "Вариант Ответа №3",
-                "Вариант Ответа №4",
-            ],
-            type: "multiple-choice",
-            //@ts-ignore
-            correctAnswers: options[0] || ["Вариант Ответа №1",
-                "Вариант Ответа №3"],
+            return {
+                ...prevData,
+                questions: [...prevData.questions, {
+                    _id: (Math.random() * 5 * 100).toFixed(0),
+                    test: testFormData._id,
+                    title: title || "Вопрос №" + (testFormData.questions.length + 1),
+                    title1: title || "Вопрос №" + (testFormData.questions.length + 1),
+                    options: (options && options.length !== 0) ? options : [
+                        "Вариант Ответа №1",
+                        "Вариант Ответа №2",
+                        "Вариант Ответа №3",
+                        "Вариант Ответа №4",
+                    ],
+                    type: "multiple-choice",
+                    shortAnswer: '',
+                    isNewQuestion: true,
+                    correctAnswers: options || ["Вариант Ответа №1",
+                        "Вариант Ответа №2"],
+
+                }],
+                randomizedQuestionsSets: prevData.isQuestionsRandomized ? createRandomizedQuestionsSets(testFormData.questions.length + 1, testFormData.countRandomizedQuestionsSets) : []
+            }
         });
-        refetchGetTest?.();
     };
 
     useEffect(() => {
-        console.log(`testFormData ${testFormData}`)
         console.log(testFormData)
     }, [testFormData]);
 
@@ -102,16 +109,6 @@ export const TestForm = memo((props: TestFormProps) => {
             ),
         }));
     };
-
-    // const handleTimeLimitChange = (questionTitle: string, timeLimit: number | undefined) => {
-    //     // Number(e.target.value) === 0 ? undefined : Number(e.target.value)
-    //     setTestFormData((prevData) => ({
-    //         ...prevData,
-    //         questions: prevData.questions.map((q) =>
-    //             q.title === questionTitle ? { ...q, timeLimit } : q
-    //         ),
-    //     }));
-    // };
 
     const handleTimeLimitChange = (questionTitle: string, timeLimit: number | undefined) => {
         setTestFormData((prevData) => ({
@@ -183,7 +180,7 @@ export const TestForm = memo((props: TestFormProps) => {
             let filteredQuestions = prevData.questions.filter((q) => q._id !== questionId)
             return {
                 ...prevData,
-                questions: prevData.questions.filter((q) => q._id !== questionId), randomizedQuestionsSets: createRandomizedQuestionsSets(filteredQuestions.length, testFormData.countRandomizedQuestionsSets)
+                questions: prevData.questions.filter((q) => q._id !== questionId), randomizedQuestionsSets: prevData.isQuestionsRandomized ? createRandomizedQuestionsSets(testFormData.questions.length + 1, testFormData.countRandomizedQuestionsSets) : []
             }
         });
     };
@@ -215,7 +212,7 @@ export const TestForm = memo((props: TestFormProps) => {
         setTestFormData((prevData) => ({
             ...prevData,
             questions: prevData.questions.map((q) =>
-                q._id === questionId ? { ...q, correctAnswers: [shortAnswer] } : q
+                q._id === questionId ? { ...q, shortAnswer: shortAnswer } : q
             ),
         }));
     };
@@ -277,7 +274,7 @@ export const TestForm = memo((props: TestFormProps) => {
                         className={cls.input}
                         value={question.title1 || ""}
                         onChange={(e) => {
-                            handleImageURLChange1(question.title || "", e.target.value, question._id);
+                            handleImageURLChange1(question.title || "", e.target.value, question?._id || "");
                         }}
                         label={'Вопрос'}
                         style={{ width: '100%' }}
@@ -341,7 +338,7 @@ export const TestForm = memo((props: TestFormProps) => {
                                 + Добавить вариант ответа
                             </button>
                         </div> : question.type === 'short-answer' ? <>
-                            {question.correctAnswers.map((correctAnswer, index) => (
+                            {/* {question.correctAnswers.map((correctAnswer, index) => (
                                 <div className={cls.shortAnswerBlock}>
                                     <TextField
                                         className={cls.shortAnswerInput}
@@ -353,7 +350,17 @@ export const TestForm = memo((props: TestFormProps) => {
                                         label={"Текстовый ответ"}
                                         variant={"standard"}
                                     /></div>
-                            ))}
+                            ))} */}
+                            <TextField
+                                className={cls.shortAnswerInput}
+                                value={question.shortAnswer}
+                                onChange={(e) =>
+                                    handleShortAnswer(question._id || "", e.target.value)
+                                }
+                                placeholder={"Текстовый ответ"}
+                                label={"Текстовый ответ"}
+                                variant={"standard"}
+                            />
                         </> : question.type === 'single-choice' && (
                             <div className={cls.AnswerOptions}>
                                 {question.options.map((option, index) => (

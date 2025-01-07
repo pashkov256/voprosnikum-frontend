@@ -45,7 +45,7 @@ const TestEditPage = memo((props: TestEditProps) => {
     const { className } = props;
     const { id } = useParams();
     const userData = useSelector((state: RootState) => state.auth.data);
-    const { data: testData, isLoading: testDataIsLoading, refetch: refetchGetTest } = useGetTestByIdQuery({ _id: id || "" })
+    const { data: testData, isLoading: testDataIsLoading, refetch: refetchGetTest } = useGetTestByIdQuery({ _id: id || "", mode: "full" })
     const [updateTestData, { isLoading: updateTestIsLoaing }] = useUpdateTestMutation()
     const { data: groupsData, isLoading: groupsDataIsLoading } = useGetGroupsQuery()
     const navigate = useNavigate()
@@ -192,7 +192,7 @@ const TestEditPage = memo((props: TestEditProps) => {
                                                 return {
                                                     ...prevState,
                                                     isQuestionsRandomized: e.target.checked,
-                                                    randomizedQuestionsSets: e.target.checked ? undefined : createRandomizedQuestionsSets(testFormData.questions.length + 1)
+                                                    randomizedQuestionsSets: !e.target.checked ? [] : createRandomizedQuestionsSets(testFormData.questions.length + 1)
                                                 }
                                             })
                                         }
