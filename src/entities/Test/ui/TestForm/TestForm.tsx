@@ -4,6 +4,7 @@ import { ITest } from "entities/Test/model/types/test";
 import React, { memo, useEffect, useState } from "react";
 import { IoIosClose } from "react-icons/io";
 import { RiDeleteBinLine } from "react-icons/ri";
+import { createRandomizedQuestionsSets } from "shared/lib/shuffle/shuffle";
 import { Button, ButtonTheme } from "shared/ui/Button/Button";
 import { Input } from "shared/ui/Input/Input";
 import { Text, TextSize } from "shared/ui/Text/Text";
@@ -16,14 +17,14 @@ interface TestFormProps {
     testData: ITest;
     refetchGetTest?: () => void;
     updateTestData: any;
-    onChangeTestFormData:  React.Dispatch<React.SetStateAction<ITest | undefined>>;
+    onChangeTestFormData: React.Dispatch<React.SetStateAction<ITest | undefined>>;
 }
 
 export const TestForm = memo((props: TestFormProps) => {
-    const { className, testData, refetchGetTest ,onChangeTestFormData,updateTestData} = props;
+    const { className, testData, refetchGetTest, onChangeTestFormData, updateTestData } = props;
     const [createQuestion, { isLoading: createQuestionIsLoading }] = useCreateQuestionMutation();
     const [testFormData, setTestFormData] = useState<ITest>(testData);
-    const [textAreaValue,setTextAreaValue] = useState('')
+    const [textAreaValue, setTextAreaValue] = useState('')
     useEffect(() => {
         setTestFormData(testData);
     }, [testData]);
@@ -32,9 +33,10 @@ export const TestForm = memo((props: TestFormProps) => {
         onChangeTestFormData(testFormData);
     }, [testFormData]);
 
-    const createNewQuestion = async (title?:string | undefined,options?:string[] | undefined) => {
-        await updateTestData({...testFormData});
-        console.log({...testFormData})
+    const createNewQuestion = async (title?: string | undefined, options?: string[] | undefined) => {
+        await updateTestData({ ...testFormData, randomizedQuestionsSets: createRandomizedQuestionsSets(testFormData.questions.length + 1, testFormData.countRandomizedQuestionsSets) });
+
+        console.log({ ...testFormData })
         await createQuestion({
             test: testFormData._id,
             title: title || "Вопрос №" + (testFormData.questions.length + 1),
@@ -73,11 +75,11 @@ export const TestForm = memo((props: TestFormProps) => {
 
     const handleQuestionTypeChange = (questionId: string, type: "short-answer" | "multiple-choice" | "single-choice") => {
         setTestFormData((prevData) => {
-            if(type === "short-answer"){
+            if (type === "short-answer") {
                 return {
                     ...prevData,
                     questions: prevData.questions.map((q) =>
-                        q._id === questionId ? { ...q, type, options:[] ,correctAnswers: ["Ваш текстовый ответ"]} : q
+                        q._id === questionId ? { ...q, type, options: [], correctAnswers: ["Ваш текстовый ответ"] } : q
                     ),
                 }
             } else {
@@ -101,14 +103,31 @@ export const TestForm = memo((props: TestFormProps) => {
         }));
     };
 
+    // const handleTimeLimitChange = (questionTitle: string, timeLimit: number | undefined) => {
+    //     // Number(e.target.value) === 0 ? undefined : Number(e.target.value)
+    //     setTestFormData((prevData) => ({
+    //         ...prevData,
+    //         questions: prevData.questions.map((q) =>
+    //             q.title === questionTitle ? { ...q, timeLimit } : q
+    //         ),
+    //     }));
+    // };
+
     const handleTimeLimitChange = (questionTitle: string, timeLimit: number | undefined) => {
         setTestFormData((prevData) => ({
             ...prevData,
             questions: prevData.questions.map((q) =>
-                q.title === questionTitle ? { ...q, timeLimit } : q
+                q.title === questionTitle
+                    ? timeLimit === 0
+                        ? { ...q, timeLimit: undefined } // Удаляем поле timeLimit
+                        : { ...q, timeLimit } // Обновляем поле timeLimit
+                    : q
             ),
         }));
     };
+
+    console.log(testFormData);
+
 
     const handleOptionToggle = (questionTitle: string, option: string) => {
         setTestFormData((prevData) => ({
@@ -158,10 +177,15 @@ export const TestForm = memo((props: TestFormProps) => {
     };
 
     const handleDeleteQuestion = (questionId: string) => {
-        setTestFormData((prevData) => ({
-            ...prevData,
-            questions: prevData.questions.filter((q) => q._id !== questionId),
-        }));
+        console.log(13);
+
+        setTestFormData((prevData) => {
+            let filteredQuestions = prevData.questions.filter((q) => q._id !== questionId)
+            return {
+                ...prevData,
+                questions: prevData.questions.filter((q) => q._id !== questionId), randomizedQuestionsSets: createRandomizedQuestionsSets(filteredQuestions.length, testFormData.countRandomizedQuestionsSets)
+            }
+        });
     };
 
     const handleAddOption = (questionTitle: string) => {
@@ -191,16 +215,16 @@ export const TestForm = memo((props: TestFormProps) => {
         setTestFormData((prevData) => ({
             ...prevData,
             questions: prevData.questions.map((q) =>
-                q._id === questionId ? { ...q, correctAnswers:[shortAnswer] } : q
+                q._id === questionId ? { ...q, correctAnswers: [shortAnswer] } : q
             ),
         }));
     };
 
-    const handleImageURLChange1 = (questionTitle: string, imageUrl: string) => {
+    const handleImageURLChange1 = (questionTitle: string, qt: string, questionId: string) => {
         setTestFormData((prevData) => ({
             ...prevData,
             questions: prevData.questions.map((q) =>
-                q.title === questionTitle ? { ...q, title1: imageUrl} : q
+                q._id === questionId ? { ...q, title1: qt } : q
             ),
         }));
     };
@@ -221,12 +245,13 @@ export const TestForm = memo((props: TestFormProps) => {
     };
 
 
+
     return (
         <div className={cls.TestForm}>
             <div className={cls.TestFormBlock}>
                 <TextField
                     value={testFormData?.name || ""}
-                    onChange={(e)=>{
+                    onChange={(e) => {
                         handleTestNameChange(e.target.value);
                     }}
                     label='Название теста'
@@ -236,7 +261,7 @@ export const TestForm = memo((props: TestFormProps) => {
 
                 <TextField
                     value={testFormData?.description || ""}
-                    onChange={(e)=>{
+                    onChange={(e) => {
                         handleTestDescriptionChange(e.target.value);
                     }}
                     className={cls.textareaDescription}
@@ -250,9 +275,9 @@ export const TestForm = memo((props: TestFormProps) => {
                 <div key={question.title + question.type} className={cls.TestFormBlock}>
                     <TextField
                         className={cls.input}
-                        value={question.title1 || "" }
-                        onChange={(e)=>{
-                            handleImageURLChange1(question.title || "", e.target.value);
+                        value={question.title1 || ""}
+                        onChange={(e) => {
+                            handleImageURLChange1(question.title || "", e.target.value, question._id);
                         }}
                         label={'Вопрос'}
                         style={{ width: '100%' }}
@@ -281,19 +306,68 @@ export const TestForm = memo((props: TestFormProps) => {
                     </div>
 
                     <div className={cls.settings}>
-                            {question.type === 'multiple-choice' ?  <div className={cls.AnswerOptions}>
-                                {question.options.map((option, index) => (
-                                    <div className={cls.multiChoice}>        <label className={cls.AnswerOptionLabel} key={index}>
-                                        <input
-                                            type="checkbox"
-                                            name={`question-${question.title}`}
-                                            value={option}
-                                            checked={question.correctAnswers.includes(option)}
-                                            onChange={() => handleOptionToggle(question.title || "", option)}
-                                            className={cls.AnswerOptionRadio}
-                                        />
+                        {question.type === 'multiple-choice' ? <div className={cls.AnswerOptions}>
+                            {question.options.map((option, index) => (
+                                <div className={cls.multiChoice}>        <label className={cls.AnswerOptionLabel} key={index}>
+                                    <input
+                                        type="checkbox"
+                                        name={`question-${question._id}`}
+                                        value={option}
+                                        checked={question.correctAnswers.includes(option)}
+                                        onChange={() => handleOptionToggle(question.title || "", option)}
+                                        className={cls.AnswerOptionRadio}
+                                    />
 
-                                    </label>
+                                </label>
+                                    <TextField
+                                        value={option}
+                                        onChange={(e) =>
+                                            handleOptionChange(question.title || "", index, e.target.value)
+                                        }
+                                        variant={"standard"}
+                                    />
+                                    <IoIosClose
+                                        className={cls.Icon}
+                                        title={"Удалить вариант ответа"}
+                                        onClick={() => handleDeleteOption(question.title || "", index)}
+                                    />
+                                </div>
+                            ))}
+
+                            <button
+                                className={cls.AddAnswerOption}
+                                onClick={() => handleAddOption(question.title || "")}
+                            >
+                                + Добавить вариант ответа
+                            </button>
+                        </div> : question.type === 'short-answer' ? <>
+                            {question.correctAnswers.map((correctAnswer, index) => (
+                                <div className={cls.shortAnswerBlock}>
+                                    <TextField
+                                        className={cls.shortAnswerInput}
+                                        value={correctAnswer}
+                                        onChange={(e) =>
+                                            handleShortAnswer(question._id || "", e.target.value)
+                                        }
+                                        placeholder={"Текстовый ответ"}
+                                        label={"Текстовый ответ"}
+                                        variant={"standard"}
+                                    /></div>
+                            ))}
+                        </> : question.type === 'single-choice' && (
+                            <div className={cls.AnswerOptions}>
+                                {question.options.map((option, index) => (
+                                    <div className={cls.singleChoice} key={index}>
+                                        <label className={cls.AnswerOptionLabel}>
+                                            <input
+                                                type="radio"
+                                                name={`question-${question.title}`}
+                                                value={option}
+                                                checked={question.correctAnswers[0] === option}
+                                                onChange={() => handleSingleChoiceToggle(question.title || "", option)}
+                                                className={cls.AnswerOptionRadio}
+                                            />
+                                        </label>
                                         <TextField
                                             value={option}
                                             onChange={(e) =>
@@ -305,7 +379,8 @@ export const TestForm = memo((props: TestFormProps) => {
                                             className={cls.Icon}
                                             title={"Удалить вариант ответа"}
                                             onClick={() => handleDeleteOption(question.title || "", index)}
-                                        /></div>
+                                        />
+                                    </div>
                                 ))}
 
                                 <button
@@ -314,57 +389,8 @@ export const TestForm = memo((props: TestFormProps) => {
                                 >
                                     + Добавить вариант ответа
                                 </button>
-                            </div> : question.type === 'short-answer' ?  <>
-                                {question.correctAnswers.map((correctAnswer, index) => (
-                                    <div className={cls.shortAnswerBlock}>
-                                        <TextField
-                                            className={cls.shortAnswerInput}
-                                            value={correctAnswer}
-                                            onChange={(e) =>
-                                                handleShortAnswer(question._id || "", e.target.value)
-                                            }
-                                            placeholder={"Текстовый ответ"}
-                                            label={"Текстовый ответ"}
-                                            variant={"standard"}
-                                        /></div>
-                                ))}
-                            </> : question.type === 'single-choice' && (
-                                <div className={cls.AnswerOptions}>
-                                    {question.options.map((option, index) => (
-                                        <div className={cls.singleChoice} key={index}>
-                                            <label className={cls.AnswerOptionLabel}>
-                                                <input
-                                                    type="radio"
-                                                    name={`question-${question.title}`}
-                                                    value={option}
-                                                    checked={question.correctAnswers[0] === option}
-                                                    onChange={() => handleSingleChoiceToggle(question.title || "", option)}
-                                                    className={cls.AnswerOptionRadio}
-                                                />
-                                            </label>
-                                            <TextField
-                                                value={option}
-                                                onChange={(e) =>
-                                                    handleOptionChange(question.title || "", index, e.target.value)
-                                                }
-                                                variant={"standard"}
-                                            />
-                                            <IoIosClose
-                                                className={cls.Icon}
-                                                title={"Удалить вариант ответа"}
-                                                onClick={() => handleDeleteOption(question.title || "", index)}
-                                            />
-                                        </div>
-                                    ))}
-
-                                    <button
-                                        className={cls.AddAnswerOption}
-                                        onClick={() => handleAddOption(question.title || "")}
-                                    >
-                                        + Добавить вариант ответа
-                                    </button>
-                                </div>
-                            )}
+                            </div>
+                        )}
 
                         <div className={cls.QuestionSettings}>
                             <TextField
@@ -372,7 +398,7 @@ export const TestForm = memo((props: TestFormProps) => {
                                 value={question.timeLimit !== 0 && question.timeLimit !== null && question.timeLimit !== undefined ? question.timeLimit : ""}
                                 type={"number"}
                                 onChange={(e) =>
-                                    handleTimeLimitChange(question.title || "",Number(e.target.value)  === 0 ? undefined:Number(e.target.value))
+                                    handleTimeLimitChange(question.title || "", Number(e.target.value))
                                 }
                                 placeholder="Укажите время выполнения"
                                 label="Время выполнения (сек)"
@@ -395,9 +421,9 @@ export const TestForm = memo((props: TestFormProps) => {
                 </div>
             ))}
 
-                <TextArea
-                    className={cls.textareaNewQuestion}
-                    onChange={(value)=>setTextAreaValue(value)} value={textAreaValue} placeholder="Вставьте ваш вопрос с вариантами ответа (пример)
+            <TextArea
+                className={cls.textareaNewQuestion}
+                onChange={(value) => setTextAreaValue(value)} value={textAreaValue} placeholder="Вставьте ваш вопрос с вариантами ответа (пример)
                 ⠀
                 Кто создал Linux?¶
                      Ада Лавлейс ¶
@@ -405,20 +431,20 @@ export const TestForm = memo((props: TestFormProps) => {
                      Линус Торвальдс¶
                 "/>
 
-                <Button
-                    className={cls.AddQuestion}
-                    onClick={()=>{
-                        const splitedValue = textAreaValue.split('\n')
-                        let title = splitedValue[0]
-                        splitedValue.shift()
-                        createNewQuestion(title,splitedValue)
-                        setTextAreaValue('')
-                    }}
-                    disabled={createQuestionIsLoading}
-                    theme={ButtonTheme.BACKGROUND}
-                >
-                    + Добавить новый вопрос
-                </Button>
+            <Button
+                className={cls.AddQuestion}
+                onClick={() => {
+                    const splitedValue = textAreaValue.split('\n')
+                    let title = splitedValue[0]
+                    splitedValue.shift()
+                    createNewQuestion(title, splitedValue)
+                    setTextAreaValue('')
+                }}
+                disabled={createQuestionIsLoading}
+                theme={ButtonTheme.BACKGROUND}
+            >
+                + Добавить новый вопрос
+            </Button>
 
         </div>
     );
