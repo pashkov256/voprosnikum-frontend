@@ -92,6 +92,13 @@ export const testApi = createApi({
                 body: { testResult, question, isCorrect, selectedOptions, correctAnswers, isTimeFail, questionType, shortAnswer }
             }),
         }),
+        updateTestAnswer: builder.mutation<void, { testResult: string, shortAnswer?: string, selectedOptions?: string[], testAnswerId: string, pointsAwarded: number }>({
+            query: ({ testResult, selectedOptions, shortAnswer, testAnswerId, pointsAwarded }) => ({
+                url: `/test/update-answer`,
+                method: "PUT",
+                body: { testResult, selectedOptions, shortAnswer, testAnswerId, pointsAwardedOld: pointsAwarded }
+            }),
+        }),
         updateTestResult: builder.mutation<void, { completedAt?: string, dateStart?: string, completionTime?: string, id: string }>({
             query: ({ completedAt, dateStart, completionTime, id }) => ({
                 url: `/results/${id}`,
@@ -109,4 +116,4 @@ export const testApi = createApi({
 });
 
 
-export const { useGetTestsByTeacherQuery, useGetTeachersQuery, useCreateUserByAdminMutation, useLazyGetTestByIdQuery, useCreateQuestionMutation, useCreateTestMutation, useGetTestByIdQuery, useUpdateTestMutation, useCreateTestResultMutation, useGetTestResultQuery, useCreateTestAnswerMutation, useGetTestAllResultsQuery, useUpdateTestResultMutation, useDeleteTestMutation } = testApi
+export const { useGetTestsByTeacherQuery, useGetTeachersQuery, useCreateUserByAdminMutation, useLazyGetTestByIdQuery, useCreateQuestionMutation, useCreateTestMutation, useGetTestByIdQuery, useUpdateTestMutation, useCreateTestResultMutation, useGetTestResultQuery, useCreateTestAnswerMutation, useGetTestAllResultsQuery, useUpdateTestResultMutation, useDeleteTestMutation, useUpdateTestAnswerMutation } = testApi

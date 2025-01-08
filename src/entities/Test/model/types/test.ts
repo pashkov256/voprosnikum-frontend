@@ -32,6 +32,7 @@ export interface ITest {
 }
 
 export interface ITestAnswer {
+    _id: string;
     question: string,
     pointsAwarded: number,
     shortAnswer: string,

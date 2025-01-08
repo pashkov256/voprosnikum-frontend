@@ -1,6 +1,6 @@
 import { Container } from '@mui/material';
 import { ITest } from 'entities/Test';
-import { IQuestion } from 'entities/Test/model/types/test';
+import { IQuestion, ITestAnswer, ITestResult } from 'entities/Test/model/types/test';
 import { memo } from 'react';
 import { IoMdTime } from 'react-icons/io';
 import { LuTimer } from 'react-icons/lu';
@@ -12,34 +12,48 @@ import cls from './TestPage.module.scss';
 
 interface TestProps {
    testData: ITest,
+   testResult: ITestResult | undefined,
    currentQuestion: number,
    currentQuestionData: IQuestion,
    selectedOptions: string[],
    setSelectedOptions: React.Dispatch<React.SetStateAction<string[]>>,
    setShortAnswerValue: (value: string) => void,
+   setButtonsIsDisabled: (value: boolean) => void,
    handleNextQuestion: () => void,
+   handleToPrevQuestion: () => void,
+   haveSelectedOptionsChanged: () => boolean,
    shortAnswerValue: string,
    testSecondsLeft: number | null,
    questionSecondsLeft: number | null,
    buttonsIsDisabled: boolean,
    isComplete: boolean,
+   isBackMode: boolean,
+   inputIsDisabled: boolean,
 }
 
 export const Test = memo(({
    testData,
+   testResult,
    currentQuestion,
    currentQuestionData,
    selectedOptions,
    setSelectedOptions,
    handleNextQuestion,
+   handleToPrevQuestion,
+   haveSelectedOptionsChanged,
    shortAnswerValue,
    setShortAnswerValue,
    testSecondsLeft,
    questionSecondsLeft,
    isComplete,
+   isBackMode,
    buttonsIsDisabled,
+   inputIsDisabled,
 }: TestProps) => {
-   console.log(currentQuestionData);
+   console.log({ shortAnswerValue });
+   console.log({ FUNC: haveSelectedOptionsChanged() });
+   console.log({ shortAnswerValue });
+   console.log({ testres_ANSWER: testResult?.testAnswers[currentQuestion]?.shortAnswer });
 
    return (
       <Container maxWidth="lg" className={classNames(cls.testContainer, { [cls.wrapperWithTimer]: !(testSecondsLeft !== null && !(testSecondsLeft > 0)) }, [])}>
@@ -93,43 +107,56 @@ export const Test = memo(({
                            <p className={cls.choiseTypeText}>Выберите один вариант ответа</p>}
                         {currentQuestionData.type === "multiple-choice" || currentQuestionData.type === "single-choice" ? (
                            <div className={cls["quiz-questions"]}>
-                              {currentQuestionData.options.map((option: string) => (
-                                 <button
-                                    key={option}
-                                    className={classNames(cls["quiz-question"], {
-                                       [cls.optionSelected]: selectedOptions.includes(option),
-                                    })}
-                                    onClick={() => {
-                                       if (currentQuestionData.type === "multiple-choice") {
-                                          setSelectedOptions((prev) =>
-                                             prev.includes(option) ? prev.filter((o) => o !== option) : [...prev, option]
-                                          )
-                                       } else {
-                                          setSelectedOptions((prev) =>
-                                             prev.includes(option) ? prev.filter((o) => o !== option) : [option]
-                                          )
-                                       }
-                                    }}
-                                    disabled={buttonsIsDisabled}
-                                 >
-                                    {option}
-                                 </button>
-                              ))}
+                              {currentQuestionData.options.map((option: string) => {
+                                 return (
+                                    <button
+                                       key={option}
+                                       className={classNames(cls["quiz-question"], {
+                                          [cls.optionSelected]: selectedOptions.includes(option),
+                                       })}
+                                       onClick={() => {
+                                          if (currentQuestionData.type === "multiple-choice") {
+                                             setSelectedOptions((prev) =>
+                                                prev.includes(option) ? prev.filter((o) => o !== option) : [...prev, option]
+                                             )
+                                          } else {
+                                             setSelectedOptions((prev) =>
+                                                prev.includes(option) ? prev.filter((o) => o !== option) : [option]
+                                             )
+                                          }
+                                       }}
+                                       disabled={buttonsIsDisabled}
+                                    >
+                                       {option}
+                                    </button>
+                                 )
+                              })}
                            </div>
                         ) : (
                            <div className={cls.shortAnswerBlock}>
                               <Input placeholder={"Введите ответ"} className={cls.shortAnswerInput}
                                  value={shortAnswerValue}
+                                 disabled={inputIsDisabled}
                                  onChange={(value) => setShortAnswerValue(value)} />
                            </div>
                         )}
-                        <button
-                           className={cls["btn-continue"]}
-                           onClick={handleNextQuestion}
-                        /*переход на след вопрос*/
-                        >
-                           {currentQuestion >= testData.questions.length - 1 ? "Завершить" : "Продолжить"}
-                        </button>
+                        <div className={cls.navigationButtons}>
+                           <button
+                              className={cls.buttonBack}
+                              onClick={handleToPrevQuestion}
+                           /*переход на предыдущий вопрос*/
+                           >
+                              Предыдущий вопрос
+                           </button>
+                           <button
+                              className={cls["btn-continue"]}
+                              onClick={handleNextQuestion}
+                           /*переход на след вопрос*/
+                           >
+                              {/* {currentQuestion >= testData.questions.length - 1 ? "Завершить" : (isBackMode && (selectedOptions.length !== 0 && (currentQuestionData?.type === 'multiple-choice') || (currentQuestionData?.type === 'single-choice')) || (shortAnswerValue !== "" && currentQuestionData?.type === 'short-answer')) ? "Изменить ответ" : isBackMode ? "Следующий вопрос" : "Ответить"} */}
+                              {currentQuestion >= testData.questions.length - 1 ? "Завершить" : isBackMode && (haveSelectedOptionsChanged() || shortAnswerValue !== testResult?.testAnswers[currentQuestion]?.shortAnswer) ? "Сохранить изменения" : isBackMode ? "Следующий вопрос" : "Ответить"}
+                           </button>
+                        </div>
                      </div>
                   </>
                </div>
@@ -138,3 +165,4 @@ export const Test = memo(({
       </Container>
    )
 });
+

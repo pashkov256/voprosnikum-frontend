@@ -54,8 +54,8 @@ export const TestForm = memo((props: TestFormProps) => {
                     type: "multiple-choice",
                     shortAnswer: '',
                     isNewQuestion: true,
-                    correctAnswers: options || ["Вариант Ответа №1",
-                        "Вариант Ответа №2"],
+                    correctAnswers: [],
+                    // correctAnswers: options || ["Вариант Ответа №1","Вариант Ответа №2"],
 
                 }],
                 randomizedQuestionsSets: prevData.isQuestionsRandomized ? createRandomizedQuestionsSets(testFormData.questions.length + 1, testFormData.countRandomizedQuestionsSets) : []
