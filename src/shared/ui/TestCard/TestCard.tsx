@@ -1,11 +1,10 @@
 import { ITest } from 'entities/Test';
-import cls from './TestCard.module.scss';
-import { RiDeleteBinLine } from "react-icons/ri";
-import { RiShareForwardLine } from "react-icons/ri";
+import { useDeleteTestMutation } from "entities/Test/model/slice/testSlice";
+import { RiDeleteBinLine, RiShareForwardLine } from "react-icons/ri";
 import { Link, useNavigate } from "react-router-dom";
-import {CLIENT_PROD_URL, SERVER_URL} from "shared/const/const";
-import {formatDate, testIsOpenByDate} from "shared/lib/date";
-import {useDeleteTestMutation} from "entities/Test/model/slice/testSlice";
+import { CLIENT_PROD_URL, SERVER_URL } from "shared/const/const";
+import { formatDate, testIsOpenByDate } from "shared/lib/date";
+import cls from './TestCard.module.scss';
 
 interface TestCardProps {
     className?: string;
@@ -35,13 +34,13 @@ export const TestCard = (props: TestCardProps) => {
                     } catch (e) {
                         console.log(e)
                     }
-                }}/>
+                }} />
                 <RiShareForwardLine className={cls.CardIcon} onClick={(event) => {
                     event.preventDefault();
                     event.stopPropagation();
-                    navigator.clipboard.writeText(`${CLIENT_PROD_URL}/quiz/${test._id}`);
+                    navigator.clipboard.writeText(`${CLIENT_PROD_URL}/test/${test._id}`);
                     alert('Ссылка скопирована');
-                }}/>
+                }} />
             </div>
             <div className={cls.CardItem}>
                 <span className={cls.CardItemTitle}>Количество вопросов:</span>
@@ -57,7 +56,7 @@ export const TestCard = (props: TestCardProps) => {
             </div>}
             <div className={cls.CardItem}>
                 <span className={cls.CardItemTitle}>Доступен:</span>
-                 <span className={cls.CardItemData}>{testIsOpenByDate(test?.deadline || '') || !test?.deadline ? 'Да' : 'Нет'}</span>
+                <span className={cls.CardItemData}>{testIsOpenByDate(test?.deadline || '') || !test?.deadline ? 'Да' : 'Нет'}</span>
             </div>
             {/*<div className={cls.CardItem}>*/}
             {/*    <span className={cls.CardItemTitle}>Людей прошло:</span>*/}

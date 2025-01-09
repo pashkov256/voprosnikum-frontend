@@ -1,15 +1,15 @@
-import { Container } from '@mui/material';
+import { Container, LinearProgress } from '@mui/material';
 import { ITest } from 'entities/Test';
 import { IQuestion, ITestAnswer, ITestResult } from 'entities/Test/model/types/test';
 import { memo } from 'react';
-import { IoMdTime } from 'react-icons/io';
+import { BiSolidSelectMultiple } from "react-icons/bi";
+import { IoIosFlag, IoMdArrowRoundBack, IoMdCheckmark, IoMdTime } from 'react-icons/io';
 import { LuTimer } from 'react-icons/lu';
+import { MdModeEdit, MdQuestionAnswer } from "react-icons/md";
 import { RiQuestionAnswerLine } from 'react-icons/ri';
 import { classNames } from 'shared/lib/classNames/classNames';
 import { Input } from 'shared/ui/Input/Input';
 import cls from './TestPage.module.scss';
-
-
 interface TestProps {
    testData: ITest,
    testResult: ITestResult | undefined,
@@ -50,13 +50,9 @@ export const Test = memo(({
    buttonsIsDisabled,
    inputIsDisabled,
 }: TestProps) => {
-   console.log({ shortAnswerValue });
-   console.log({ FUNC: haveSelectedOptionsChanged() });
-   console.log({ shortAnswerValue });
-   console.log({ testres_ANSWER: testResult?.testAnswers[currentQuestion]?.shortAnswer });
-
    return (
       <Container maxWidth="lg" className={classNames(cls.testContainer, { [cls.wrapperWithTimer]: !(testSecondsLeft !== null && !(testSecondsLeft > 0)) }, [])}>
+
          <div className={classNames(cls.testWrapper, {}, [])} >
             {(testData.timeLimit !== 0) && !isComplete && <div
                className={cls.testSecondLeftBlock}
@@ -76,6 +72,7 @@ export const Test = memo(({
 
             </div>}
             <div className={classNames(cls.quiz, {}, [])}>
+               {/* <LinearProgress variant="determinate" className={cls.questionTimeProgress} value={Math.max(0, Math.min(100, ((questionSecondsLeft || 0) / (currentQuestionData.timeLimit || 0)) * 100))} color='secondary' /> */}
                <div className={cls["quiz-wrapper"]}>
                   <>
                      {questionSecondsLeft !== null && (
@@ -141,21 +138,50 @@ export const Test = memo(({
                            </div>
                         )}
                         <div className={cls.navigationButtons}>
-                           <button
-                              className={cls.buttonBack}
-                              onClick={handleToPrevQuestion}
-                           /*переход на предыдущий вопрос*/
-                           >
-                              Предыдущий вопрос
-                           </button>
-                           <button
-                              className={cls["btn-continue"]}
-                              onClick={handleNextQuestion}
-                           /*переход на след вопрос*/
-                           >
-                              {/* {currentQuestion >= testData.questions.length - 1 ? "Завершить" : (isBackMode && (selectedOptions.length !== 0 && (currentQuestionData?.type === 'multiple-choice') || (currentQuestionData?.type === 'single-choice')) || (shortAnswerValue !== "" && currentQuestionData?.type === 'short-answer')) ? "Изменить ответ" : isBackMode ? "Следующий вопрос" : "Ответить"} */}
-                              {currentQuestion >= testData.questions.length - 1 ? "Завершить" : isBackMode && (haveSelectedOptionsChanged() || shortAnswerValue !== testResult?.testAnswers[currentQuestion]?.shortAnswer) ? "Сохранить изменения" : isBackMode ? "Следующий вопрос" : "Ответить"}
-                           </button>
+                           <div className={cls.navigationButtonsInner}>
+                              <button
+                                 className={classNames(cls.navigationButton, {}, [cls.buttonBack])}
+                                 onClick={handleToPrevQuestion}
+                              >
+                                 <div className={cls.buttonIconWrapper}>
+                                    <IoMdArrowRoundBack size={32} className={classNames(cls.buttonIcon, {}, [cls.buttonIconBack])} />
+                                 </div>
+                                 Назад
+
+                              </button>
+                              <button
+                                 className={classNames(cls.navigationButton, {}, [cls.buttonNext])}
+                                 onClick={handleNextQuestion}
+                              /*переход на след вопрос*/
+                              >
+                                 {/* {currentQuestion >= testData.questions.length - 1 ? "Завершить" : (isBackMode && (selectedOptions.length !== 0 && (currentQuestionData?.type === 'multiple-choice') || (currentQuestionData?.type === 'single-choice')) || (shortAnswerValue !== "" && currentQuestionData?.type === 'short-answer')) ? "Изменить ответ" : isBackMode ? "Следующий вопрос" : "Ответить"} */}
+                                 {currentQuestion >= testData.questions.length - 1 ? <>
+                                    Ответить и завершить
+                                    <div className={cls.buttonIconWrapper}>
+                                       <IoIosFlag className={classNames(cls.buttonIcon, {}, [cls.buttonIconCheck])} />
+
+                                    </div>
+                                 </> : isBackMode && (haveSelectedOptionsChanged() || (shortAnswerValue || '') !== (testResult?.testAnswers[currentQuestion]?.shortAnswer || "")) ? <>
+                                    Сохранить изменения
+                                    <div className={cls.buttonIconWrapper}>
+                                       <MdModeEdit className={classNames(cls.buttonIcon, {}, [cls.buttonIconEdit])} />
+
+                                    </div>
+                                 </> : isBackMode ? <>
+                                    Вперёд
+                                    <div className={cls.buttonIconWrapper}>
+                                       <IoMdArrowRoundBack className={classNames(cls.buttonIcon, {}, [cls.buttonIconNext])} />
+
+                                    </div>
+                                 </> : <>
+                                    Ответить
+                                    <div className={cls.buttonIconWrapper}>
+                                       <BiSolidSelectMultiple className={classNames(cls.buttonIcon, {}, [cls.buttonIconAnswering])} />
+
+                                    </div>
+                                 </>}
+                              </button>
+                           </div>
                         </div>
                      </div>
                   </>

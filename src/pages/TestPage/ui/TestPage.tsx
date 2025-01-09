@@ -103,25 +103,32 @@ const TestPage = () => {
             const timer = setTimeout(() => setQuestionSecondsLeft(questionSecondsLeft - 1), 1000);//таймер на вопрос, если в текущем вопросе есть лимит по времени
             return () => clearTimeout(timer);
         } else {
-            if (testData) {
-                alert('Время на вопрос кончилось')
-                setQuestionSecondsLeft(null)//обнуление состояние таймера вопроса
-                setButtonsIsDisabled(true);
-                setInputIsDisabled(true);
-                createTestAnswer({ testResult: testResult?._id || "", question: (currentQuestionData || testData.questions[currentQuestion])?._id || "", isCorrect: false, isTimeFail: true, questionType: currentQuestionData?.type || 'single-choice' })
-                // createTestAnswer({ testResult: testResult?._id || "", question: testData.questions[currentQuestion]._id, isCorrect: false, isTimeFail: true })
-                if (currentQuestion + 1 >= testData.questions.length) {
-                    finalizeTest()
-                } else {
-                    setCurrentQuestion((prev) => {
-                        setupTimerForCurrentQuestion(prev + 1)
-                        return prev + 1
-                    })
+            let kostil = async () => {
+                if (testData) {
+                    alert('Время на вопрос кончилось')
+                    setQuestionSecondsLeft(null)//обнуление состояние таймера вопроса
+                    setButtonsIsDisabled(true);
+                    setInputIsDisabled(true);
+                    await createTestAnswer({ testResult: testResult?._id || "", question: (currentQuestionData || testData.questions[currentQuestion])?._id || "", isCorrect: false, isTimeFail: true, questionType: currentQuestionData?.type || 'single-choice' })
+                    // createTestAnswer({ testResult: testResult?._id || "", question: testData.questions[currentQuestion]._id, isCorrect: false, isTimeFail: true })
 
+                    if (currentQuestion + 1 >= testData.questions.length) {
+                        finalizeTest()
+                    } else {
+                        setCurrentQuestion((prev) => {
+                            setupTimerForCurrentQuestion(prev + 1)
+                            return prev + 1
+                        })
+
+                    }
+                    await refetchTestResult()
+                    setButtonsIsDisabled(false);
+                    setInputIsDisabled(false);
+                    // setSelectedOptions([])
+                    // setShortAnswerValue('')
                 }
-                setButtonsIsDisabled(false);
-                setInputIsDisabled(false);
             }
+            kostil()
         }
     }, [questionSecondsLeft]);
 
@@ -206,14 +213,11 @@ const TestPage = () => {
     }, [currentQuestion])
 
     const haveSelectedOptionsChanged = () => {
-        console.log({ currentQuestion });
-
-        if (testResult && currentQuestionData?.type === 'multiple-choice') {
+        if (testResult?.testAnswers[currentQuestion]?.isTimeFail === true) {
+            return false
+        }
+        if (testResult && (currentQuestionData?.type === 'multiple-choice' || currentQuestionData?.type === 'single-choice')) {
             const currentTestAnswerData = testResult?.testAnswers[currentQuestion]
-            console.log(currentTestAnswerData);
-            console.log(selectedOptions);
-
-
             if (isBackMode) {
                 // Проверяем разницу в длине массивов
                 if (selectedOptions.length !== currentTestAnswerData?.selectedOptions.length) {
@@ -258,10 +262,16 @@ const TestPage = () => {
                     answerUpdatePayload = { ...answerUpdatePayload, shortAnswer: shortAnswerValue }
                     setShortAnswerValue('')
                 }
+
                 await updateTestAnswer(answerUpdatePayload)
                 await refetchTestResult()
                 setShortAnswerValue('')
                 setSelectedOptions([])
+            }
+
+            if (currentQuestionData?.timeLimit !== undefined) {
+                setButtonsIsDisabled(false);
+                setInputIsDisabled(false);
             }
             setCurrentQuestion((prev) => prev + 1)
         } else {
@@ -321,10 +331,11 @@ const TestPage = () => {
     };
     const handleToPrevQuestion = () => {
         if (!((questionSecondsLeft || 0) > 0)) {
-            if ((haveSelectedOptionsChanged() || shortAnswerValue !== testResult?.testAnswers[currentQuestion]?.shortAnswer) && isBackMode) {
+            if ((haveSelectedOptionsChanged() || (shortAnswerValue || "") !== (testResult?.testAnswers[currentQuestion]?.shortAnswer || "")) && isBackMode) {
                 alert('Сохраните изменения')
             } else {
                 if (currentQuestion >= 1) {
+
                     setCurrentQuestion((prev) => prev - 1)
                     const currentTestAnswerData = testResult?.testAnswers[currentQuestion - 1]
                     setSelectedOptions(currentTestAnswerData?.selectedOptions || [])
