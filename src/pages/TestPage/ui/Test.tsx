@@ -154,7 +154,6 @@ export const Test = memo(({
                                  onClick={handleNextQuestion}
                               /*переход на след вопрос*/
                               >
-                                 {/* {currentQuestion >= testData.questions.length - 1 ? "Завершить" : (isBackMode && (selectedOptions.length !== 0 && (currentQuestionData?.type === 'multiple-choice') || (currentQuestionData?.type === 'single-choice')) || (shortAnswerValue !== "" && currentQuestionData?.type === 'short-answer')) ? "Изменить ответ" : isBackMode ? "Следующий вопрос" : "Ответить"} */}
                                  {currentQuestion >= testData.questions.length - 1 ? <>
                                     Ответить и завершить
                                     <div className={cls.buttonIconWrapper}>
