@@ -94,8 +94,13 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
     // last
     [AppRoutes.NOT_FOUND]: {
         path: RoutePath.not_found,
-        element: <Container maxWidth="lg" style={{ textAlign: 'center' }}>
-            <span style={{ fontSize: '72px', fontWeight: "700" }}>404</span>
-        </Container>,
+        element:
+            <>
+                <Header />
+                <Container maxWidth="lg" style={{ textAlign: 'center', marginTop: "100px" }}>
+                    <span style={{ fontSize: '3vw', fontWeight: "700" }}>Страница не найдена</span>
+                </Container>
+            </>
+        ,
     },
 };
