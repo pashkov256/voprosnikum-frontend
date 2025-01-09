@@ -99,11 +99,11 @@ export const testApi = createApi({
                 body: { testResult, selectedOptions, shortAnswer, testAnswerId, pointsAwardedOld: pointsAwarded }
             }),
         }),
-        updateTestResult: builder.mutation<void, { completedAt?: string, dateStart?: string, completionTime?: string, id: string }>({
-            query: ({ completedAt, dateStart, completionTime, id }) => ({
+        updateTestResult: builder.mutation<void, { completedAt?: string, dateStart?: string, completionTime?: string, id: string, focusLossCount?: number }>({
+            query: ({ completedAt, dateStart, completionTime, id, focusLossCount }) => ({
                 url: `/results/${id}`,
                 method: "PUT",
-                body: { completedAt, dateStart, completionTime }
+                body: { completedAt, dateStart, completionTime, focusLossCount }
             }),
         }),
         deleteTest: builder.mutation<void, string>({

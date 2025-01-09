@@ -51,6 +51,7 @@ export interface ITestResult {
     score?: number;
     points: number;
     randomizedQuestionsSetIndex: number;
+    focusLossCount: number;
     _id: string;
 }
 

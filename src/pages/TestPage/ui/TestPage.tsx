@@ -8,7 +8,7 @@ import {
     useUpdateTestResultMutation
 } from 'entities/Test/model/slice/testSlice';
 import { IQuestion } from 'entities/Test/model/types/test';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from "react-router-dom";
 import { formatTimeDifference } from 'shared/lib/date';
@@ -39,7 +39,7 @@ const TestPage = () => {
     const [updateTestAnswer] = useUpdateTestAnswerMutation()//обновление ответа на вопрос
     const isBackMode = (testResult?.testAnswers?.length || 0) > currentQuestion
     const currentQuestionData = (testResult && testData?.randomizedQuestionsSets?.length !== 0 && testData?.isQuestionsRandomized) ? testData?.questions[testData?.randomizedQuestionsSets[testResult?.randomizedQuestionsSetIndex][currentQuestion]] : testData?.questions[currentQuestion];
-
+    const [focusLossCount, setFocusLossCount] = useState(testResult?.focusLossCount || 0);
     const handleStartTest = async () => {//старт теста по клику
         try {
             const newDateStart = new Date().toISOString()
@@ -110,7 +110,6 @@ const TestPage = () => {
                     setButtonsIsDisabled(true);
                     setInputIsDisabled(true);
                     await createTestAnswer({ testResult: testResult?._id || "", question: (currentQuestionData || testData.questions[currentQuestion])?._id || "", isCorrect: false, isTimeFail: true, questionType: currentQuestionData?.type || 'single-choice' })
-                    // createTestAnswer({ testResult: testResult?._id || "", question: testData.questions[currentQuestion]._id, isCorrect: false, isTimeFail: true })
 
                     if (currentQuestion + 1 >= testData.questions.length) {
                         finalizeTest()
@@ -124,8 +123,6 @@ const TestPage = () => {
                     await refetchTestResult()
                     setButtonsIsDisabled(false);
                     setInputIsDisabled(false);
-                    // setSelectedOptions([])
-                    // setShortAnswerValue('')
                 }
             }
             kostil()
@@ -348,6 +345,29 @@ const TestPage = () => {
     }
 
     useEffect(() => {
+        const handleBlur = async () => {
+            setFocusLossCount((prev) => prev + 1);
+            try {
+                await updateTestResult({
+                    id: testResult?._id || "", // Используем постоянный testResult._id
+                    focusLossCount: focusLossCount + 1,
+                });
+            } catch (error) {
+                console.error("Ошибка при обновлении на сервере:", error);
+            }
+        };
+        window.addEventListener("blur", handleBlur);
+        return () => {
+            window.removeEventListener("blur", handleBlur);
+        };
+    }, [focusLossCount, testResult]);
+    useEffect(() => {
+        if (testResult) {
+            setFocusLossCount(testResult.focusLossCount)
+        }
+    }, [testResult])
+
+    useEffect(() => {
         if (!testDataIsLoading && !testResultIsLoading) {
             setupTest();
         }
@@ -361,7 +381,7 @@ const TestPage = () => {
         return <h1>Тест не найден</h1>;
     }
 
-    if (!startTest && !isComplete) {
+    if (!startTest && !isComplete && !testResult) {
         return <TestStart testData={testData} onStartTest={handleStartTest} />;
     }
 
