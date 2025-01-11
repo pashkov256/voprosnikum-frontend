@@ -7,6 +7,7 @@ import {TeachersList} from "../TeachersList/TeachersList";
 import {Block} from "shared/ui/Block/Block";
 import {TestsFilter} from "entities/Test/ui/TestsFilter/TestsFilter";
 import {Container} from "@mui/material";
+import {useEffect} from "react";
 
 interface MePageProps {
     className?: string;
@@ -14,6 +15,9 @@ interface MePageProps {
 
 const MePage = (props: MePageProps) => {
     const userData = useAppSelector((state)=>state.auth.data)
+    useEffect(()=>{
+        document.title = 'Главная страница'
+    },[])
     return (
         <Container maxWidth="xl" className={cls.meContainer}>
             <div className={cls.Me}>

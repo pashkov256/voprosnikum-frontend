@@ -66,9 +66,10 @@ const TestPage = () => {
             navigate('/');
             return;
         }
-
+        console.log({testResult})
         // Если результат теста существует
         if (testResult) {
+
             if (testResult.completedAt) {
                 // Если тест уже завершён
                 setIsComplete(true);
@@ -348,10 +349,12 @@ const TestPage = () => {
         const handleBlur = async () => {
             setFocusLossCount((prev) => prev + 1);
             try {
-                await updateTestResult({
-                    id: testResult?._id || "", // Используем постоянный testResult._id
-                    focusLossCount: focusLossCount + 1,
-                });
+                if (!isComplete) {
+                    await updateTestResult({
+                        id: testResult?._id || "", // Используем постоянный testResult._id
+                        focusLossCount: focusLossCount + 1,
+                    });
+                }
             } catch (error) {
                 console.error("Ошибка при обновлении на сервере:", error);
             }
@@ -364,6 +367,9 @@ const TestPage = () => {
     useEffect(() => {
         if (testResult) {
             setFocusLossCount(testResult.focusLossCount)
+            if(testResult.completedAt){
+                setIsComplete(true)
+            }
         }
     }, [testResult])
 
@@ -376,6 +382,7 @@ const TestPage = () => {
     if ((testResultIsLoading || testDataIsLoading) && !testData) {
         return <Loader />;
     }
+    console.log({testData,isComplete,testResult,testResultIsLoading,testDataIsLoading});
 
     if (!testData) {
         return <h1>Тест не найден</h1>;
@@ -389,8 +396,8 @@ const TestPage = () => {
         return <TestResult testResult={testResult} />;
     }
 
-    return (
-        <Test
+    if(!isComplete && !testResultIsLoading){
+        return <Test
             testData={testData}
             testResult={testResult}
             currentQuestion={currentQuestion}
@@ -410,7 +417,9 @@ const TestPage = () => {
             isComplete={isComplete}
             isBackMode={isBackMode}
         />
-    );
+    } else {
+        return <div></div>
+    }
 };
 
 export default TestPage;

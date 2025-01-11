@@ -1,15 +1,16 @@
-import { Container, LinearProgress } from '@mui/material';
-import { ITest } from 'entities/Test';
-import { IQuestion, ITestAnswer, ITestResult } from 'entities/Test/model/types/test';
-import { memo } from 'react';
-import { BiSolidSelectMultiple } from "react-icons/bi";
-import { IoIosFlag, IoMdArrowRoundBack, IoMdCheckmark, IoMdTime } from 'react-icons/io';
-import { LuTimer } from 'react-icons/lu';
-import { MdModeEdit, MdQuestionAnswer } from "react-icons/md";
-import { RiQuestionAnswerLine } from 'react-icons/ri';
-import { classNames } from 'shared/lib/classNames/classNames';
-import { Input } from 'shared/ui/Input/Input';
+import {Container} from '@mui/material';
+import {ITest} from 'entities/Test';
+import {IQuestion, ITestResult} from 'entities/Test/model/types/test';
+import {memo} from 'react';
+import {BiSolidSelectMultiple} from "react-icons/bi";
+import {IoIosFlag, IoMdArrowRoundBack, IoMdTime} from 'react-icons/io';
+import {LuTimer} from 'react-icons/lu';
+import {MdModeEdit} from "react-icons/md";
+import {RiQuestionAnswerLine} from 'react-icons/ri';
+import {classNames} from 'shared/lib/classNames/classNames';
+import {Input} from 'shared/ui/Input/Input';
 import cls from './TestPage.module.scss';
+
 interface TestProps {
    testData: ITest,
    testResult: ITestResult | undefined,

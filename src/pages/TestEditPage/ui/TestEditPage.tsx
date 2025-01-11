@@ -2,8 +2,12 @@ import { Box, Container, MenuItem, Select, SelectChangeEvent, Tab, Tabs } from "
 import TextField from "@mui/material/TextField";
 import { RootState } from "app/providers/StoreProvider/config/store";
 import { useGetGroupsQuery } from "entities/Group/model/slice/groupSlice";
-import { useGetTestByIdQuery, useUpdateTestMutation } from "entities/Test/model/slice/testSlice";
-import { ITest } from "entities/Test/model/types/test";
+import {
+    useGetTestAllResultsQuery,
+    useGetTestByIdQuery,
+    useUpdateTestMutation
+} from "entities/Test/model/slice/testSlice";
+import { ITest, ITestResult, ITestResultDetails } from "entities/Test/model/types/test";
 import { TableTestResults } from "entities/Test/ui/TableTestResults/TableTestResults";
 import { TestForm } from "entities/Test/ui/TestForm/TestForm";
 import React, { memo, SyntheticEvent, useEffect, useState } from "react";
@@ -13,6 +17,7 @@ import { formatDateTimeForInput } from "shared/lib/date";
 import { createRandomizedQuestionsSets } from "shared/lib/shuffle/shuffle";
 import { Button } from "shared/ui/Button/Button";
 import Loader from "shared/ui/Loader/Loader";
+import ModalTestResult from "./ModalTestResult/ModalTestResult";
 import cls from './TestEditPage.module.scss';
 interface TestEditProps {
     className?: string;
@@ -46,16 +51,23 @@ const TestEditPage = memo((props: TestEditProps) => {
     const { id } = useParams();
     const userData = useSelector((state: RootState) => state.auth.data);
     const { data: testData, isLoading: testDataIsLoading, refetch: refetchGetTest } = useGetTestByIdQuery({ _id: id || "", mode: "full" })
+    const { data: testAllResults, isLoading: testAllResultsIsLoading, error: testAllResultsError , refetch: refetchGetTestResults } = useGetTestAllResultsQuery(id || "");
     const [updateTestData, { isLoading: updateTestIsLoaing }] = useUpdateTestMutation()
     const { data: groupsData, isLoading: groupsDataIsLoading } = useGetGroupsQuery()
     const navigate = useNavigate()
     const [tabsValue, setTabsValue] = useState(0);
+    const [testResult, setTestResult] = useState<null | ITestResultDetails>(null)
     const [testFormData, setTestFormData] = useState<ITest>();
+    const [openModalTestResult, setOpenModalTestResult] = useState(false)
     const isCreateMode = id === undefined;
 
     const handleChangeTabs = (event: SyntheticEvent, newValue: any) => {
         setTabsValue(newValue);
     };
+
+    const handleRefetchTestResults = async ()=>{
+        await refetchGetTestResults()
+    }
     useEffect(() => {
         document.title = 'Редактирование теста'
     }, [])
@@ -100,7 +112,18 @@ const TestEditPage = memo((props: TestEditProps) => {
 
                 <TabPanel value={tabsValue} index={1}>
                     <Container maxWidth="lg" className={cls.tabContent}>
-                        <TableTestResults id={id || ""} />
+                        <TableTestResults
+                            id={id || ""}
+                            testData={testData}
+                            setOpenModalTestResult={setOpenModalTestResult}
+                            setTestResult={setTestResult}
+                            testAllResults={testAllResults}
+                            testAllResultsIsLoading={testAllResultsIsLoading}
+                            testAllResultsError={testAllResultsError}
+                        />
+                        {testResult !== null &&
+                            <ModalTestResult open={openModalTestResult} setOpenModalTestResult={setOpenModalTestResult} testResult={testResult} handleRefetchTestResults={handleRefetchTestResults}/>
+                        }
                     </Container>
                 </TabPanel>
 
@@ -142,6 +165,7 @@ const TestEditPage = memo((props: TestEditProps) => {
                                 <h3 className={cls.settingsTitle}>Для какой группы тест</h3>
 
                                 <Select
+
                                     //@ts-ignore
                                     value={groupsData.find((group) => group._id === testFormData?.group)?.name}
                                     onChange={(e: SelectChangeEvent<string>) => //@ts-ignore
@@ -156,6 +180,7 @@ const TestEditPage = memo((props: TestEditProps) => {
                                     }
                                     className={cls.selectForm}
                                     variant="outlined"
+                                    MenuProps={{ disableScrollLock: true }}
                                 >
                                     {groupsData.map((group) => <MenuItem
                                         value={group.name}>{group.name}</MenuItem>)}
