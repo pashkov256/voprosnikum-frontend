@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { IUser } from "entities/User";
 import { IAnswer } from "model/IQuiz";
 import { SERVER_URL } from "shared/const/const";
-import { IQuestion, ITest, ITestAnswer, ITestResult, ITestWithPopulate } from '../types/test';
+import { IQuestion, ITest, ITestAnswer, ITestResult, ITestResultDetails, ITestWithPopulate } from '../types/test';
 
 export const testApi = createApi({
     reducerPath: 'testApi',
@@ -79,7 +79,13 @@ export const testApi = createApi({
                 method: "GET",
             }),
         }),
-        getTestAllResults: builder.query<ITestResult[], string>({
+        deleteTestResult: builder.query<ITestResult, string>({
+            query: ( testResultId ) => ({
+                url: `/results/${testResultId}`,
+                method: "DELETE",
+            }),
+        }),
+        getTestAllResults: builder.query<ITestResultDetails[], string>({
             query: (_id) => ({
                 url: `/test/${_id}/results`,
                 method: "GET",
@@ -116,4 +122,4 @@ export const testApi = createApi({
 });
 
 
-export const { useGetTestsByTeacherQuery, useGetTeachersQuery, useCreateUserByAdminMutation, useLazyGetTestByIdQuery, useCreateQuestionMutation, useCreateTestMutation, useGetTestByIdQuery, useUpdateTestMutation, useCreateTestResultMutation, useGetTestResultQuery, useCreateTestAnswerMutation, useGetTestAllResultsQuery, useUpdateTestResultMutation, useDeleteTestMutation, useUpdateTestAnswerMutation } = testApi
+export const { useGetTestsByTeacherQuery, useGetTeachersQuery, useCreateUserByAdminMutation, useLazyGetTestByIdQuery, useCreateQuestionMutation, useCreateTestMutation, useGetTestByIdQuery, useUpdateTestMutation, useCreateTestResultMutation, useGetTestResultQuery, useCreateTestAnswerMutation, useGetTestAllResultsQuery, useUpdateTestResultMutation, useDeleteTestMutation, useUpdateTestAnswerMutation ,useLazyDeleteTestResultQuery} = testApi

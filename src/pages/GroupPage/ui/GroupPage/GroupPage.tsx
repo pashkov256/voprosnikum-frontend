@@ -78,6 +78,7 @@ const GroupPage = (props: GroupPageProps) => {
                 <Text className={cls.groupTitle} title="Преподаватели группы" size={TextSize.L}/>
                 {/*<InputLabel id="multiple-names-label">Добавьте преподавателей для группы</InputLabel>*/}
                 <Select
+                    MenuProps={{ disableScrollLock: true }}
                     labelId="multiple-names-label"
                     multiple
                     value={selectedNames}

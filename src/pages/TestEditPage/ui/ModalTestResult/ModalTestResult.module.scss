@@ -1,0 +1,112 @@
+.modal {
+   width: 60vw !important;
+   min-height: 70vh;
+   max-height: 90vh;
+}
+
+.resultHeader {
+   padding-left: 8px;
+   padding-bottom: 12px;
+   border-bottom: 1px solid #eee;
+}
+
+.studentFullName {
+   font-size: 24px;
+   font-weight: 600;
+}
+
+.questionsCardList {
+   display: flex;
+   flex-direction: column;
+   margin-bottom: 20px;
+   gap: 10px;
+}
+
+.questionCard {
+   display: flex;
+   flex-direction: column;
+   padding: 12px 8px;
+   border-radius: 8px;
+   border: 2px solid #e4e6e7;
+}
+
+.questionTitle {
+   font-size: 18px;
+   font-weight: 600;
+}
+
+.questionIndexWrapper {
+   display: flex;
+   align-items: center;
+   gap: 4px;
+}
+
+.questionIndex {
+   font-size: 15px;
+}
+
+.questionCardHeader {
+   display: flex;
+   margin-bottom: 14px;
+}
+
+.resultBody {
+   max-height: 60vh;
+   overflow-y: auto;
+}
+
+
+.questionCardHeader {
+   display: flex;
+   justify-content: space-between;
+}
+
+.questionCardHeaderLeft,
+.questionCardHeaderRight {
+   display: flex;
+   gap: 10px;
+}
+
+.questionPointBlock {
+   display: flex;
+   align-items: center;
+   width: 85px;
+   gap: 6px;
+}
+
+.pointWrapper {
+   width: 16px;
+   height: 16px;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   background-color: #f9ad0f;
+   border-radius: 50%;
+}
+
+.questionPoint {
+   font-size: 14px;
+   font-weight: 700;
+}
+
+.pointIcon {
+   width: 10px;
+   height: 10px;
+}
+
+.questionTypeBlock {
+   background-color: #f4f4f4;
+   border-radius: 6px;
+   display: flex;
+   gap: 6px;
+   padding: 5px;
+}
+
+.questionType {
+   font-size: 12px;
+}
+
+.resultDeleteButton {
+   font-weight: 600;
+   margin-top: 12px;
+}

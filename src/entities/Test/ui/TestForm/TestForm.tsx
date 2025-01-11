@@ -126,11 +126,11 @@ export const TestForm = memo((props: TestFormProps) => {
     console.log(testFormData);
 
 
-    const handleOptionToggle = (questionTitle: string, option: string) => {
+    const handleOptionToggle = (questionId: string, option: string) => {
         setTestFormData((prevData) => ({
             ...prevData,
             questions: prevData.questions.map((q) => {
-                if (q.title === questionTitle) {
+                if (q._id === questionId) {
                     const isChecked = q.correctAnswers.includes(option);
                     return {
                         ...q,
@@ -144,14 +144,37 @@ export const TestForm = memo((props: TestFormProps) => {
         }));
     };
 
+    // const handleOptionChange = (questionId: string, index: number, newOption: string) => {
+    //     setTestFormData((prevData) => ({
+    //         ...prevData,
+    //         questions: prevData.questions.map((q) => {
+    //             if (q._id === questionId) {
+    //                 const updatedOptions = [...q.options];
+    //                 updatedOptions[index] = newOption;
+    //                 return { ...q, options: updatedOptions };
+    //             }
+    //             return q;
+    //         }),
+    //     }));
+    // };
+
     const handleOptionChange = (questionId: string, index: number, newOption: string) => {
         setTestFormData((prevData) => ({
             ...prevData,
             questions: prevData.questions.map((q) => {
-                if (q.title === questionId) {
+                if (q._id === questionId) {
                     const updatedOptions = [...q.options];
                     updatedOptions[index] = newOption;
-                    return { ...q, options: updatedOptions };
+
+                    const updatedCorrectAnswers = q.correctAnswers.map((answer) =>
+                        answer === q.options[index] ? newOption : answer
+                    );
+
+                    return {
+                        ...q,
+                        options: updatedOptions,
+                        correctAnswers: updatedCorrectAnswers
+                    };
                 }
                 return q;
             }),
@@ -286,6 +309,7 @@ export const TestForm = memo((props: TestFormProps) => {
 
                         className={cls.selectForm}
                         variant="outlined"
+                        MenuProps={{ disableScrollLock: true }}
                     >
                         <MenuItem value="short-answer">Короткий ответ</MenuItem>
                         <MenuItem value="single-choice">Одиночный выбор</MenuItem>
@@ -311,7 +335,7 @@ export const TestForm = memo((props: TestFormProps) => {
                                         name={`question-${question._id}`}
                                         value={option}
                                         checked={question.correctAnswers.includes(option)}
-                                        onChange={() => handleOptionToggle(question.title || "", option)}
+                                        onChange={() => handleOptionToggle(question._id || "", option)}
                                         className={cls.AnswerOptionRadio}
                                     />
 
@@ -319,7 +343,7 @@ export const TestForm = memo((props: TestFormProps) => {
                                     <TextField
                                         value={option}
                                         onChange={(e) =>
-                                            handleOptionChange(question.title || "", index, e.target.value)
+                                            handleOptionChange(question._id || "", index, e.target.value)
                                         }
                                         variant={"standard"}
                                     />
@@ -378,7 +402,7 @@ export const TestForm = memo((props: TestFormProps) => {
                                         <TextField
                                             value={option}
                                             onChange={(e) =>
-                                                handleOptionChange(question.title || "", index, e.target.value)
+                                                handleOptionChange(question._id || "", index, e.target.value)
                                             }
                                             variant={"standard"}
                                         />

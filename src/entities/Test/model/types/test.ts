@@ -40,11 +40,51 @@ export interface ITestAnswer {
     isTimeFail: boolean,
     isCorrect: boolean,
 }
+export interface ITestAnswer {
+    _id: string;
+    question: string,
+    pointsAwarded: number,
+    shortAnswer: string,
+    selectedOptions: string[],
+    isTimeFail: boolean,
+    isCorrect: boolean,
+}
 
 export interface ITestResult {
     test: string;
-    student: string;
+    student: {
+        fullName: string,
+        _id: string,
+    };
     testAnswers: ITestAnswer[];
+    completedAt?: string;
+    dateStart?: string;
+    completionTime?: string;
+    score?: number;
+    points: number;
+    randomizedQuestionsSetIndex: number;
+    focusLossCount: number;
+    _id: string;
+}
+
+export type TestAnswersDetails = Omit<ITestAnswer, 'question'> & {
+    question: {
+        correctAnswers: string[];
+        shortAnswer: string;
+        title1: string;
+        type: 'short-answer' | 'multiple-choice' | 'single-choice';
+        _id: string;
+    };
+    __v: number;
+};
+
+export interface ITestResultDetails {
+    test: string;
+    student: {
+        fullName: string,
+        _id: string,
+    };
+    testAnswers: TestAnswersDetails[];
     completedAt?: string;
     dateStart?: string;
     completionTime?: string;
