@@ -16,10 +16,12 @@ import { formatDateTimeForInput } from "shared/lib/date";
 import { createRandomizedQuestionsSets } from "shared/lib/shuffle/shuffle";
 import { Button } from "shared/ui/Button/Button";
 import Loader from "shared/ui/Loader/Loader";
-import ModalTestResult from "./ModalTestResult/ModalTestResult";
-import cls from './TestEditPage.module.scss';
+import ModalTestResult from "pages/TestEditPage/ui/ModalTestResult/ModalTestResult";
+import cls from 'pages/TestEditPage/ui/TestEditPage/TestEditPage.module.scss';
 import {TestForm} from "entities/Test/ui/TestForm";
-
+import { MdOutlineFileDownload } from "react-icons/md";
+import {cleanedTestFormData} from "shared/lib/cleanedTestFormData";
+import {TestTemplateUpload} from "../TestTemplateUpload/TestTemplateUpload";
 interface TestEditProps {
     className?: string;
 }
@@ -88,8 +90,28 @@ const TestEditPage = memo((props: TestEditProps) => {
             alert("Успешно обновлено");
         }
     };
+    const handleUpdateTest = (updatedTestData:ITest) => {
+        updateTestData({...updatedTestData})
+    };
+
+    const handleDownloadTemplateTest  = useCallback(() => {
+        //@ts-ignore
+        let newTestFormData = cleanedTestFormData(testFormData);
+        const jsonString = JSON.stringify(newTestFormData, null, 2);
+        const blob = new Blob([jsonString], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        // Создаем временный элемент <a> для скачивания
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `${testFormData.name}.json`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+    }, [testFormData]);
+
     console.log({testFormData});
-    if( testDataIsLoading) {
+    if(testDataIsLoading) {
         return <Loader />
     }
 
@@ -276,6 +298,14 @@ const TestEditPage = memo((props: TestEditProps) => {
                                     </label>
                                 </div>
                             )}
+
+                            <div className={cls.templateInputs}>
+                                <TestTemplateUpload handleUpdateTest={handleUpdateTest}/>
+                                <Button className={cls.downloadTemplateButton} onClick={handleDownloadTemplateTest}>
+                                    <MdOutlineFileDownload  className={cls.downloadTemplateButtonIcon}/>
+                                    Скачать шаблон теста
+                                </Button>
+                            </div>
                         </div>
                     </Container>
                 </TabPanel>
