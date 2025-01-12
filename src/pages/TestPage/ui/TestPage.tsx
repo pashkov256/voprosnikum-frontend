@@ -11,13 +11,14 @@ import { IQuestion } from 'entities/Test/model/types/test';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from "react-router-dom";
-import { formatTimeDifference } from 'shared/lib/date';
+import {formatDate, formatTimeDifference} from 'shared/lib/date';
 import isPastDate from 'shared/lib/isPastDate/isPastDate';
 import { shuffle } from 'shared/lib/shuffle/shuffle';
 import Loader from 'shared/ui/Loader/Loader';
 import { Test } from './Test';
 import { TestResult } from './TestResult';
 import { TestStart } from './TestStart';
+import {isTestAvailable} from "shared/lib/date/isTestAvailable";
 const TestPage = () => {
     const { testId } = useParams(); // Получаем ID теста из URL
     const navigate = useNavigate();
@@ -60,6 +61,10 @@ const TestPage = () => {
         document.title = testData.name;
 
         // Проверяем актуальность теста
+        if(!isTestAvailable(testData?.startDate || "")){
+            alert(`Начало теста ${formatDate(testData?.startDate || "")}, на данный момент тест не доступен`);
+            navigate('/');
+        }
         const isTestExpired = testData?.deadline && !isPastDate(testData.deadline);
         if (isTestExpired && !testData.isResultVisibleAfterDeadline) {
             alert("Тест не актуален");

@@ -60,10 +60,10 @@ export const testApi = createApi({
             }),
         }),
         updateTest: builder.mutation<ITest, ITest>({
-            query: ({ name, description, teacher, questions, _id, createdAt, deadline, timeLimit, group, isResultVisibleAfterDeadline, randomizedQuestionsSets, isQuestionsRandomized, countRandomizedQuestionsSets }) => ({
+            query: ({ name, description, teacher, questions, _id, createdAt, deadline, timeLimit, group, isResultVisibleAfterDeadline, randomizedQuestionsSets, isQuestionsRandomized, countRandomizedQuestionsSets,startDate }) => ({
                 url: `/tests/${_id}`,
                 method: "PUT",
-                body: { name, description, teacher, questions, _id, createdAt, deadline, timeLimit, group, isResultVisibleAfterDeadline, randomizedQuestionsSets, isQuestionsRandomized, countRandomizedQuestionsSets },
+                body: { name, description, teacher, questions, _id, createdAt, deadline, timeLimit, group, isResultVisibleAfterDeadline, randomizedQuestionsSets, isQuestionsRandomized, countRandomizedQuestionsSets,startDate },
             }),
         }),
         createTestResult: builder.mutation<ITestResult, ITestResult>({

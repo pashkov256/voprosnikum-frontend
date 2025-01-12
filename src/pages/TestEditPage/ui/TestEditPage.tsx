@@ -153,42 +153,6 @@ const TestEditPage = memo((props: TestEditProps) => {
                     <Container maxWidth="md" className={cls.tabContent}>
                         <div className={cls.settingsBlock}>
                             <div className={cls.setting}>
-                                <h3 className={cls.settingsTitle}>Дата открытия теста:</h3>
-                                <TextField
-                                    value={formatDateTimeForInput(testFormData?.deadline || "")}
-                                    className={cls.settingsInput}
-                                    type={"datetime-local"}
-                                    onChange={(e) => {
-                                        setTestFormData((prev) => ({...prev, deadline: e.target.value}));
-                                    }}
-                                />
-                            </div>
-                            <div className={cls.setting}>
-                                <h3 className={cls.settingsTitle}>Опрос доступен до:</h3>
-                                <TextField
-                                    value={formatDateTimeForInput(testFormData?.deadline || "")}
-                                    className={cls.settingsInput}
-                                    type={"datetime-local"}
-                                    onChange={(e) => {
-                                        setTestFormData((prev) => ({...prev, deadline: e.target.value}));
-                                    }}
-                                />
-                            </div>
-
-                            <div className={cls.setting}>
-                                <h3 className={cls.settingsTitle}>Время прохождения теста (минуты)</h3>
-                                <TextField
-                                    value={testFormData?.timeLimit === 0 ? "" : testFormData?.timeLimit}
-                                    className={cls.settingsInput}
-                                    type={"number"}
-                                    placeholder={"В минутах"}
-                                    onChange={(e) => {
-                                        setTestFormData((prev) => ({...prev, timeLimit: Number(e.target.value)}));
-                                    }}
-                                />
-                            </div>
-
-                            <div className={cls.setting}>
                                 <h3 className={cls.settingsTitle}>Для какой группы тест</h3>
                                 <Select
                                     value={groupsData.find((group) => group._id === testFormData?.group)?.name || ""}
@@ -209,6 +173,46 @@ const TestEditPage = memo((props: TestEditProps) => {
                                     ))}
                                 </Select>
                             </div>
+                            <div className={cls.setting}>
+                                <h3 className={cls.settingsTitle}>Дата открытия теста:</h3>
+                                <TextField
+                                    value={formatDateTimeForInput(testFormData?.startDate || "")}
+                                    className={cls.settingsInput}
+                                    type={"datetime-local"}
+                                    onChange={(e) => {
+                                        setTestFormData((prev) => ({
+                                            ...prev, startDate:
+                                                e.target.value + ":00.000Z"
+                                        }));
+                                    }}
+
+                                />
+                            </div>
+                            <div className={cls.setting}>
+                                <h3 className={cls.settingsTitle}>Опрос доступен до:</h3>
+                                <TextField
+                                    value={formatDateTimeForInput(testFormData?.deadline || "")}
+                                    className={cls.settingsInput}
+                                    type={"datetime-local"}
+                                    onChange={(e) => {
+                                        setTestFormData((prev) => ({...prev, deadline: e.target.value + ":00.000Z"}));
+                                    }}
+                                />
+                            </div>
+
+                            <div className={cls.setting}>
+                                <h3 className={cls.settingsTitle}>Время прохождения теста (минуты)</h3>
+                                <TextField
+                                    value={testFormData?.timeLimit === 0 ? "" : testFormData?.timeLimit}
+                                    className={cls.settingsInput}
+                                    type={"number"}
+                                    placeholder={"В минутах"}
+                                    onChange={(e) => {
+                                        setTestFormData((prev) => ({...prev, timeLimit: Number(e.target.value)}));
+                                    }}
+                                />
+                            </div>
+
 
                             {testFormData?.isQuestionsRandomized && (
                                 <div className={cls.setting}>

@@ -1,10 +1,10 @@
 export function formatDate(dateString: string): string {
     const date = new Date(dateString);
-    const year = date.getFullYear(); // Получаем год
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const year = date.getUTCFullYear(); // Год в UTC
+    const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Месяц в UTC
+    const day = String(date.getUTCDate()).padStart(2, '0'); // День в UTC
+    const hours = String(date.getUTCHours()).padStart(2, '0'); // Часы в UTC
+    const minutes = String(date.getUTCMinutes()).padStart(2, '0'); // Минуты в UTC
 
-    return `${year}-${month}-${day} ${hours}:${minutes}`;
+    return `${year}-${day}-${month} ${hours}:${minutes}`;
 }
