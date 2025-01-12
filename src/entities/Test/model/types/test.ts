@@ -11,6 +11,9 @@ export interface IQuestion {
     imageUrl?: string | null;
     timeLimit?: number;
     isNewQuestion?: boolean;
+    shortAnswerPoints: number;
+    multipleChoicePoints: number;
+    singleChoicePoints: number;
 }
 
 export interface ITest {

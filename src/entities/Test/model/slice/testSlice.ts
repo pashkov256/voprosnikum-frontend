@@ -31,6 +31,9 @@ export const testApi = createApi({
         getTeachers: builder.query<IUser, void>({
             query: () => `/user/teachers`,
         }),
+        getAdmins: builder.query<IUser, void>({
+            query: () => `/user/admins`,
+        }),
         getTestById: builder.query<ITestWithPopulate, { _id: string, mode: "student" | "full" }>({
             query: ({ _id, mode }) => ({
                 url: `/tests/${_id}/${mode}`,
@@ -122,4 +125,4 @@ export const testApi = createApi({
 });
 
 
-export const { useGetTestsByTeacherQuery, useGetTeachersQuery, useCreateUserByAdminMutation, useLazyGetTestByIdQuery, useCreateQuestionMutation, useCreateTestMutation, useGetTestByIdQuery, useUpdateTestMutation, useCreateTestResultMutation, useGetTestResultQuery, useCreateTestAnswerMutation, useGetTestAllResultsQuery, useUpdateTestResultMutation, useDeleteTestMutation, useUpdateTestAnswerMutation ,useLazyDeleteTestResultQuery} = testApi
+export const { useGetTestsByTeacherQuery, useGetTeachersQuery, useCreateUserByAdminMutation, useLazyGetTestByIdQuery, useCreateQuestionMutation, useCreateTestMutation, useGetTestByIdQuery, useUpdateTestMutation, useCreateTestResultMutation, useGetTestResultQuery, useCreateTestAnswerMutation, useGetTestAllResultsQuery, useUpdateTestResultMutation, useDeleteTestMutation, useUpdateTestAnswerMutation ,useLazyDeleteTestResultQuery,useGetAdminsQuery} = testApi

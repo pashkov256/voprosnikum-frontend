@@ -8,6 +8,7 @@ import {Block} from "shared/ui/Block/Block";
 import {TestsFilter} from "entities/Test/ui/TestsFilter/TestsFilter";
 import {Container} from "@mui/material";
 import {useEffect} from "react";
+import {TableAdmins} from "pages/MePage/ui/TableAdmins/TableAdmins";
 
 interface MePageProps {
     className?: string;
@@ -39,10 +40,16 @@ const MePage = (props: MePageProps) => {
 
                             {  //@ts-ignore
                                 userData.role === "admin" &&
-                                <Block>
-                                    <Text title={"Список преподавателей"} size={TextSize.L} className={cls.meTitle}/>
-                                    <TableTeachers/>
-                                </Block>
+                               <>
+                                   <Block>
+                                       <Text title={"Список преподавателей"} size={TextSize.L} className={cls.meTitle}/>
+                                       <TableTeachers/>
+                                   </Block>
+                                   <Block>
+                                       <Text title={"Список администраторов"} size={TextSize.L} className={cls.meTitle}/>
+                                       <TableAdmins/>
+                                   </Block>
+                               </>
                             }
 
                         </>

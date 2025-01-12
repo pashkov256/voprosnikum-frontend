@@ -17,6 +17,9 @@ interface QuestionEditProps {
     onImageURLChange: (questionId: string, imageUrl: string) => void;
     onShortAnswerChange: (questionId: string, shortAnswer: string) => void;
     onSingleChoiceToggle: (questionId: string, option: string) => void;
+    handleShortAnswerPointsChange:(questionId:string,newPoints:number)=> void;
+    handleMultipleChoicePointsChange:(questionId:string,newPoints:number)=> void;
+    handleSingleChoicePointsChange:(questionId:string,newPoints:number)=> void;
 }
 
 export const QuestionEdit = memo(({
@@ -32,6 +35,9 @@ export const QuestionEdit = memo(({
                                onImageURLChange,
                                onShortAnswerChange,
                                onSingleChoiceToggle,
+                               handleShortAnswerPointsChange,
+                               handleMultipleChoicePointsChange,
+                               handleSingleChoicePointsChange,
                            }: QuestionEditProps) => {
     return (
         <div className={cls.TestFormBlock}>
@@ -152,6 +158,46 @@ export const QuestionEdit = memo(({
                 )}
 
                 <div className={cls.QuestionSettings}>
+                    {question.type === 'multiple-choice' ? (
+                        <TextField
+                            className={cls.input}
+                            value={question.multipleChoicePoints === 0 ? null : question.multipleChoicePoints }
+                            type={"number"}
+                            onChange={(e) => handleMultipleChoicePointsChange(question._id, Number(e.target.value))}
+                            placeholder="Укажите балл за верный ответ"
+                            label="Балл за верный ответ"
+                            variant="standard"
+                            inputProps={{
+                                step: "0.1"
+                            }}
+                        />
+                    ) : question.type === 'short-answer' ? (
+                        <TextField
+                            className={cls.input}
+                            value={question.shortAnswerPoints === 0 ? null : question.shortAnswerPoints }
+                            type={"number"}
+                            onChange={(e) => handleShortAnswerPointsChange(question._id, Number(e.target.value))}
+                            placeholder="Укажите балл за верный ответ"
+                            label="Балл за верный ответ"
+                            variant="standard"
+                              inputProps={{
+                                step: "0.1"
+                            }}
+                        />
+                    ): question.type === 'single-choice' && (
+                        <TextField
+                            className={cls.input}
+                            value={question.singleChoicePoints === 0 ? null : question.singleChoicePoints }
+                            type={"number"}
+                            onChange={(e) => handleSingleChoicePointsChange(question._id, Number(e.target.value))}
+                            placeholder="Укажите балл за верный ответ"
+                            label="Балл за верный ответ"
+                            variant="standard"
+                              inputProps={{
+                                step: "0.1"
+                            }}
+                        />
+                    )}
                     <TextField
                         className={cls.input}
                         value={question.timeLimit !== 0 && question.timeLimit !== null && question.timeLimit !== undefined ? question.timeLimit : ""}

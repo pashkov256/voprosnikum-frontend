@@ -60,11 +60,14 @@ const TestPage = () => {
         if (!testData) return;
         document.title = testData.name;
 
-        // Проверяем актуальность теста
-        if(!isTestAvailable(testData?.startDate || "")){
-            alert(`Начало теста ${formatDate(testData?.startDate || "")}, на данный момент тест не доступен`);
-            navigate('/');
+        if(testData?.startDate){
+            if(!isTestAvailable(testData?.startDate || "")){
+                alert(`Тест доступен с ${formatDate(testData?.startDate || "")}, на данный момент тест не доступен`);
+                navigate('/');
+            }
         }
+
+        // Проверяем актуальность теста
         const isTestExpired = testData?.deadline && !isPastDate(testData.deadline);
         if (isTestExpired && !testData.isResultVisibleAfterDeadline) {
             alert("Тест не актуален");
