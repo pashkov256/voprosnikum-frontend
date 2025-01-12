@@ -4,10 +4,11 @@ import styles from './TestTemplateUpload.module.scss'; // Импорт SCSS мо
 
 interface TestTemplateUploadProps {
     handleUpdateTest: (test: ITest) => void;
+    testId: string;
 }
 
 export const TestTemplateUpload = (props: TestTemplateUploadProps) => {
-    const { handleUpdateTest } = props;
+    const { handleUpdateTest,testId } = props;
     const [error, setError] = useState<string | null>(null);
     const [isDragging, setIsDragging] = useState(false);
 
@@ -20,8 +21,8 @@ export const TestTemplateUpload = (props: TestTemplateUploadProps) => {
         reader.onload = () => {
             try {
                 const parsedData = JSON.parse(reader.result as string) as ITest;
-                console.log({ abs: { ...parsedData, _id: '6783eb2605cae400b63ac62e' } });
-                handleUpdateTest({ ...parsedData, _id: '6783eb2605cae400b63ac62e' });
+                handleUpdateTest({ ...parsedData, _id: testId });
+                window.location.reload();
                 setError(null);
             } catch (err) {
                 setError('Ошибка при парсинге JSON-файла.');
@@ -80,7 +81,7 @@ export const TestTemplateUpload = (props: TestTemplateUploadProps) => {
                 className={styles.fileInput}
             />
             <label htmlFor="fileInput" className={styles.uploadLabel}>
-                Файл с шаблоном теста сюда или <span>выберите файл</span>
+                Переместите файл с шаблоном теста сюда или <span>выберите файл</span>
             </label>
             {error && <p className={styles.error}>{error}</p>}
         </div>

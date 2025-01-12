@@ -65,7 +65,6 @@ const TestEditPage = memo((props: TestEditProps) => {
     const isCreateMode = id === undefined;
     //@ts-ignore
     const [testFormData, setTestFormData] = useState<ITest>(testData);
-
     useEffect(() => {
         if (testData) {
             setTestFormData(testData);
@@ -94,9 +93,10 @@ const TestEditPage = memo((props: TestEditProps) => {
         updateTestData({...updatedTestData})
     };
 
-    const handleDownloadTemplateTest  = useCallback(() => {
+    const handleDownloadTemplateTest  =() => {
+        console.log({testFormData})
         //@ts-ignore
-        let newTestFormData = cleanedTestFormData(testFormData);
+        let newTestFormData = cleanedTestFormData({testFormData});
         const jsonString = JSON.stringify(newTestFormData, null, 2);
         const blob = new Blob([jsonString], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
@@ -108,7 +108,7 @@ const TestEditPage = memo((props: TestEditProps) => {
         link.click();
         document.body.removeChild(link);
         URL.revokeObjectURL(url);
-    }, [testFormData]);
+    };
 
     console.log({testFormData});
     if(testDataIsLoading) {
@@ -300,7 +300,7 @@ const TestEditPage = memo((props: TestEditProps) => {
                             )}
 
                             <div className={cls.templateInputs}>
-                                <TestTemplateUpload handleUpdateTest={handleUpdateTest}/>
+                                <TestTemplateUpload handleUpdateTest={handleUpdateTest} testId={id || ""}/>
                                 <Button className={cls.downloadTemplateButton} onClick={handleDownloadTemplateTest}>
                                     <MdOutlineFileDownload  className={cls.downloadTemplateButtonIcon}/>
                                     Скачать шаблон теста

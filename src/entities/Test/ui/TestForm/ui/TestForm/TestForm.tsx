@@ -143,6 +143,33 @@ export const TestForm = memo((props: TestFormProps) => {
         }));
     }, [onChangeTestFormData]);
 
+    const handleShortAnswerPointsChange = useCallback((questionId: string, shortAnswerPoints: number) => {
+        onChangeTestFormData((prev) => ({
+            ...prev,
+            questions: prev.questions.map((q) =>
+                q._id === questionId ? { ...q, shortAnswerPoints: Math.abs(shortAnswerPoints)} : q
+            ),
+        }));
+    }, [onChangeTestFormData]);
+
+    const handleMultipleChoicePointsChange = useCallback((questionId: string, multipleChoicePoints: number) => {
+        onChangeTestFormData((prev) => ({
+            ...prev,
+            questions: prev.questions.map((q) =>
+                q._id === questionId ? { ...q, multipleChoicePoints: Math.abs(multipleChoicePoints)} : q
+            ),
+        }));
+    }, [onChangeTestFormData]);
+
+    const handleSingleChoicePointsChange = useCallback((questionId: string, singleChoicePoints: number) => {
+        onChangeTestFormData((prev) => ({
+            ...prev,
+            questions: prev.questions.map((q) =>
+                q._id === questionId ? { ...q, singleChoicePoints: Math.abs(singleChoicePoints)} : q
+            ),
+        }));
+    }, [onChangeTestFormData]);
+
     const handleImageURLChange = useCallback((questionId: string, imageUrl: string) => {
         onChangeTestFormData((prev) => ({
             ...prev,
@@ -192,6 +219,9 @@ export const TestForm = memo((props: TestFormProps) => {
             shortAnswer: '',
             isNewQuestion: true,
             correctAnswers: [],
+            shortAnswerPoints:1,
+            multipleChoicePoints:0.5,
+            singleChoicePoints:1,
         };
         onChangeTestFormData((prev) => ({
             ...prev,
@@ -235,6 +265,9 @@ export const TestForm = memo((props: TestFormProps) => {
                     onImageURLChange={handleImageURLChange}
                     onShortAnswerChange={handleShortAnswerChange}
                     onSingleChoiceToggle={handleSingleChoiceToggle}
+                    handleShortAnswerPointsChange={handleShortAnswerPointsChange}
+                    handleMultipleChoicePointsChange={handleMultipleChoicePointsChange}
+                    handleSingleChoicePointsChange={handleSingleChoicePointsChange}
                 />
             ))}
 

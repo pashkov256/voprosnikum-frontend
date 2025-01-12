@@ -22,7 +22,13 @@ interface ICleanedQuestion {
     timeLimit?: number;
 }
 
-export const cleanedTestFormData = (testFormData:ITest):ICleanedTest => {
+interface cleanedTestFormDataProps{
+    testFormData:ITest;
+}
+
+export const cleanedTestFormData = (props:cleanedTestFormDataProps):ICleanedTest => {
+    const {testFormData} = props
+
     // Создаем копию объекта, чтобы не изменять оригинальный
     const cleanedData = { ...testFormData };
 
@@ -36,10 +42,11 @@ export const cleanedTestFormData = (testFormData:ITest):ICleanedTest => {
         //@ts-ignore
         cleanedData.questions = cleanedData.questions.map(question => {
             const { _id, ...rest } = question; // Удаляем _id из каждого вопроса
+
             return {...rest,isNewQuestion:true};
         });
     }
-    console.log({cleanedData})
+    console.log({testFormData,cleanedData})
 //@ts-ignore
     return cleanedData;
 };

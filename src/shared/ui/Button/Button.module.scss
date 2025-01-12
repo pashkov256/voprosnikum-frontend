@@ -14,6 +14,12 @@
 }
 
 
+@media(hover:none){
+  .Button:hover {
+    background-color: var(--main-color);
+  }
+}
+
 .clear {
   padding: 0;
   border: none;
