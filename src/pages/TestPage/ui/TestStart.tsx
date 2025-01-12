@@ -39,7 +39,7 @@ export const TestStart = ({ testData, onStartTest }:TestStartProps) => (
                )}
                {testData?.deadline && (
                    <div className={cls.blockStartInfo}>
-                       <span className={cls.blockStartInfoLeft}>Тест актуален до:</span>
+                       <span className={cls.blockStartInfoLeft}>Тест доступен до:</span>
                        <span className={cls.blockStartInfoRight}>{formatDate(testData?.deadline)}</span>
                    </div>
                )}

@@ -1,11 +1,7 @@
-import {classNames} from 'shared/lib/classNames/classNames';
-import cls from './TableStudents.module.scss';
-import {useCreateUserByAdminMutation, useGetTeachersQuery} from "entities/Test/model/slice/testSlice";
+import {useCreateUserByAdminMutation} from "entities/Test/model/slice/testSlice";
 import {useRef} from "react";
-import {generatePDF} from "shared/lib/generatePDF/generatePDF";
 import Loader from "shared/ui/Loader/Loader";
 import {TableUsers} from "pages/MePage/ui/TableUsers/TableUsers";
-import {Column} from "shared/ui/Table/Table";
 import {useGetStudentsByGroupQuery} from "entities/Group/model/slice/groupSlice";
 
 

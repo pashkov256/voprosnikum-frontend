@@ -13,7 +13,7 @@ interface TeacherTestsProps {
 export const TeacherTests = (props: TeacherTestsProps) => {
     const {className,teacherTests} = props;
 
-
+    console.log(teacherTests)
     return (
         <Block className={classNames(cls.TeachersList, {}, [className])}>
             <Text title={teacherTests.fullName}  size={TextSize.S} className={cls.teacherName}/>
@@ -27,10 +27,16 @@ export const TeacherTests = (props: TeacherTestsProps) => {
                             <span className={cls.testDetailsTitle}>Название:</span>
                             <span className={cls.testDetailsText}>{teacherTest.name}</span>
                         </div>
-                        <div className={cls.testDetailsBlock}>
-                            <span className={cls.testDetailsTitle}>Создан:</span>
-                            <span className={cls.testDetailsText}>{formatDate(teacherTest.createdAt)}</span>
-                        </div>
+                        {/*<div className={cls.testDetailsBlock}>*/}
+                        {/*    <span className={cls.testDetailsTitle}>Создан:</span>*/}
+                        {/*    <span className={cls.testDetailsText}>{formatDate(teacherTest.createdAt)}</span>*/}
+                        {/*</div>*/}
+                        {teacherTest.startDate &&
+                            <div className={cls.testDetailsBlock}>
+                                <span className={cls.testDetailsTitle}>Доступен с:</span>
+                                <span className={cls.testDetailsText}>{formatDate(teacherTest.startDate)}</span>
+                            </div>
+                        }
                         {teacherTest.deadline &&
                             <div className={cls.testDetailsBlock}>
                                 <span className={cls.testDetailsTitle}>Пройти до:</span>

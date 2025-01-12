@@ -7,7 +7,8 @@ export interface ITeacherAndTests {
         fullName:string,
         tests:{
             createdAt:string,
-            deadline:string,
+            deadline?:string,
+            startDate?:string,
             name:string,
             teacher:string,
             testIsComplete:boolean,

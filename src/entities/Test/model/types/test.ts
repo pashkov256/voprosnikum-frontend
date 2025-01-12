@@ -20,6 +20,7 @@ export interface ITest {
     teacher: string | { fullName: string };
     group: string; //id
     deadline?: string;
+    startDate?: string;
     createdAt?: string;
     updatedAt?: string;
     timeLimit: number;
