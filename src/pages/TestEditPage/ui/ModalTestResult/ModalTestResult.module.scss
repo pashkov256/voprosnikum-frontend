@@ -42,7 +42,7 @@
 }
 
 .questionIndex {
-   font-size: 15px;
+   font-size: 13px;
 }
 
 .questionCardHeader {
@@ -53,6 +53,7 @@
 .resultBody {
    max-height: 60vh;
    overflow-y: auto;
+   border-bottom: 1px solid #eee;
 }
 
 
@@ -109,4 +110,138 @@
 .resultDeleteButton {
    font-weight: 600;
    margin-top: 12px;
+}
+
+.answerBlock{
+   display: flex;
+   align-items: center;
+   gap: 6px;
+   margin-top: 10px;
+}
+
+.selectedAnswerIconWrapper{
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   width: 24px;
+
+   height: 24px;
+   border-radius: 50%;
+}
+
+.selectedAnswerBlock{
+   display: flex;
+   align-items: center;
+   background-color: #f4f4f4;
+   border-radius: 10px;
+   display: flex;
+   gap: 6px;
+   padding:3px 6px;
+}
+
+.selectedAnswer{
+   font-size: 12px;
+   font-weight: 500;
+   color: #333;
+}
+
+.selectedAnswerIcon{
+   font-size: 20px;
+}
+
+.selectedAnswerIconCorrect{
+   color: #30ad8d;
+}
+.selectedAnswerIconFail{
+   color: #f12f38;
+}
+
+.selectedAnswerList{
+   display: flex;
+   align-items: center;
+   flex-wrap: wrap;
+   gap: 8px;
+}
+
+.selectedAnswerBlock{
+   display: flex;
+}
+
+
+@media(max-width: 1200px){
+   .modal{
+      width: 90vw!important;
+   }
+}
+
+@media(max-width: 900px){
+   .modal{
+      //min-height: 80vh;
+      max-height: 90vh;
+   }
+}
+
+@media(max-width: 800px){
+   .modal{
+      width: 98vw!important;
+      //min-height: 90vh;
+      max-height: 85vh;
+   }
+   .resultBody{
+      max-height: 65vh;
+   }
+   .studentFullName{
+      font-size: 20px;
+   }
+   .questionIndex{
+      font-size: 11px;
+   }
+   .questionType{
+      font-size: 10px;
+   }
+   .questionCardHeader{
+      margin-bottom: 8px;
+   }
+   .questionTitle{
+      font-size: 16px;
+   }
+   .answerBlock span{
+      font-size: 13px;
+   }
+   .selectedAnswer{
+      font-size: 11px!important;
+   }
+   .selectedAnswerIcon{
+      font-size: 12px;
+   }
+   .resultDeleteButton{
+      width: 100%;
+      font-size: 12px;
+   }
+}
+
+@media(max-width: 600px){
+   .questionCardHeader{
+      margin-bottom: 22px;
+   }
+   .questionIcon{
+      font-size: 13px;
+   }
+   .questionPointBlock{
+      width: max-content;
+   }
+   .questionPoint{
+      font-size: 12px;
+   }
+}
+
+@media(max-width: 410px){
+   .questionCardHeader{
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 12px;
+   }
+   .studentFullName{
+      font-size: 16px;
+   }
 }

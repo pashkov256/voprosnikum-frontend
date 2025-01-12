@@ -90,7 +90,7 @@ export const Test = memo(({
                      </div>
                      <div className={cls.testInnerWrapper} style={{ width: '100%' }}>
                         <div className={cls["question-text-wrapper"]}>
-                           <h3 className={cls["question-text"]}>{currentQuestionData.title1}</h3>
+                           <h3 className={cls["question-text"]}>{currentQuestionData.title}</h3>
                         </div>
                         {currentQuestionData?.imageUrl && (
                            <div className={cls.quizImageBlock}>

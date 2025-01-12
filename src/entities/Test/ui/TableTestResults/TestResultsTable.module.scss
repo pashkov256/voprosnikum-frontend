@@ -8,3 +8,32 @@
    font-size: 12px;
    font-weight: 600;
 }
+
+.testResultError{
+   text-align: center;
+}
+
+@media(max-width: 1200px){
+   .tableCell{
+      padding: 12px 8px;
+   }
+}
+
+@media(max-width: 600px){
+   .TableResults{
+      padding-top: 8px;
+   }
+}
+
+@media(max-width: 1020px){
+   .tableCell{
+      padding: 8px 10px;
+      line-height: 20px;
+   }
+}
+
+@media(max-width: 770px){
+   .testResultError{
+      font-size: 18px;
+   }
+}

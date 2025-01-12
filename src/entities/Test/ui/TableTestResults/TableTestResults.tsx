@@ -72,7 +72,7 @@ export const TableTestResults: React.FC<TableTestResultsProps> = ({ id, testData
     }
 
     return (
-        <div className={classNames(cls.TableTeachers, {}, [])}>
+        <div className={classNames(cls.TableResults, {}, [])}>
             {testAllResults?.length !== 0 ? (<TableContainer component={Paper}>
                 <Table>
                     <TableHead>
@@ -161,7 +161,7 @@ export const TableTestResults: React.FC<TableTestResultsProps> = ({ id, testData
                         ))}
                     </TableBody>
                 </Table>
-            </TableContainer>) : <h2 style={{ textAlign: "center" }}>Тест ещё никто не прошёл</h2>}
+            </TableContainer>) : <h2 className={cls.testResultError}>Тест ещё никто не прошёл</h2>}
         </div>
     );
 };
