@@ -59,7 +59,7 @@
       }
 
       .AddAnswerOption{
-        width: 242px;
+        width: 100%;
         background-color: var(--main-color);
         color: #fff;
         padding: 12px 0px;
@@ -166,6 +166,11 @@
 .TestFormBlockHead{
   padding: 32px 24px!important;
 }
+
+.answerOptionInput{
+  width: 300px;
+}
+
 @media(max-width: 800px) {
   .questionInput{
     width: 92%!important;
