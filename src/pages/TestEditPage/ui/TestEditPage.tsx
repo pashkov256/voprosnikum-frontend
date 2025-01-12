@@ -5,12 +5,11 @@ import { useGetGroupsQuery } from "entities/Group/model/slice/groupSlice";
 import {
     useGetTestAllResultsQuery,
     useGetTestByIdQuery,
-    useUpdateTestMutation
+    useUpdateTestMutation,
 } from "entities/Test/model/slice/testSlice";
-import { ITest, ITestResult, ITestResultDetails } from "entities/Test/model/types/test";
+import { ITest, ITestResultDetails } from "entities/Test/model/types/test";
 import { TableTestResults } from "entities/Test/ui/TableTestResults/TableTestResults";
-import { TestForm } from "entities/Test/ui/TestForm/TestForm";
-import React, { memo, SyntheticEvent, useEffect, useState } from "react";
+import React, { memo, SyntheticEvent, useCallback, useEffect, useReducer, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { formatDateTimeForInput } from "shared/lib/date";
@@ -19,15 +18,14 @@ import { Button } from "shared/ui/Button/Button";
 import Loader from "shared/ui/Loader/Loader";
 import ModalTestResult from "./ModalTestResult/ModalTestResult";
 import cls from './TestEditPage.module.scss';
+import {TestForm} from "entities/Test/ui/TestForm";
+
 interface TestEditProps {
     className?: string;
 }
 
-
 function TabPanel(props: any) {
-    const {
-        children, value, index, ...other
-    } = props;
+    const { children, value, index, ...other } = props;
 
     return (
         <div
@@ -37,11 +35,7 @@ function TabPanel(props: any) {
             aria-labelledby={`tab-${index}`}
             {...other}
         >
-            {value === index && (
-                <Box sx={{ p: 3 }}>
-                    {children}
-                </Box>
-            )}
+            {value === index && <Box sx={{ p: 3 }} className={cls.tabPanelContent}>{children}</Box>}
         </div>
     );
 }
@@ -50,68 +44,91 @@ const TestEditPage = memo((props: TestEditProps) => {
     const { className } = props;
     const { id } = useParams();
     const userData = useSelector((state: RootState) => state.auth.data);
-    const { data: testData, isLoading: testDataIsLoading, refetch: refetchGetTest } = useGetTestByIdQuery({ _id: id || "", mode: "full" })
-    const { data: testAllResults, isLoading: testAllResultsIsLoading, error: testAllResultsError , refetch: refetchGetTestResults } = useGetTestAllResultsQuery(id || "");
-    const [updateTestData, { isLoading: updateTestIsLoaing }] = useUpdateTestMutation()
-    const { data: groupsData, isLoading: groupsDataIsLoading } = useGetGroupsQuery()
-    const navigate = useNavigate()
+    const { data: testData, isLoading: testDataIsLoading, refetch: refetchGetTest } = useGetTestByIdQuery({
+        _id: id || "",
+        mode: "full",
+    });
+    const {
+        data: testAllResults,
+        isLoading: testAllResultsIsLoading,
+        error: testAllResultsError,
+        refetch: refetchGetTestResults,
+    } = useGetTestAllResultsQuery(id || "");
+    const [updateTestData, { isLoading: updateTestIsLoading }] = useUpdateTestMutation();
+    const { data: groupsData, isLoading: groupsDataIsLoading } = useGetGroupsQuery();
+    const navigate = useNavigate();
     const [tabsValue, setTabsValue] = useState(0);
-    const [testResult, setTestResult] = useState<null | ITestResultDetails>(null)
-    const [testFormData, setTestFormData] = useState<ITest>();
-    const [openModalTestResult, setOpenModalTestResult] = useState(false)
+    const [testResult, setTestResult] = useState<null | ITestResultDetails>(null);
+    const [openModalTestResult, setOpenModalTestResult] = useState(false);
     const isCreateMode = id === undefined;
+    //@ts-ignore
+    const [testFormData, setTestFormData] = useState<ITest>(testData);
+
+    useEffect(() => {
+        if (testData) {
+            setTestFormData(testData);
+        }
+    }, [testData]);
 
     const handleChangeTabs = (event: SyntheticEvent, newValue: any) => {
         setTabsValue(newValue);
     };
 
-    const handleRefetchTestResults = async ()=>{
-        await refetchGetTestResults()
-    }
-    useEffect(() => {
-        document.title = 'Редактирование теста'
-    }, [])
-    console.log(testFormData)
+    const handleRefetchTestResults = async () => {
+        await refetchGetTestResults();
+    };
 
-    if (testData && groupsData) {
+    useEffect(() => {
+        document.title = "Редактирование теста";
+    }, []);
+
+    const handleSaveTest = () => {
+        if (testFormData) {
+            updateTestData({ ...testFormData });
+            alert("Успешно обновлено");
+        }
+    };
+    console.log({testFormData});
+    if( testDataIsLoading) {
+        return <Loader />
+    }
+
+    if (testFormData && groupsData ) {
         //@ts-ignore
         if (userData._id !== testData.teacher._id) {
-            navigate('/')
+            navigate("/");
         }
         return (
             <div className={cls.TestCreate}>
                 <div className={cls.tabPanels}>
                     <Container maxWidth="lg" className={cls.tabPanelsContent}>
-                        <Tabs value={tabsValue} onChange={handleChangeTabs}>
-                            <Tab label="Вопросы" />
-                            {!isCreateMode && <Tab label="Ответы" />}
-                            <Tab label="Настройки" />
+                        <Tabs value={tabsValue} onChange={handleChangeTabs} className={cls.tabsList}>
+                            <Tab label="Вопросы" className={cls.tab}/>
+                            {!isCreateMode && <Tab label="Результаты" className={cls.tab}/>}
+                            <Tab label="Настройки" className={cls.tab}/>
                         </Tabs>
-                        {/* eslint-disable-next-line react/button-has-type */}
                         <Button
                             className={cls.BtnSaveForm}
-                            onClick={() => {
-                                if (testFormData) {
-                                    console.log(testFormData)
-                                    updateTestData({ ...testFormData })
-                                    alert("Успешно обновлено")
-                                }
-                            }}
+                            onClick={handleSaveTest}
                         >
                             Сохранить изменения
                         </Button>
                     </Container>
-
                 </div>
 
                 <TabPanel value={tabsValue} index={0}>
                     <Container maxWidth="md" className={cls.tabContent}>
-                        <TestForm testData={testData} refetchGetTest={refetchGetTest} onChangeTestFormData={setTestFormData} updateTestData={updateTestData} />
+                        <TestForm
+                            testData={testFormData}
+                            refetchGetTest={refetchGetTest}
+                            onChangeTestFormData={setTestFormData}
+                            updateTestData={updateTestData}
+                        />
                     </Container>
                 </TabPanel>
 
                 <TabPanel value={tabsValue} index={1}>
-                    <Container maxWidth="lg" className={cls.tabContent}>
+                    <Container maxWidth="lg" className={cls.tabContentResult}>
                         <TableTestResults
                             id={id || ""}
                             testData={testData}
@@ -121,9 +138,14 @@ const TestEditPage = memo((props: TestEditProps) => {
                             testAllResultsIsLoading={testAllResultsIsLoading}
                             testAllResultsError={testAllResultsError}
                         />
-                        {testResult !== null &&
-                            <ModalTestResult open={openModalTestResult} setOpenModalTestResult={setOpenModalTestResult} testResult={testResult} handleRefetchTestResults={handleRefetchTestResults}/>
-                        }
+                        {testResult !== null && (
+                            <ModalTestResult
+                                open={openModalTestResult}
+                                setOpenModalTestResult={setOpenModalTestResult}
+                                testResult={testResult}
+                                handleRefetchTestResults={handleRefetchTestResults}
+                            />
+                        )}
                     </Container>
                 </TabPanel>
 
@@ -131,129 +153,132 @@ const TestEditPage = memo((props: TestEditProps) => {
                     <Container maxWidth="md" className={cls.tabContent}>
                         <div className={cls.settingsBlock}>
                             <div className={cls.setting}>
-                                <h3 className={cls.settingsTitle}>Опрос доступен до:</h3>
-
-                                <TextField value={formatDateTimeForInput(testFormData?.deadline || '')}
-                                    className={cls.settingsInput} type={"datetime-local"}
+                                <h3 className={cls.settingsTitle}>Дата открытия теста:</h3>
+                                <TextField
+                                    value={formatDateTimeForInput(testFormData?.deadline || "")}
+                                    className={cls.settingsInput}
+                                    type={"datetime-local"}
                                     onChange={(e) => {
-                                        //@ts-ignore
-                                        setTestFormData((prevState) => {
-                                            console.log(e.target.value)
-                                            return {
-                                                ...prevState, deadline:
-                                                    e.target.value
-                                            }
-                                        })
-                                    }} />
+                                        setTestFormData((prev) => ({...prev, deadline: e.target.value}));
+                                    }}
+                                />
+                            </div>
+                            <div className={cls.setting}>
+                                <h3 className={cls.settingsTitle}>Опрос доступен до:</h3>
+                                <TextField
+                                    value={formatDateTimeForInput(testFormData?.deadline || "")}
+                                    className={cls.settingsInput}
+                                    type={"datetime-local"}
+                                    onChange={(e) => {
+                                        setTestFormData((prev) => ({...prev, deadline: e.target.value}));
+                                    }}
+                                />
                             </div>
 
                             <div className={cls.setting}>
                                 <h3 className={cls.settingsTitle}>Время прохождения теста (минуты)</h3>
-
-                                <TextField value={testFormData?.timeLimit === 0 ? "" : testFormData?.timeLimit}
-                                    className={cls.settingsInput} type={"number"} placeholder={"В минутах"}
+                                <TextField
+                                    value={testFormData?.timeLimit === 0 ? "" : testFormData?.timeLimit}
+                                    className={cls.settingsInput}
+                                    type={"number"}
+                                    placeholder={"В минутах"}
                                     onChange={(e) => {
-                                        //@ts-ignore
-                                        setTestFormData((prevState) => {
-                                            //@ts-ignore
-                                            return { ...prevState, timeLimit: Number(e.target.value) }
-                                        })
-                                    }} />
+                                        setTestFormData((prev) => ({...prev, timeLimit: Number(e.target.value)}));
+                                    }}
+                                />
                             </div>
 
                             <div className={cls.setting}>
                                 <h3 className={cls.settingsTitle}>Для какой группы тест</h3>
-
                                 <Select
-
-                                    //@ts-ignore
-                                    value={groupsData.find((group) => group._id === testFormData?.group)?.name}
-                                    onChange={(e: SelectChangeEvent<string>) => //@ts-ignore
-                                        setTestFormData((prevState) => {
-
-                                            return {
-                                                ...prevState,
-                                                //@ts-ignore
-                                                group: groupsData.find((group) => group.name == e.target.value)._id
-                                            }
-                                        })
-                                    }
+                                    value={groupsData.find((group) => group._id === testFormData?.group)?.name || ""}
+                                    onChange={(e: SelectChangeEvent<string>) => {
+                                        const selectedGroup = groupsData.find((group) => group.name === e.target.value);
+                                        if (selectedGroup) {
+                                            setTestFormData((prev) => ({...prev, group: selectedGroup._id}));
+                                        }
+                                    }}
                                     className={cls.selectForm}
                                     variant="outlined"
-                                    MenuProps={{ disableScrollLock: true }}
+                                    MenuProps={{disableScrollLock: true}}
                                 >
-                                    {groupsData.map((group) => <MenuItem
-                                        value={group.name}>{group.name}</MenuItem>)}
+                                    {groupsData.map((group) => (
+                                        <MenuItem key={group._id} value={group.name}>
+                                            {group.name}
+                                        </MenuItem>
+                                    ))}
                                 </Select>
                             </div>
 
-                            {testFormData?.isQuestionsRandomized && <div className={cls.setting}>
-                                <h3 className={cls.settingsTitle}>Количество вариантов со случайными вопросами</h3>
+                            {testFormData?.isQuestionsRandomized && (
+                                <div className={cls.setting}>
+                                    <h3 className={cls.settingsTitle}>Количество вариантов со случайными вопросами</h3>
+                                    <TextField
+                                        value={testFormData?.countRandomizedQuestionsSets === 0 || testFormData?.countRandomizedQuestionsSets < 2 ? 2 : testFormData?.countRandomizedQuestionsSets}
+                                        className={cls.settingsInput}
+                                        type={"number"}
+                                        placeholder={"Укажите количество вариантов"}
+                                        onChange={(e) => {
+                                            const countRandomizedQuestionsSets = Number(e.target.value);
+                                            const validatedRandomizedQuestionsSetsCount =
+                                                countRandomizedQuestionsSets === 0 || countRandomizedQuestionsSets < 2 ? 2 : countRandomizedQuestionsSets;
+                                            setTestFormData((prev) => ({
+                                                ...prev,
+                                                countRandomizedQuestionsSets: validatedRandomizedQuestionsSetsCount,
+                                                randomizedQuestionsSets: createRandomizedQuestionsSets(testFormData.questions.length, validatedRandomizedQuestionsSetsCount),
+                                            }));
+                                        }}
+                                    />
+                                </div>
+                            )}
 
-                                <TextField value={testFormData?.countRandomizedQuestionsSets === 0 || testFormData?.countRandomizedQuestionsSets < 2 ? 2 : testFormData?.countRandomizedQuestionsSets}
-                                    className={cls.settingsInput} type={"number"} placeholder={"Укажите количество вариантов"}
-                                    onChange={(e) => {
-                                        //@ts-ignore
-                                        setTestFormData((prevState) => {
-                                            const countRandomizedQuestionsSets = Number(e.target.value)
-                                            const validatedRandomizedQuestionsSetsCount = countRandomizedQuestionsSets === 0 || countRandomizedQuestionsSets < 2 ? 2 : countRandomizedQuestionsSets
-
-                                            //@ts-ignore
-                                            return { ...prevState, countRandomizedQuestionsSets: validatedRandomizedQuestionsSetsCount, randomizedQuestionsSets: createRandomizedQuestionsSets(prevState?.questions.length, validatedRandomizedQuestionsSetsCount) }
-                                        })
-                                    }} />
-                            </div>}
-
-                            {testFormData &&
+                            {testFormData && (
                                 <div className={cls.settingInline}>
-
                                     <input
                                         checked={testFormData.isQuestionsRandomized}
                                         type="checkbox"
                                         className={cls.settingCheckbox}
                                         name={"isQuestionsRandomized"}
-                                        onChange={(e) => //@ts-ignore
-                                            setTestFormData((prevState) => {
-                                                return {
-                                                    ...prevState,
-                                                    isQuestionsRandomized: e.target.checked,
-                                                    randomizedQuestionsSets: !e.target.checked ? [] : createRandomizedQuestionsSets(testFormData.questions.length + 1)
-                                                }
-                                            })
-                                        }
+                                        onChange={(e) => {
+                                            setTestFormData((prev) => ({
+                                                ...prev,
+                                                isQuestionsRandomized: e.target.checked,
+                                                randomizedQuestionsSets: e.target.checked ? createRandomizedQuestionsSets(testFormData.questions.length) : [],
+                                            }));
+                                        }}
                                     />
-                                    <label htmlFor={"isQuestionsRandomized"} className={cls.settingLabel}>Показывать вопросы в тесте в случайном порядке?</label>
+                                    <label htmlFor={"isQuestionsRandomized"} className={cls.settingLabel}>
+                                        Показывать вопросы в тесте в случайном порядке?
+                                    </label>
                                 </div>
-                            }
+                            )}
 
-                            {testFormData &&
+                            {testFormData && (
                                 <div className={cls.settingInline}>
                                     <input
                                         checked={testFormData.isResultVisibleAfterDeadline}
                                         type="checkbox"
                                         className={cls.settingCheckbox}
                                         name={"isResultVisibleAfterDeadline"}
-                                        onChange={(e) => //@ts-ignore
-                                            setTestFormData((prevState) => {
-                                                return {
-                                                    ...prevState,
-                                                    isResultVisibleAfterDeadline: e.target.checked
-                                                }
-                                            })
-                                        }
+                                        onChange={(e) => {
+                                            setTestFormData((prev) => ({
+                                                ...prev,
+                                                isResultVisibleAfterDeadline: e.target.checked,
+                                            }));
+                                        }}
                                     />
-                                    <label htmlFor={"isResultVisibleAfterDeadline"} className={cls.settingLabel}>Показывать
-                                        студенту результат теста только после истечения срока сдачи?</label>
+                                    <label htmlFor={"isResultVisibleAfterDeadline"} className={cls.settingLabel}>
+                                        Показывать студенту результат теста только после истечения срока сдачи?
+                                    </label>
                                 </div>
-                            }
-
+                            )}
                         </div>
                     </Container>
                 </TabPanel>
             </div>
-        )
+        );
     }
-    return <Loader />
+    return <Loader/>;
 });
 
 export default TestEditPage;

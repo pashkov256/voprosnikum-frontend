@@ -2,7 +2,7 @@ export interface IQuestion {
     _id: string;
     test: string;
     title: string | null;
-    title1?: string | null;
+    // title1?: string | null;
     type: 'short-answer' | 'multiple-choice' | 'single-choice';
     options: string[];
     correctAnswers: string[];
@@ -71,7 +71,7 @@ export type TestAnswersDetails = Omit<ITestAnswer, 'question'> & {
     question: {
         correctAnswers: string[];
         shortAnswer: string;
-        title1: string;
+        title: string;
         type: 'short-answer' | 'multiple-choice' | 'single-choice';
         _id: string;
     };

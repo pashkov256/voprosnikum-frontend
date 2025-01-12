@@ -46,10 +46,10 @@ export const testApi = createApi({
             }),
         }),
         createQuestion: builder.mutation<IQuestion, IQuestion>({
-            query: ({ test, title, title1, type, options, correctAnswers, imageUrl, timeLimit }) => ({
+            query: ({ test, title, type, options, correctAnswers, imageUrl, timeLimit }) => ({
                 url: `/question/test/${test}`,
                 method: "POST",
-                body: { test, title, type, options, correctAnswers, imageUrl, timeLimit, title1 },
+                body: { test, title, type, options, correctAnswers, imageUrl, timeLimit },
             }),
         }),
         createTest: builder.mutation<ITest, { teacher: string }>({

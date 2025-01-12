@@ -28,7 +28,7 @@
   margin-top: 120px;
 }
 
-.tabContent {
+.tabContent,.tabContentResult {
   margin-top: 130px;
 }
 
@@ -87,4 +87,87 @@
   width: 24px;
   height: 24px;
   cursor: pointer;
+}
+
+@media(max-width: 1020px){
+  .tabContentResult{
+    padding: 0px;
+  }
+
+}
+
+@media(max-width: 900px){
+  .tabContent{
+    padding: 16px 10px 10px 10px!important;
+    padding-top: 20px!important;
+  }
+  .tabPanelContent{
+    padding: 16px 0px 0px 0px!important;
+  }
+  .tabContentResult{
+    padding-top: 0px !important;
+  }
+  .tabPanelsContent{
+    justify-content: flex-start;
+    margin-left: 25px;
+  }
+}
+
+@media (max-width: 770px) {
+  .settingInline label{
+    width: 90%;
+  }
+  .settingCheckbox{
+    width: 20px;
+    height: 20px;
+  }
+}
+
+@media(max-width: 600px){
+  .BtnSaveForm {
+    position: unset;
+    width: 330px;
+  }
+  .tabPanelsContent {
+    flex-direction: column-reverse;
+    margin-left: 0;
+    padding-top: 0;
+  }
+  .tabPanelContent{
+    padding: 24px 10px;
+  }
+
+  .tab{
+    font-size: 12px!important;
+  }
+  .settingsTitle{
+    font-size: 15px;
+  }
+  .settingsInput input{
+    font-size: 13px!important;
+  }
+  .selectForm{
+    font-size: 13px!important;
+  }
+  .settingInline label{
+    font-size: 12px!important;
+  }
+}
+
+
+
+@media (max-width: 550px) {
+  .BtnSaveForm {
+    width: 80%;
+  }
+  .tabsList{
+    margin-top: 4px;
+  }
+}
+
+@media (max-width: 450px) {
+  .BtnSaveForm {
+    width: 88%;
+  }
+
 }
