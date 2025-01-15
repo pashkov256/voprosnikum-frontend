@@ -22,6 +22,8 @@ import {TestForm} from "entities/Test/ui/TestForm";
 import { MdOutlineFileDownload } from "react-icons/md";
 import {cleanedTestFormData} from "shared/lib/cleanedTestFormData";
 import {TestTemplateUpload} from "../TestTemplateUpload/TestTemplateUpload";
+import {CLIENT_PROD_URL} from "shared/const/const";
+import { MdContentCopy } from "react-icons/md";
 interface TestEditProps {
     className?: string;
 }
@@ -89,8 +91,8 @@ const TestEditPage = memo((props: TestEditProps) => {
             alert("Успешно обновлено");
         }
     };
-    const handleUpdateTest = (updatedTestData:ITest) => {
-        updateTestData({...updatedTestData})
+    const handleUpdateTest = async (updatedTestData:ITest) => {
+        await updateTestData({...updatedTestData})
     };
 
     const handleDownloadTemplateTest  =() => {
@@ -174,6 +176,22 @@ const TestEditPage = memo((props: TestEditProps) => {
                 <TabPanel value={tabsValue} index={2}>
                     <Container maxWidth="md" className={cls.tabContent}>
                         <div className={cls.settingsBlock}>
+                            <div className={cls.setting}>
+                                <h3 className={cls.settingsTitle}>
+                                    Сыллка на тест
+                                </h3>
+                                <div className={cls.settingsURLTestBlock}>
+                                    <span className={cls.settingsURLTest}>{`${CLIENT_PROD_URL}/test/${id}`}</span>
+                                    <Button className={cls.settingsURLTestButton} onClick={(event) => {
+                                        event.preventDefault();
+                                        event.stopPropagation();
+                                        navigator.clipboard.writeText(`${CLIENT_PROD_URL}/test/${id}`);
+                                        alert('Ссылка скопирована');
+                                    }}>
+                                        <MdContentCopy className={cls.settingsURLTestButtonIcon}/>
+                                        </Button>
+                                </div>
+                            </div>
                             <div className={cls.setting}>
                                 <h3 className={cls.settingsTitle}>Для какой группы тест</h3>
                                 <Select

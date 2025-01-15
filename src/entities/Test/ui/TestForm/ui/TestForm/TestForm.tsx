@@ -275,13 +275,7 @@ export const TestForm = memo((props: TestFormProps) => {
                 className={cls.textareaNewQuestion}
                 onChange={(value) => setTextAreaValue(value)}
                 value={textAreaValue}
-                placeholder="Вставьте ваш вопрос с вариантами ответа (пример)
-        ⠀
-        Кто создал Linux?¶
-             Ада Лавлейс ¶
-             Алан Тьюринг¶
-             Линус Торвальдс¶
-        "
+                placeholder={`Вставьте ваш вопрос с вариантами ответа (пример)\n\nКто создал Linux?¶\nАда Лавлейс ¶\nАлан Тьюринг¶\nЛинус Торвальдс¶`}
             />
 
             <Button

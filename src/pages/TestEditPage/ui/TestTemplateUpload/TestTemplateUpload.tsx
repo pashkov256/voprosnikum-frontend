@@ -3,7 +3,7 @@ import {ITest} from 'entities/Test';
 import styles from './TestTemplateUpload.module.scss'; // Импорт SCSS модуля
 
 interface TestTemplateUploadProps {
-    handleUpdateTest: (test: ITest) => void;
+    handleUpdateTest: (test: ITest) => Promise<void>;
     testId: string;
 }
 
@@ -18,10 +18,10 @@ export const TestTemplateUpload = (props: TestTemplateUploadProps) => {
 
         reader.readAsText(file);
 
-        reader.onload = () => {
+        reader.onload = async () => {
             try {
                 const parsedData = JSON.parse(reader.result as string) as ITest;
-                handleUpdateTest({ ...parsedData, _id: testId });
+                await handleUpdateTest({ ...parsedData, _id: testId });
                 window.location.reload();
                 setError(null);
             } catch (err) {

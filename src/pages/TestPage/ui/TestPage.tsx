@@ -31,9 +31,11 @@ const TestPage = () => {
     const [isComplete, setIsComplete] = useState(false); // Завершен ли тест
     const [questionSecondsLeft, setQuestionSecondsLeft] = useState<number | null>(null); // Таймер на текущий ВОПРОС теста
     const [buttonsIsDisabled, setButtonsIsDisabled] = useState(false);
+    const [testResultIsSet, setTestResultIsSet] = useState(false);
     const [inputIsDisabled, setInputIsDisabled] = useState(false);
+    const [testAnswerIsSubmitting, setTestAnswerIsSubmitting] = useState(false);
     const { data: testData, isLoading: testDataIsLoading } = useGetTestByIdQuery({ _id: testId || "", mode: "student" }); // Получение данных теста
-    const { data: testResult, isLoading: testResultIsLoading, refetch: refetchTestResult } = useGetTestResultQuery({ test: testId || "", student: userData?._id || "" });//получение результата теста
+    const { data: testResult, isLoading: testResultIsLoading, refetch: refetchTestResult,isSuccess:testResultIsSuccess,isError:testResultIsError } = useGetTestResultQuery({ test: testId || "", student: userData?._id || "" });//получение результата теста
     const [createTestResult] = useCreateTestResultMutation(); // Создание результата теста
     const [createTestAnswer] = useCreateTestAnswerMutation(); // Создание ответа на вопрос
     const [updateTestResult] = useUpdateTestResultMutation()//обновление результата теста
@@ -58,6 +60,7 @@ const TestPage = () => {
 
     const setupTest = async () => {
         if (!testData) return;
+
         document.title = testData.name;
 
         if(testData?.startDate){
@@ -74,10 +77,8 @@ const TestPage = () => {
             navigate('/');
             return;
         }
-        console.log({testResult})
         // Если результат теста существует
         if (testResult) {
-
             if (testResult.completedAt) {
                 // Если тест уже завершён
                 setIsComplete(true);
@@ -102,6 +103,7 @@ const TestPage = () => {
             if (startTest) {
                 initialTestTimer();
                 setupTimerForCurrentQuestion();
+
             }
         }
     };
@@ -253,87 +255,91 @@ const TestPage = () => {
 
 
     const handleNextQuestion = async () => {
-        if (isBackMode) {
-            if ((haveSelectedOptionsChanged() || shortAnswerValue !== testResult?.testAnswers[currentQuestion]?.shortAnswer)) {
-                let answerUpdatePayload: {
-                    testResult: string;
-                    shortAnswer?: string;
-                    selectedOptions?: string[];
-                    testAnswerId: string;
-                    pointsAwarded: number
-                } = { testResult: testResult?._id || "", testAnswerId: testResult?.testAnswers[currentQuestion]._id || "", pointsAwarded: testResult?.testAnswers[currentQuestion].pointsAwarded || 0 }
-                if (currentQuestionData?.type === 'multiple-choice' || currentQuestionData?.type === 'single-choice') {
-                    answerUpdatePayload = { ...answerUpdatePayload, selectedOptions }
-                } else if (currentQuestionData?.type === 'short-answer') {
-                    answerUpdatePayload = { ...answerUpdatePayload, shortAnswer: shortAnswerValue }
-                    setShortAnswerValue('')
-                }
-
-                await updateTestAnswer(answerUpdatePayload)
-                await refetchTestResult()
-                setShortAnswerValue('')
-                setSelectedOptions([])
-            }
-
-            if (currentQuestionData?.timeLimit !== undefined) {
-                setButtonsIsDisabled(false);
-                setInputIsDisabled(false);
-            }
-            setCurrentQuestion((prev) => prev + 1)
-        } else {
-            if ((selectedOptions.length !== 0 && (currentQuestionData?.type === 'multiple-choice') || (currentQuestionData?.type === 'single-choice')) || (shortAnswerValue !== "" && currentQuestionData?.type === 'short-answer')) {
-                setQuestionSecondsLeft(null)
-                if (testData) {
-                    const question = currentQuestionData || testData.questions[currentQuestion];
-
-                    // Отправка ответа
-                    try {
-                        const answerPayload: {
-                            testResult: string,
-                            question: string,
-                            isCorrect?: boolean,
-                            correctAnswers?: string[],
-                            selectedAnswerOptions?: string[],
-                            isTimeFail?: boolean,
-                            questionType: IQuestion['type'],
-                            shortAnswer: string;
-                            selectedOptions: string[];
-                        } = {
-                            testResult: testResult?._id || "",
-                            question: question?._id || "",
-                            questionType: question.type,
-                            shortAnswer: shortAnswerValue,
-                            selectedOptions: selectedOptions
-                        }
-
-                        await createTestAnswer(answerPayload);
-                        await refetchTestResult()
-                        // Очистка данных после отправки ответа
-                        setSelectedOptions([]);
-                        setShortAnswerValue('');
-
-                        // Переход к следующему вопросу или завершение теста
-                        if (currentQuestion + 1 === testData.questions.length) {
-                            finalizeTest()
-                        } else {
-                            setCurrentQuestion((prev) => {
-                                setupTimerForCurrentQuestion(prev + 1)
-                                return prev + 1
-                            });
-
-                        }
-                    } catch (error) {
-                        console.error('Error submitting answer:', error);
+        if(!testAnswerIsSubmitting){
+            if (isBackMode) {
+                if ((haveSelectedOptionsChanged() || shortAnswerValue !== testResult?.testAnswers[currentQuestion]?.shortAnswer)) {
+                    let answerUpdatePayload: {
+                        testResult: string;
+                        shortAnswer?: string;
+                        selectedOptions?: string[];
+                        testAnswerId: string;
+                        pointsAwarded: number
+                    } = { testResult: testResult?._id || "", testAnswerId: testResult?.testAnswers[currentQuestion]._id || "", pointsAwarded: testResult?.testAnswers[currentQuestion].pointsAwarded || 0 }
+                    if (currentQuestionData?.type === 'multiple-choice' || currentQuestionData?.type === 'single-choice') {
+                        answerUpdatePayload = { ...answerUpdatePayload, selectedOptions }
+                    } else if (currentQuestionData?.type === 'short-answer') {
+                        answerUpdatePayload = { ...answerUpdatePayload, shortAnswer: shortAnswerValue }
+                        setShortAnswerValue('')
                     }
+                    setTestAnswerIsSubmitting(true)
+                    await updateTestAnswer(answerUpdatePayload)
+                    await refetchTestResult()
+                    setShortAnswerValue('')
+                    setSelectedOptions([])
                 }
+
+                if (currentQuestionData?.timeLimit !== undefined) {
+                    setButtonsIsDisabled(false);
+                    setInputIsDisabled(false);
+                }
+                setCurrentQuestion((prev) => prev + 1)
             } else {
-                alert('Укажите ответ!')
+                if ((selectedOptions.length !== 0 && ((currentQuestionData?.type === 'multiple-choice') || (currentQuestionData?.type === 'single-choice'))) || (shortAnswerValue !== "" && currentQuestionData?.type === 'short-answer')) {
+                    setQuestionSecondsLeft(null)
+                    if (testData) {
+                        const question = currentQuestionData || testData.questions[currentQuestion];
+
+                        // Отправка ответа
+                        try {
+                            const answerPayload: {
+                                testResult: string,
+                                question: string,
+                                isCorrect?: boolean,
+                                correctAnswers?: string[],
+                                selectedAnswerOptions?: string[],
+                                isTimeFail?: boolean,
+                                questionType: IQuestion['type'],
+                                shortAnswer: string;
+                                selectedOptions: string[];
+                            } = {
+                                testResult: testResult?._id || "",
+                                question: question?._id || "",
+                                questionType: question.type,
+                                shortAnswer: shortAnswerValue,
+                                selectedOptions: selectedOptions
+                            }
+                            setTestAnswerIsSubmitting(true)
+                            await createTestAnswer(answerPayload);
+                            await refetchTestResult()
+
+                            // Очистка данных после отправки ответа
+                            setSelectedOptions([]);
+                            setShortAnswerValue('');
+
+                            // Переход к следующему вопросу или завершение теста
+                            if (currentQuestion + 1 === testData.questions.length) {
+                                finalizeTest()
+                            } else {
+                                setCurrentQuestion((prev) => {
+                                    setupTimerForCurrentQuestion(prev + 1)
+                                    return prev + 1
+                                });
+
+                            }
+                        } catch (error) {
+                            console.error('Error submitting answer:', error);
+                        }
+                    }
+                } else {
+                    alert('Укажите ответ!')
+                }
             }
+            setShortAnswerValue('')
+            setSelectedOptions([])
+            setButtonsIsDisabled(false);
+            setInputIsDisabled(false);
+            setTestAnswerIsSubmitting(false)
         }
-        setShortAnswerValue('')
-        setSelectedOptions([])
-        setButtonsIsDisabled(false);
-        setInputIsDisabled(false);
     };
     const handleToPrevQuestion = () => {
         if (!((questionSecondsLeft || 0) > 0)) {
@@ -378,19 +384,23 @@ const TestPage = () => {
             if(testResult.completedAt){
                 setIsComplete(true)
             }
+            if(!testResultIsSet){
+                setTestResultIsSet(true)
+            }
         }
     }, [testResult])
 
     useEffect(() => {
-        if (!testDataIsLoading && !testResultIsLoading) {
+        if (!testDataIsLoading && (!testResultIsLoading && (testResultIsSuccess || testResultIsError))) {
             setupTest();
         }
-    }, [testData]);
+    }, [testData,testResultIsSet]);
 
-    if ((testResultIsLoading || testDataIsLoading) && !testData) {
+
+  if ((testResultIsLoading || testDataIsLoading) && !testData) {
         return <Loader />;
     }
-    console.log({testData,isComplete,testResult,testResultIsLoading,testDataIsLoading});
+
 
     if (!testData) {
         return <h1>Тест не найден</h1>;

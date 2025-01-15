@@ -94,43 +94,46 @@ function ModalTestResult(props: ModalTestResultProps) {
                       </div>
                       <div className={cls.questionCardBottom}>
                           <span className={cls.questionTitle}>{testAnswer.question.title}</span>
-                          {testAnswer.question.type === 'multiple-choice' || testAnswer.question.type === 'single-choice' ?
-                              <div className={cls.answerBlock}>
-                                  <span>{testAnswer.question.type === 'multiple-choice' ? "Выбранные ответы:" : "Выбранный ответ:"}</span>
-                                  <div className={cls.selectedAnswerList}>
-                                      {testAnswer.selectedOptions.map((option, index) => (
-                                          <div className={cls.selectedAnswerBlock}>
+                          {testAnswer.isTimeFail ? <div className={cls.answerBlock}>
+                              <span>Студент не успел ответить на вопрос</span>
+                          </div> : testAnswer.question.type === 'multiple-choice' || testAnswer.question.type === 'single-choice' ?
+                                  <div className={cls.answerBlock}>
+                                      <span>{testAnswer.question.type === 'multiple-choice' ? "Выбранные ответы:" : "Выбранный ответ:"}</span>
+                                      <div className={cls.selectedAnswerList}>
+                                          {testAnswer.selectedOptions.map((option, index) => (
+                                              <div className={cls.selectedAnswerBlock}>
                                                   {testAnswer.question.correctAnswers.includes(option)
                                                       ?
-                                                          <IoCheckmarkSharp  className={classNames(cls.selectedAnswerIcon,{},[cls.selectedAnswerIconCorrect])}/>
+                                                      <IoCheckmarkSharp  className={classNames(cls.selectedAnswerIcon,{},[cls.selectedAnswerIconCorrect])}/>
 
                                                       :
-                                                          <IoCloseSharp className={classNames(cls.selectedAnswerIcon,{},[cls.selectedAnswerIconFail])}/>
+                                                      <IoCloseSharp className={classNames(cls.selectedAnswerIcon,{},[cls.selectedAnswerIconFail])}/>
 
-                                                          }
-                                                      <span className={cls.selectedAnswer}>{option}</span>
-                                                      </div>
-                                      ))}
+                                                  }
+                                                  <span className={cls.selectedAnswer}>{option}</span>
+                                              </div>
+                                          ))}
+                                      </div>
                                   </div>
-                              </div>
-                          : testAnswer.question.type === 'short-answer' &&
-                              <div className={cls.answerBlock}>
-                                  <span>Текстовый ответ:</span>
-                                  <div className={cls.selectedAnswerBlock}>
-                                      {testAnswer.shortAnswer === testAnswer.question.shortAnswer
-                                          ?
-                                          <IoCheckmarkSharp
-                                              className={classNames(cls.selectedAnswerIcon, {}, [cls.selectedAnswerIconCorrect])}/>
+                                  : testAnswer.question.type === 'short-answer' &&
+                                  <div className={cls.answerBlock}>
+                                      <span>Текстовый ответ:</span>
+                                      <div className={cls.selectedAnswerBlock}>
+                                          {testAnswer.shortAnswer === testAnswer.question.shortAnswer
+                                              ?
+                                              <IoCheckmarkSharp
+                                                  className={classNames(cls.selectedAnswerIcon, {}, [cls.selectedAnswerIconCorrect])}/>
 
-                                          :
-                                          <IoCloseSharp
-                                              className={classNames(cls.selectedAnswerIcon, {}, [cls.selectedAnswerIconFail])}/>
+                                              :
+                                              <IoCloseSharp
+                                                  className={classNames(cls.selectedAnswerIcon, {}, [cls.selectedAnswerIconFail])}/>
 
-                                      }
-                                      <span className={cls.selectedAnswer}>{testAnswer.shortAnswer}</span>
+                                          }
+                                          <span className={cls.selectedAnswer}>{testAnswer.shortAnswer}</span>
+                                      </div>
                                   </div>
-                              </div>
                           }
+
                           {testAnswer.__v !== 0 && <div className={cls.answerBlock}>
                               <span>Кол-во изменений ответа: {testAnswer.__v}</span>
 

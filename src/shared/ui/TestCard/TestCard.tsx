@@ -27,10 +27,8 @@ export const TestCard = (props: TestCardProps) => {
                     event.preventDefault();
                     event.stopPropagation()
                     try {
-                        // await axios.delete(`${SERVER_URL}/quiz/${test._id}/delete`);
-                        testDelete(test._id)
+                        await testDelete(test._id)
                         alert("Успешно удалено!")
-                        // navigate('/me')
                         window.location.reload()
                     } catch (e) {
                         console.log(e)
@@ -62,12 +60,8 @@ export const TestCard = (props: TestCardProps) => {
             <div className={cls.CardItem}>
                 <span className={cls.CardItemTitle}>Доступен для студентов:</span>
                 <span
-                    className={cls.CardItemData}>{((testIsOpenByDate(test?.deadline || '') || !test?.deadline) && (isTestAvailable(test?.startDate || ''))) ? 'Да' : 'Нет'}</span>
+                    className={cls.CardItemData}>{(((testIsOpenByDate(test?.deadline || '') || !test?.deadline) && test?.startDate ? isTestAvailable(test?.startDate || '') : true)) ? 'Да' : 'Нет'}</span>
             </div>
-            {/*<div className={cls.CardItem}>*/}
-            {/*    <span className={cls.CardItemTitle}>Людей прошло:</span>*/}
-            {/*     <span className={cls.CardItemData}>{Math.floor(test.peoplePassed / 2)}</span> */}
-            {/*</div>*/}
         </Link>
     );
 };

@@ -17,7 +17,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 12px 0px 0px 0px;
+  //padding: 12px 0px 0px 0px;
+  padding: 0px;
 }
 
 .TestContainer {
@@ -111,6 +112,33 @@
   font-size: 32px;
 }
 
+.settingsURLTestBlock{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #ccc;
+  padding: 10px 14px;
+  border-radius: 4px;
+}
+.settingsURLTest{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: copy;
+}
+
+.settingsURLTestButton{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+  border-radius: 30%;
+}
+
+.settingsURLTestButtonIcon{
+  font-size: 22px;
+}
+
 @media(max-width: 1020px){
   .tabContentResult{
     padding: 0px;
@@ -176,6 +204,12 @@
   .settingsInput input{
     font-size: 13px!important;
   }
+  .settingsURLTest{
+    font-size: 13px;
+  }
+  .settingsURLTestButtonIcon{
+    font-size: 18px;
+  }
   .selectForm{
     font-size: 13px!important;
   }
@@ -195,6 +229,9 @@
   }
   .downloadTemplateButton{
     margin-top: 10px;
+  }
+  .settingsURLTestButtonIcon{
+    font-size: 14px;
   }
 }
 

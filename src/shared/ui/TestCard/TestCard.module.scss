@@ -3,13 +3,14 @@
     flex-direction: column;
     width: 32%;
     gap:13px;
-    padding: 30px 48px 24px 16px;
-    box-shadow: rgba(14, 63, 126, 0.06) 0px 0px 0px 1px, rgba(42, 51, 70, 0.03) 0px 1px 1px -0.5px, rgba(42, 51, 70, 0.04) 0px 2px 2px -1px, rgba(42, 51, 70, 0.04) 0px 3px 3px -1.5px, rgba(42, 51, 70, 0.03) 0px 5px 5px -2.5px, rgba(42, 51, 70, 0.03) 0px 10px 10px -5px, rgba(42, 51, 70, 0.03) 0px 24px 24px -8px;
-    transition: 0.5s ease-in-out;
+    padding: 20px 48px 24px 16px;
+    //box-shadow: rgba(14, 63, 126, 0.1) 0px 0px 0px 1px, rgba(42, 51, 70, 0.03) 0px 1px 1px -0.5px, rgba(42, 51, 70, 0.1) 0px 2px 2px -1px, rgba(42, 51, 70, 0.1) 0px 3px 3px -1.5px, rgba(42, 51, 70, 0.1) 0px 5px 5px -2.5px, rgba(42, 51, 70, 0.1) 0px 10px 10px -5px, rgba(42, 51, 70, 0.1) 0px 24px 24px -8px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 6px 24px 0px, rgba(0, 0, 0, 0.1) 0px 0px 0px 1px;
+  transition: 0.5s ease-in-out;
     border-radius: 10px;
     position: relative;
     text-decoration: none;
-    background-color: #fff;
+    background-color: #fdfdfd;
     height: 260px;
     &:hover{
       box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px;
@@ -17,7 +18,13 @@
     }
 
 
+}
+
+@media(hover:none){
+  .Card:hover{
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 6px 24px 0px, rgba(0, 0, 0, 0.1) 0px 0px 0px 1px;
   }
+}
 
 .CardItem{
   display: flex;
@@ -43,7 +50,7 @@
     position: absolute;
     display: flex;
     flex-direction: column;
-    top: 24px;
+    top: 20px;
     right: 12px;
     gap: 14px;
 }
@@ -93,10 +100,13 @@
     font-size: 28px;
   }
 }
-@media(max-width:450px){
+@media(max-width:500px){
   .Card{
     gap: 5px;
-    padding: 30px 48px 24px 12px;
+    padding: 14px 48px 24px 12px;
+  }
+  .CardIcons{
+    top: 14px;
   }
   .CardItem{
     gap: 6px;
