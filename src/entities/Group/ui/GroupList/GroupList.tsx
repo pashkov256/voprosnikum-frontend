@@ -18,12 +18,10 @@ export const GroupList = (props: GroupListProps) => {
     const {data,isLoading,error,refetch} = useGetGroupsQuery()
     const [groupName, setGroupName] = useState("")
     const [createGroup,{isLoading : createGroupIsLoading}] = useCreateGroupMutation();
-    console.log(data)
     const onCreateGroup = async (name:string) => {
         await createGroup(name)
         refetch();
     }
-    console.log(groupName)
     return (
         <div className={classNames(cls.GroupBlock, {}, [className])}>
             {haveCreateMode && <div className={cls.groupForm}>

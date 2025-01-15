@@ -14,8 +14,6 @@ interface HeaderProps {
 const Header = (props: HeaderProps) => {
     const {haveBorder = true} = props
     const isAuth = useSelector(selectorIsAuth);
-    console.log(isAuth)
-    const navigate = useNavigate();
     return (
         <div className={cls.root} style={haveBorder ? {borderBottom: "2px solid #f4f4f6"}:{}}>
             <Container maxWidth="lg">

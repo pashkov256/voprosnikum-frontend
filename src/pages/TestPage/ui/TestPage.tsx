@@ -45,7 +45,16 @@ const TestPage = () => {
     const [focusLossCount, setFocusLossCount] = useState(testResult?.focusLossCount || 0);
     const handleStartTest = async () => {//старт теста по клику
         try {
-            const newDateStart = new Date().toISOString()
+            const date = new Date();
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0'); // Месяцы начинаются с 0
+            const day = String(date.getDate()).padStart(2, '0');
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            const seconds = String(date.getSeconds()).padStart(2, '0');
+            const milliseconds = String(date.getMilliseconds()).padStart(3, '0');
+            const newDateStart = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${milliseconds}Z`;
+
             //@ts-ignore
             await createTestResult({ test: testId, student: userData._id, dateStart: newDateStart, randomizedQuestionsSetIndex: Math.floor(Math.random() * testData?.randomizedQuestionsSets.length) });
             await refetchTestResult()
@@ -189,7 +198,16 @@ const TestPage = () => {
     };
 
     const finalizeTest = async () => {
-        const completedAt = new Date().toISOString();
+        const date = new Date();
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Месяцы начинаются с 0
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
+        const milliseconds = String(date.getMilliseconds()).padStart(3, '0');
+        const completedAt = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${milliseconds}Z`;
+        // const completedAt = new Date().toISOString();
         const completionTime = formatTimeDifference(testResult?.dateStart || "", completedAt);
 
         await updateTestResult({

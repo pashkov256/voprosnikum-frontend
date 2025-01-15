@@ -20,7 +20,6 @@ export const UserProvider = ({ children }:{children:ReactNode}) => {
     const [userDataIsLoading, setUserDataIsLoading] = useState(true);
     useEffect(() => {
         const fetchUserData = async () => {
-            console.log(localStorage.getItem("token"));
             try {
                 const { data } = await axios.get<UserData>("/auth/me");
                 setUserData(data);
