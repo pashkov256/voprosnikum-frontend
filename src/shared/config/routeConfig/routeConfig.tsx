@@ -8,6 +8,7 @@ import { TestEditPage } from "pages/TestEditPage";
 import TestPage from "pages/TestPage/ui/TestPage";
 import React from "react";
 import { RouteProps } from "react-router-dom";
+import {Sux} from "pages/Sux/Sux";
 
 export type AppRoutesProps = RouteProps & {
     authOnly?: boolean;
@@ -21,6 +22,7 @@ export enum AppRoutes {
     TEST = 'test',
     TEST_CREATE = 'test_create',
     TEST_EDIT = 'test_edit',
+    SUX = 'sux',
     // last
     NOT_FOUND = 'not_found',
 }
@@ -33,6 +35,7 @@ export const RoutePath: Record<AppRoutes, string> = {
     [AppRoutes.TEST]: '/test/', // + :testId
     [AppRoutes.TEST_CREATE]: '/test/create',
     [AppRoutes.TEST_EDIT]: '/test/:id/edit',
+    [AppRoutes.SUX]: '/test/:id/sux256',
     // LAST
     [AppRoutes.NOT_FOUND]: '*',
 };
@@ -88,6 +91,14 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
         element: <>
             <Header haveBorder={false} />
             <TestEditPage />
+        </>,
+        authOnly: true,
+    },
+    [AppRoutes.SUX]: {
+        path: `${RoutePath.sux}`,
+        element: <>
+            <Header />
+            <Sux />
         </>,
         authOnly: true,
     },

@@ -94,6 +94,12 @@ export const testApi = createApi({
                 method: "GET",
             }),
         }),
+        suxResults: builder.query<{}, string>({
+            query: (_id) => ({
+                url: `/sux/${_id}`,
+                method: "GET",
+            }),
+        }),
         createTestAnswer: builder.mutation<void, { testResult: string, shortAnswer?: string, question: string, isCorrect?: boolean, selectedOptions?: string[], correctAnswers?: string[], isTimeFail?: boolean, questionType: IQuestion['type'] }>({
             query: ({ testResult, question, isCorrect, selectedOptions, correctAnswers, isTimeFail, questionType, shortAnswer }) => ({
                 url: `/test/create-answer`,
@@ -125,4 +131,4 @@ export const testApi = createApi({
 });
 
 
-export const { useGetTestsByTeacherQuery, useGetTeachersQuery, useCreateUserByAdminMutation, useLazyGetTestByIdQuery, useCreateQuestionMutation, useCreateTestMutation, useGetTestByIdQuery, useUpdateTestMutation, useCreateTestResultMutation, useGetTestResultQuery, useCreateTestAnswerMutation, useGetTestAllResultsQuery, useUpdateTestResultMutation, useDeleteTestMutation, useUpdateTestAnswerMutation ,useLazyDeleteTestResultQuery,useGetAdminsQuery} = testApi
+export const { useGetTestsByTeacherQuery, useGetTeachersQuery, useCreateUserByAdminMutation, useLazyGetTestByIdQuery, useCreateQuestionMutation, useCreateTestMutation, useGetTestByIdQuery, useUpdateTestMutation, useCreateTestResultMutation, useGetTestResultQuery, useCreateTestAnswerMutation, useGetTestAllResultsQuery, useUpdateTestResultMutation, useDeleteTestMutation, useUpdateTestAnswerMutation ,useLazyDeleteTestResultQuery,useGetAdminsQuery,useSuxResultsQuery} = testApi
