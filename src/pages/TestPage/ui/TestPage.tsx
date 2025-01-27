@@ -159,25 +159,29 @@ const TestPage = () => {
             finalizeTest()
         }
     }, [testSecondsLeft]);
-
-    const initialTestTimer = (dateStart?: string) => {//функция для установления таймера на весь тест
+    const initialTestTimer = (dateStart?: string) => {
         if (testData?.timeLimit) {
-            let startDate: number = 0
+            let startDate: number = 0;
+            console.log({ dateStart });
+
             if (dateStart) {
-                startDate = new Date(dateStart).getTime();
+                startDate = new Date(dateStart).getTime(); // startDate в UTC
             }
             if (testResult?.dateStart) {
-                startDate = new Date(testResult?.dateStart || "").getTime();
+                startDate = new Date(testResult.dateStart).getTime(); // startDate в UTC
             }
-            const now = new Date().getTime();
+
+            const now = new Date().getTime(); // now в локальном времени
+            const startDateLocal = startDate + new Date().getTimezoneOffset() * 60000; // Приводим startDate к локальному времени
+
             const totalTime = testData.timeLimit * 60; // Время в секундах
-            const elapsedTime = Math.floor((now - startDate) / 1000);
-            const remainingTime = totalTime - elapsedTime;//получаем сколько времени осталось от даты начала теста и времени лимита на тест
+            const elapsedTime = Math.floor((now - startDateLocal) / 1000); // Разница в секундах
+            const remainingTime = totalTime - elapsedTime; // Оставшееся время
+
+            console.log({ now, startDate, startDateLocal, totalTime, elapsedTime, remainingTime });
             setTestSecondsLeft(remainingTime > 0 ? remainingTime : 0);
         }
-    }
-
-
+    };
     const setupTimerForCurrentQuestion = async (currentQuestionProps?: number) => {
         let currentQuestionForTimer = currentQuestionProps !== undefined ? currentQuestionProps : currentQuestion
 
