@@ -222,7 +222,7 @@ const TestEditPage = memo((props: TestEditProps) => {
                                     onChange={(e) => {
                                         setTestFormData((prev) => ({
                                             ...prev, startDate:
-                                                e.target.value + ":00.000Z"
+                                            e.target.value ? e.target.value + ":00.000Z" : e.target.value
                                         }));
                                     }}
 
@@ -235,7 +235,7 @@ const TestEditPage = memo((props: TestEditProps) => {
                                     className={cls.settingsInput}
                                     type={"datetime-local"}
                                     onChange={(e) => {
-                                        setTestFormData((prev) => ({...prev, deadline: e.target.value + ":00.000Z"}));
+                                        setTestFormData((prev) => ({...prev, deadline: e.target.value ? e.target.value + ":00.000Z" : e.target.value}));
                                     }}
                                 />
                             </div>
