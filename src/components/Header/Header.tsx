@@ -18,9 +18,9 @@ const Header = (props: HeaderProps) => {
         <div className={cls.root} style={haveBorder ? {borderBottom: "2px solid #f4f4f6"}:{}}>
             <Container maxWidth="lg">
                 <div className={cls.inner}>
-                    <Link className={cls.logo} to="/me">
+                    <a className={cls.logo} href="/me">
                         ВОПРОСНИКУМ
-                    </Link>
+                    </a>
                     <div className={cls.rightContent}>
                         {isAuth ? <>
                             <span className={cls.link} onClick={()=>{
