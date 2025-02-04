@@ -32,6 +32,7 @@ const TestPage = () => {
     const [questionSecondsLeft, setQuestionSecondsLeft] = useState<number | null>(null); // Таймер на текущий ВОПРОС теста
     const [buttonsIsDisabled, setButtonsIsDisabled] = useState(false);
     const [testResultIsSet, setTestResultIsSet] = useState(false);
+    const [testTestResultIsCreated, setTestResultIsCreated] = useState(false);
     const [inputIsDisabled, setInputIsDisabled] = useState(false);
     const [testAnswerIsSubmitting, setTestAnswerIsSubmitting] = useState(false);
     const { data: testData, isLoading: testDataIsLoading } = useGetTestByIdQuery({ _id: testId || "", mode: "student" }); // Получение данных теста
@@ -45,22 +46,26 @@ const TestPage = () => {
     const [focusLossCount, setFocusLossCount] = useState(testResult?.focusLossCount || 0);
     const handleStartTest = async () => {//старт теста по клику
         try {
-            const date = new Date();
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0'); // Месяцы начинаются с 0
-            const day = String(date.getDate()).padStart(2, '0');
-            const hours = String(date.getHours()).padStart(2, '0');
-            const minutes = String(date.getMinutes()).padStart(2, '0');
-            const seconds = String(date.getSeconds()).padStart(2, '0');
-            const milliseconds = String(date.getMilliseconds()).padStart(3, '0');
-            const newDateStart = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${milliseconds}Z`;
+            if(!testTestResultIsCreated){
+                setTestResultIsCreated(true);
+                const date = new Date();
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0'); // Месяцы начинаются с 0
+                const day = String(date.getDate()).padStart(2, '0');
+                const hours = String(date.getHours()).padStart(2, '0');
+                const minutes = String(date.getMinutes()).padStart(2, '0');
+                const seconds = String(date.getSeconds()).padStart(2, '0');
+                const milliseconds = String(date.getMilliseconds()).padStart(3, '0');
+                const newDateStart = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${milliseconds}Z`;
 
-            //@ts-ignore
-            await createTestResult({ test: testId, student: userData._id, dateStart: newDateStart, randomizedQuestionsSetIndex: Math.floor(Math.random() * testData?.randomizedQuestionsSets.length) });
-            await refetchTestResult()
-            setStartTest(true);
-            initialTestTimer(newDateStart)
-            setupTimerForCurrentQuestion()
+
+                //@ts-ignore
+                await createTestResult({ test: testId, student: userData._id, dateStart: newDateStart, randomizedQuestionsSetIndex: Math.floor(Math.random() * testData?.randomizedQuestionsSets.length) });
+                await refetchTestResult()
+                setStartTest(true);
+                initialTestTimer(newDateStart)
+                setupTimerForCurrentQuestion()
+            }
         } catch (error) {
             console.error('Error creating test result:', error);
         }

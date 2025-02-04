@@ -119,7 +119,7 @@ function ModalTestResult(props: ModalTestResultProps) {
                                   <div className={cls.answerBlock}>
                                       <span>Текстовый ответ:</span>
                                       <div className={cls.selectedAnswerBlock}>
-                                          {testAnswer.shortAnswer === testAnswer.question.shortAnswer
+                                          {testAnswer.shortAnswer.toLowerCase() === testAnswer.question.shortAnswer.toLowerCase()
                                               ?
                                               <IoCheckmarkSharp
                                                   className={classNames(cls.selectedAnswerIcon, {}, [cls.selectedAnswerIconCorrect])}/>
